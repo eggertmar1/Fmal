@@ -1,0 +1,2080 @@
+1:28  
+Good day Taiwan
+
+1:37  
+Hello
+
+7:24  
+hello
+
+7:29  
+are you doing?
+
+7:37  
+Let me check if you can hear me properly? Yes, right here. Very good. I can't hear you very well, it Make it louder.
+
+7:51  
+Okay.
+
+7:57  
+Right.
+
+7:59  
+So we'll go to imperative programming today. And we'll start discussing features in languages like C
+
+8:08  
+and its relatives and Java and Python.
+
+8:14  
+So do something different
+
+8:19  
+in some sense more low level because we will in particular look at languages with with very weak type discipline and also languages where you
+
+8:30  
+do
+
+8:32  
+fine grained
+
+8:39  
+manipulation of memory and in particular manual manipulation of memory.
+
+8:47  
+Someone wrote that the sound quality dropped, is it still the case?
+
+8:58  
+Can you hear me well? Okay. Yeah, maybe it was something accidental.
+
+9:04  
+Okay, so yes.
+
+9:09  
+So these are maybe languages that you've seen more,
+
+9:13  
+depending on your background, whether it's Python,
+
+9:17  
+or Java, or for especially systems programming,
+
+9:23  
+C, and C sharp.
+
+9:27  
+And I'll start with something very simple and nice today.
+
+9:32  
+Where you can't do a lot. You can just write if and wines but differently from
+
+9:39  
+sort of functional language setting, you actually manipulate memory in
+
+9:46  
+in a mutable ways, we're no longer in the functional situation where variables don't really vary, but they have the same value throughout their lifetime. This is the main thing that is different and then
+
+10:00  
+Slowly, we will start moving towards a C like language. I'll start with this today, it works out, but it will surely also take Thursday and and also next Tuesday especially when we come to compilation, and when we come to versions of the language where you manage manually manipulate
+
+10:25  
+memory usage. So, you do your own memory management like in like in C, where you have to say allocate memory for this data structure
+
+10:35  
+deallocate memory
+
+10:38  
+and we discussed all the insecurity and unsafety that follows with this,
+
+10:44  
+what kinds of crazy things one can do? Okay, let me start sharing my screen
+
+10:52  
+maybe like this.
+
+11:06  
+So, yes, what are imperative languages imperative languages are the ones that you're most accustomed to. In many cases, they also come with objects.
+
+11:18  
+So object orientation objects and classes, but that's not strictly necessary, it depends on the variety of the language.
+
+11:27  
+But the main thing is you work with statements or commands primarily for manipulating memory.
+
+11:37  
+So, while in a functional language, you work with expressions whose primary point was to compute values,
+
+11:47  
+and maybe if you added some impurity to a functional language, you could also do other things like we discussed references
+
+11:57  
+in F sharp.
+
+12:00  
+So they are a way to integrate something imperative to
+
+12:07  
+functional first language. In an imperative language, everything is upside down. So there are expressions whose primary purpose is to compute the value. But the main syntactic category in an imperative language is always statements, also called commands, these two are really synonyms. Some people prefer one word some the other but they do mean exactly the same thing.
+
+12:30  
+In particular, if you write an imperative programme, then the top level thing is not an expression, it's always a statement or a command.
+
+12:39  
+So if you look at that, say,
+
+12:44  
+whole file containing an imperative programme.
+
+12:49  
+This is treated as
+
+12:52  
+a statement or a command.
+
+12:56  
+So commands
+
+12:59  
+don't return a value, but they are there to produce some side effect. So the most typical side effect is your update, mutable memory or store. So there is this idea that
+
+13:14  
+there are names by which you can denote locations in the store or sells in the store. And
+
+13:22  
+x may have been for yesterday, today, I set it to be 17. And that's okay. Then tomorrow, I asked what it is now. And if no one else changed it, it's still 17 this is how you programme, you, you write to a store, you read from the store,
+
+13:39  
+you keep track of what you have allocated in the store, etc. But of course, there are other side effects as well. So apart from updating the story read from the store, as I already mentioned,
+
+13:50  
+you can also print,
+
+13:53  
+say to the terminal,
+
+13:56  
+or you can you can print to a file. And then you can read
+
+14:02  
+from the console, or from a file.
+
+14:08  
+So this is this is the big game. You're working with these commands, that are instructions to the computing platform to manipulate memory primarily. These commands are such typically don't return anything. Maybe they are sort of binary in the sense that they might return a flag of whether they succeeded or not. So in shell scripting languages, typically you get something like this, you can you can find out whether so far you've been faring well or not.
+
+14:44  
+You can see if it's just minus one then maybe something went wrong. But but the primarily commands are they're not to produce any value of interest at all.
+
+14:55  
+And you just sequence together those and you build other control structures around
+
+15:01  
+So we'll start looking at these things, we start with something very simple, which is sort of,
+
+15:08  
+yeah, the minimal thing that you can come up that
+
+15:13  
+that has these imperative features in particular manipulation of store.
+
+15:19  
+But also added printing, just for the fun of it. So it does a bit more than, especially since commands return nothing, then the only way to see anything coming out of the the programme would be to print it, if it doesn't return anything as such.
+
+15:38  
+And this very first simple imperative language that we'll look at, it really has very little. So it doesn't have local names, only global names, and these are not declared.
+
+15:50  
+And even these names are only for integers. So there is no interesting other types.
+
+15:56  
+There are no functions or procedures, procedures.
+
+16:02  
+And the memory model is really very simple. In particular, there is no concept of,
+
+16:08  
+of pointers.
+
+16:11  
+So names that directly hold values, you don't have the idea that the name maps onto an address, and then the address will somehow store a value. So we are more naive than this. Okay. So my idea would be that you should be able to write little programmes that would say like x equals three,
+
+16:33  
+y equals
+
+16:37  
+x times four. And maybe you can put the whole thing in a while loop that says y Zed is
+
+16:44  
+smaller than
+
+16:47  
+17.
+
+16:49  
+With do this, something like this
+
+16:57  
+is the level of programmes that we can write, and maybe I'm interested in seeing some final results, perhaps as well, maybe I want to see what the value of y is. Or maybe I want to see what the value of y minus one is.
+
+17:11  
+So you should be able to write these things, but not so much more.
+
+17:17  
+And the reason why we want to look at it is there is this interesting concept of store that we so far
+
+17:25  
+didn't see as such. So we always worked with these environments, that contained values for immutable
+
+17:34  
+names. So, we had names for integers, they would have denoted integers, we have names for functions, they do not the closures, which are sort of a syntactic representation of a function together
+
+17:50  
+with the environment in which it was defined these kinds of things.
+
+17:54  
+But now,
+
+17:56  
+there was no notion of mutable store, now, there will have to be one.
+
+18:03  
+So here in particular, for example, in this example,
+
+18:10  
+this construct says x, whatever value it has, will now have value three, y, whatever value it had before will have the value
+
+18:22  
+that we find by taking the latest value that X has the value that X has at this programme point times four.
+
+18:33  
+And then we print y minus one. And in these programmes, you can you can choose to, to change your mind about what values or things are. So for example, at the end, I could say x is now actually 1001, for example.
+
+18:48  
+So now explicitly, in this very small programme, you see that x is first three, and it is the value that is used here. But then, when we finished the programme x is different value.
+
+19:05  
+Is this clear? That should be very familiar, I should make some little remarks, I really don't care about the precise concrete syntax of any particular
+
+19:17  
+imperative language here, there is lots of little differences.
+
+19:22  
+So very often,
+
+19:25  
+assignment is written something like this with an equal sign, but sometimes it's written with colon equals
+
+19:33  
+I don't really care which one you prefer. So this is very sort of see like, and is present in languages that derived from their this using some other places. There is the big issue of where exactly you put semicolons. So
+
+19:52  
+in some languages,
+
+19:55  
+the semi colon is something that you put at the end of every primitive
+
+20:00  
+So you would require that there is a semicolon here.
+
+20:05  
+And it's not actually a separator in a sequence
+
+20:11  
+of statements. So while doesn't need any punctuation mark at the end, so in these languages, you maybe don't put the semicolon here, and this is just as fine, I will use the semicolon as a separator. So it will always go between two statements when I put them in a sequence, but it really doesn't matter. And there are so many other differences. So some typical ones are around wine. So for some people, while it's typically written something like why an expression for the guard do a statement for the body, but it might be different. So again, in a C like language, you would maybe write something like this, maybe officer, maybe this is required to be a block.
+
+21:00  
+Similar things happened with if then else, the syntax might be
+
+21:05  
+something like this.
+
+21:10  
+But it also might not come.
+
+21:14  
+But it also might not contain the word, then it could be something like this. So all of these options are possible, but they don't really matter for us at all. So in any
+
+21:25  
+particular programming language that you're learning, of course, you have to know what, which which convention has been adopted. But but it's really the least important thing in the whole our business. So we don't concern ourselves with this.
+
+21:41  
+It is a bit of a concern, of course, when you write a lexer or parser, or if you use a Lexie, lexer parser generators, so which is automatic software for getting elect lexer parser then you have to be to think very carefully about what your syntactic conventions are, and whether everything is unambiguous. And sort of what is
+
+22:04  
+what is convenient for the programmer, what gives clean code in terms of
+
+22:12  
+enough punctuation for readability, but not too much either.
+
+22:17  
+So you don't get any clutter on the screen that you can't see through.
+
+22:21  
+But anyway, so, this is the language that I want to discuss, I will provide you with some abstract syntax for a language like this. And then we discussed what does it mean to to evaluate a programme in such a language. So what kind of infrastructure is needed for this? And
+
+22:44  
+later, we also get to things like compilations but but for the moment, just just some abstract syntax and an evaluator and some simple examples to get started.
+
+22:56  
+So what did I say I said,
+
+23:00  
+in an imperative language, almost always you will have at least two syntactic categories, maybe some more auxiliary ones, you will have at least expressions
+
+23:11  
+which in a functional language were the main thing and often the only thing maybe aside declarations.
+
+23:18  
+So here they are not the main thing, but they are something too.
+
+23:25  
+You can write that will stand for
+
+23:29  
+stuff that return values while under suitable circumstances. So the expressions will not be surprising, you will have numerals for integers.
+
+23:41  
+And we use strings as identifiers as names for integers.
+
+23:49  
+And then you can write
+
+23:55  
+up operator expressions something of the form
+
+23:58  
+you want often.
+
+24:03  
+Yep, like plus times a minus. And these operators themselves were all sort of represented by strings. So it's, it's not the fixed supply of operations here, but any string will do well, of course, we won't assign any string of meaning.
+
+24:18  
+Okay, what could be a minimum set of of statements or commands to work with?
+
+24:40  
+We will have assignments, and I'd write this
+
+24:46  
+and I'm not sure how I will write this. I will write this actually without a colon in the rest. So let me keep the same here. So we will have assignments and they are now not the same as the finish
+
+25:00  
+We're in a functional language, the idea of an assignment. These
+
+25:05  
+names always denote integers, but they can be integers that evolve over the time or the integers don't evolve, of course, but you know what integer, the name takes advantage of this evolves over the time
+
+25:19  
+over a program's execution. So x maybe has some value when you reach this point, but that doesn't matter. What does matter is, you have to evaluate a
+
+25:32  
+recipe, the expression, and the value of that expression
+
+25:37  
+will replace whatever value x had before.
+
+25:41  
+Yeah. So
+
+25:46  
+the point being that
+
+25:49  
+maybe you had that X was too before,
+
+25:54  
+I can make a new assignment that I can say, no extra three.
+
+25:59  
+Or maybe I can say x is x plus one.
+
+26:03  
+And this literally counts as an assignment that you're used to from,
+
+26:08  
+from your first programming language, whatever it was. So it doesn't say that any particular x equals x plus one at some point in time, which is any possibility, right, any number is equal to this same number plus one, but it says X has some value that
+
+26:27  
+until now, and from now on, it will have any value,
+
+26:32  
+then what you do an imperative language is always you can execute several commands, or you can put them in a sequence. And this can be done in several ways. So here, I mean, you could just do binary composition, say if s one and s two are statements, then s one semicolon s two is a statement, that's a possibility. But we can actually say that the whole list of statements makes a new statement.
+
+27:01  
+And you often call it a block. Yeah, there is maybe even more reasons to call it a block, if the block can have local variable.
+
+27:11  
+local variables introduced here, we don't have it, the block is just a sequence of statements grouped together. But the point, the idea is these are executed sequentially. Okay,
+
+27:23  
+then, it's always good to have some form of if then, or if then else. And here is the one represented like this, I forgot to say before, so a block in the abstract syntax is given by a list of statements. So
+
+27:41  
+standing for this form, then also in currency, in concrete syntax, we
+
+27:50  
+would perhaps want to have some loop constructs, so for a while, or maybe just one of them.
+
+27:58  
+So let's have both
+
+28:01  
+both are constructs that have a body that is a statement. And then there is something that controls how many times or under what circumstances the statement is repeated. That's the idea of a loop. In the case of a for loop,
+
+28:16  
+in this little language, we will have a control variables. So you can designate one name that you say will change its value in the loop,
+
+28:26  
+initially, c one, and you will stop the loop
+
+28:32  
+when the value of x has reached D two.
+
+28:35  
+Yeah.
+
+28:37  
+While do is the usual while do so you.
+
+28:43  
+So long as the value of he doesn't become false, you just keep repeating as
+
+28:51  
+the first time that you've just finished doing so maybe you didn't even start. And you observe that that condition here the guard is false, you leave the loop, you're just done that the whole the execution of the statement has finished.
+
+29:07  
+And then we could for example, choose to have printing Yeah. So then I can also pick up
+
+29:13  
+I can print out something.
+
+29:18  
+So that should be not surprising.
+
+29:26  
+And there are little variations that you can allow here. So sometimes people in such a simple idealised language that could actually serve as an intermediate language for compiling a bigger one.
+
+29:39  
+You wouldn't use this enery composition or the block structure for sequencing. Maybe you just say you allow sequences of two commands and maybe also allow the empty command or no op. Why do you need that? When you typically need no up
+
+29:56  
+if then else because if you don't have
+
+30:00  
+If then as a specific construct, you might want to talk about the situation where in the then case you do something, but then the else case you do nothing at all, then it's convenient to have the sort of empty command or skip or no up
+
+30:17  
+around to use as the else branch.
+
+30:21  
+Is this clear?
+
+30:23  
+Any questions this far?
+
+30:32  
+One could make this even more minimalistic by just keeping one of the one of the loops. If you're systematic, then perhaps you keep, while you could argue that in some sense, this is more universal than four, but that also depends on the precise
+
+30:48  
+syntax and semantics of four. So here, we are fairly liberal with four on the level of syntax, so the bounds for the loop
+
+30:59  
+they don't have to be numerals, neither of them so they can be arbitrary expressions.
+
+31:05  
+And
+
+31:07  
+they can be any expressions. So
+
+31:11  
+in particular, even e one and D two can refer to x itself or they can use x.
+
+31:18  
+You might say, this is a bad idea, but there is nothing to forbids you to do this. And you can give a meaningful meaning
+
+31:28  
+to this case, as well.
+
+31:32  
+Okay.
+
+31:36  
+So suppose I wanted to write the language processor for such a thing. So maybe an interpreter, maybe a compiler to some,
+
+31:45  
+some abstract machine, maybe through some stack machine, or Yeah, some sort of a machine operating memory, working with
+
+31:56  
+little instructions, and then maybe jump instructions.
+
+32:03  
+What do we need for this? The main thing, and this is what distinguishes imperative languages from functional is that you want to work with some notion of storage, or store, or memory, all of these are synonyms, at least on this naive level, I will use the word store,
+
+32:22  
+like you know, a department store, where you can buy goods. So it's just a place where you can store values and you can repeat retrieve values, you might also want to call it memory.
+
+32:37  
+This is such a simple language. And this lecture will become very soon
+
+32:44  
+that we can work with a very naive idea of what the store is.
+
+32:52  
+In particular, this will be a notion of storage that we cannot afford anymore. When we start to have local names, then this just doesn't work.
+
+33:04  
+For now, it's good. We don't have any local names. We only have global names, I mean, any variables that you see, in your programme, you say these are global top level names. And you can just start using variables without declaring them. Okay, there is the question of where does the variable get its value first? Well, you may initialise the store in some way. Or you may require
+
+33:29  
+that the programmer initialises all variables that it's that he or she uses. So you may require
+
+33:37  
+that the variable doesn't appear on the right hand side of an assignment before it has at least once appeared on the left hand side of assignment. So for example, an assignment like this, you could say initialise is the variable x if it didn't have a value before.
+
+33:53  
+Okay.
+
+33:57  
+There is some little thing then to notice.
+
+34:02  
+So what we need to store there in the storage, so here, it can be very simple. We can map just from names to values. And actually, in a language like this, we can adopt a convention similar to C. And other languages
+
+34:20  
+that have a very weak type discipline.
+
+34:24  
+Especially they don't have any static checking often, sometimes not even enough dynamic checking, so that you can get really very, very, very bad errors and can't understand what is happening. Because there is no diagnostics. Things simply go wrong and you're not given any signal of aetherium
+
+34:44  
+which we'll see.
+
+34:47  
+For the time being since there is no interest in pipes anyway, we can do the see like thing that
+
+34:54  
+we don't need specific Boolean values, we just reuse integers as Booleans
+
+35:00  
+And the different conventions there again,
+
+35:03  
+but we'll use the one that says zero is false. And any nonzero number counts as true. So if you do things like if three, then
+
+35:19  
+execute x equals x plus one else, the empty sequence, then what happens is?
+
+35:31  
+This is true. So actually, always, x is incremented by one. It's also silly.
+
+35:39  
+If, because
+
+35:43  
+surely, it's a constant one, right? But we could just as well, right, if Why? Now, why is a name that stands for integer depending on whether the same feature is zero, or if it's anything different from zero, like three or minus three, we will choose this branch or the other branch, in which case we do nothing
+
+36:05  
+is okay.
+
+36:07  
+And then what is important about these stores is
+
+36:15  
+they will need to allow
+
+36:20  
+that values of variables change. Now, this can be done in multiple ways, the naive, and the wasteful one would be when we, when we write an evaluator in F sharp would be to say that,
+
+36:38  
+each time I execute the command, I start from some store, and then I just return another store,
+
+36:46  
+which is basically a copy of the old store with all the appropriate changes.
+
+36:52  
+But this is pretty wasteful, because I have to copy the store over and over again, I mean, the moment that the increment my variable x, and don't change any other variables, the whole data structure will be copied. So that feels maybe a bit stupid. So
+
+37:10  
+even if, sort of ideally, you can use immutable data structures, dictionaries, as a model of store, simply each time you do something, you do get the new store, it's maybe better to work with immutable data structure. And that's what he's done here. So we met from names to values, but in a, in a,
+
+37:37  
+in a mutable data structure. And here's a little infrastructure for this, we just use
+
+37:45  
+f sharps
+
+37:46  
+map
+
+37:49  
+types.
+
+37:51  
+So these are dictionaries, but they are implemented more efficiently than the ones that we had. So we worked with lists so far,
+
+38:01  
+which have two issues. One is, of course, lists are immutable. The other one is look up in lists is also slow. In the sense that to find the key in a list, you have to in the worst case, walk through the whole list, and find your key at the last position is the least or maybe not find it at all. So of course, it's better to use some sort of tree based hash based structures for this. So map is
+
+38:30  
+provided for you. And that's something a bit more clever, but it really doesn't matter. So, the important things is there should be some notion of a store type
+
+38:40  
+that that can work with.
+
+38:44  
+And we should be able to create an empty store we should be able to extract
+
+38:51  
+a value based on a key from the storage and we should be able to
+
+38:59  
+change
+
+39:02  
+the value in the storage.
+
+39:15  
+Yes.
+
+39:19  
+Did I already say something wrong? I did. So I jumped ahead of myself. So
+
+39:24  
+with maps still.
+
+39:27  
+We do actually do get we don't do this immutably so set storage will take a storage and will actually
+
+39:37  
+return a store.
+
+39:40  
+So that's what comes back. Where as when when I get this thing there
+
+39:47  
+then I just get an integer back. So these are the four types.
+
+39:51  
+Okay, um,
+
+39:54  
+but yes,
+
+39:56  
+but but in an even better implementation you you do go
+
+40:00  
+And use immutable data structure. So then set store doesn't return anything, it is a command in the sense of F sharp, it turns return something of type unit, but it will have changed the existing
+
+40:14  
+store.
+
+40:17  
+Okay, then
+
+40:21  
+how would one evaluate expressions and statements.
+
+40:26  
+expressions are very similar to what we've seen in, in the cases with with functional programming, there is really no difference. There, we evaluate expressions based on whatever
+
+40:44  
+we could find in the environment. As we looked up things in the environment, now we look up things in the store.
+
+40:53  
+Using this function gets stored here, that is actually implemented via
+
+41:00  
+the function item,
+
+41:02  
+which is part of the interface of this type.
+
+41:09  
+So what are the cases this just goes by case distinction. So if your expression is a variable, all you need to do with this, you're given a store, you look it up there, and you get back a result, which is an integer.
+
+41:28  
+The other cases are, what you're given is a numeral, its value is just the integer that is present in your numeral. And if your expression is an opera operator applied to two expressions, then you need to evaluate those
+
+41:46  
+with respect to the given store, in this naive store format, where values are directly associated to names.
+
+41:55  
+And then you just apply one of these operations that are supported, let's say there are times plus minus, equals
+
+42:04  
+maybe right, double equals now frequent quality check, it doesn't really matter, less than
+
+42:11  
+okay.
+
+42:13  
+But the more important
+
+42:17  
+stuff is here. So how does one execute statements, statements don't return any value of interest, but here they modify the store. And the way we model it is, we run a statement in a given state of the store, and we do get back a new store.
+
+42:43  
+Yeah.
+
+42:48  
+How?
+
+42:51  
+Well what can What can a statement be
+
+42:56  
+it can be one of the five or six forms, it can be an assignment, it can be if the nails it can be a block.
+
+43:05  
+It can be a for loop while loop and it can be a print statement.
+
+43:18  
+The simplest of these is assignment.
+
+43:24  
+So what do we need to do, if you need to change the value of x based on the value of E,
+
+43:31  
+then you should evaluate e in the current store the given store
+
+43:42  
+and then you should produce a new store. Or if it's done beautifully, then you should just update the given store. So that at key x, you now have a new value. So if x before was to now maybe the 17 if evaluating e with respect to storage to store gives value of 70.
+
+44:09  
+if then else is very easy. And this is why we look at it even before block.
+
+44:18  
+So if then else has to be lazy in the sense that we do not evaluate too many things too early. So we evaluate the expression
+
+44:31  
+with respect to the store store.
+
+44:34  
+If
+
+44:36  
+the result is true, so any number different from zero, then we actually recursively call this function that we're currently looking at.
+
+44:47  
+To the then bronze which is statement one
+
+44:52  
+and in the same storage
+
+44:55  
+because evaluating the guard doesn't change the store in any
+
+45:00  
+Way,
+
+45:02  
+at least not in the simple language. In a more complicated language like C or Java, I can easily do.
+
+45:09  
+Okay, so then
+
+45:13  
+if
+
+45:15  
+the Boolean is zero, then instead, we treat the boolean value as false, I mean,
+
+45:22  
+and we execute the then branch, and nothing else needs to be done.
+
+45:34  
+What if I've got the block, the block is a list of statements.
+
+45:44  
+Well, I should traverse this list of statements, and execute every single one of them.
+
+45:52  
+But now, the important concept is I need to thread the thread through the store, I need to start with a given store, then I need to execute the first statement in the list of statements.
+
+46:09  
+This produces a new store. And that new one is the one from which I continue with the second statement, the second statement,
+
+46:18  
+changes the store again, in general produces a yet newer store. And the third statement has to be executed from that store, so to say. So this is called threading the store through, it's not the case, that every statement here would be
+
+46:39  
+started from the same state of the store that would be kind of parallel composition. But instead, instead, we execute the statements sequentially. So how do you programme this? Well, the easiest is you write a little helper
+
+46:57  
+for traversing the list. But the main thing is, you call the helper on the whole list. And
+
+47:05  
+the second argument stored here is is for
+
+47:11  
+for an accumulator of sorts, which initially is the given store. But then a new recursive calls will keep changing. Yeah.
+
+47:23  
+So if the list of statements
+
+47:26  
+that the helper is called on,
+
+47:29  
+sorry, the helper is defined here, we're defining look at statements and store and these will now vary, they need not be the initial
+
+47:38  
+ones. When,
+
+47:41  
+if the list of statements is empty means we have reached the end of the list, then we just return the store that we last produced.
+
+47:51  
+Otherwise,
+
+47:53  
+if the list of statements is of the form some first statement and more statements,
+
+47:59  
+then we execute the first statement from the given store.
+
+48:03  
+This produces a new store. And from that one, we recursively, carry on with a helper
+
+48:12  
+applied to the rest of the statements to every other statement in the list. And this way, you will go through all the statements in the next
+
+48:28  
+what next,
+
+48:33  
+maybe I should take wine next. That's actually also a little bit simpler than four.
+
+48:40  
+So a wild construct is given by a guard.
+
+48:47  
+And a statement,
+
+48:49  
+which is the body of the wild.
+
+48:56  
+This is also implemented in terms of helper the helper is called loop. And it uses
+
+49:02  
+a store as an accumulator. And initially the store is the given store.
+
+49:07  
+But then it keeps changing in the loop.
+
+49:10  
+So what does the loop do from a given store store?
+
+49:17  
+Well, it's time this is called again, we evaluate
+
+49:24  
+the guard again, in whatever the store is. Now, if the result is zero, then we're done. Then we leave the loop that corresponds to the case when the condition is false.
+
+49:37  
+Otherwise, we loop we call recursively our helper, but
+
+49:45  
+from a store that is obtained by going through the loop body ones executing the loop body ones, so either you do nothing when the guard is false or when the guard is true.
+
+50:00  
+If you execute the loop body from the store, you get the new store.
+
+50:07  
+And from there you loop on.
+
+50:12  
+Finally, and this is the tricky one, because there is also some choice about how you do
+
+50:20  
+it, let's do, let's take the for loop.
+
+50:26  
+So what happens here, the for loop is given by the control variable, then the expression determining with the initial value of the control variable during the loop, another expression that says when the loop must stop, so this is the value of such that when you've reached it, or when you've exceeded it, rather, you should no longer keep repeating.
+
+50:54  
+And then finally, there is the loop body.
+
+50:59  
+Now, this is the standard semantics, which is reasonable, which says,
+
+51:06  
+well, surely to get going with a with a loop, I should at least evaluate
+
+51:14  
+the first expression because that says, what is the value from which I need to,
+
+51:33  
+from which I need to,
+
+51:38  
+with which value of x i need to start the loop, right.
+
+51:42  
+But actually, it also makes sense at this very same point to evaluate once and for all, and not keep re evaluating it. But this is debatable.
+
+51:52  
+The other expression which says which would then given number,
+
+51:57  
+that will be the value,
+
+52:01  
+which will determine when we'll finish the loop. So once this value is exceeded, we should stop going
+
+52:08  
+around in the loop. Now how is the loop itself done the loop we can again do with a helper.
+
+52:18  
+But now the helper uses to accumulator
+
+52:25  
+to two accumulator arguments. One is for the current value of the control variable, which initially is whatever we get here. So it's the it's the value of the expression he start
+
+52:42  
+in the initial store.
+
+52:45  
+And the other argument is initially the initial store this one?
+
+52:51  
+Uh huh. But
+
+52:59  
+then these two things
+
+53:03  
+will append new values when we
+
+53:06  
+recursively call the helper again.
+
+53:10  
+So imperatively thinking this
+
+53:15  
+should actually be mutable. But now we implement this via recursion.
+
+53:20  
+So we recurse
+
+53:29  
+Yeah, so sorry. So the helper loop is defined recursively. And that is the definition. So what is done,
+
+53:37  
+whatever is the current value of the control variable,
+
+53:41  
+whatever is the state is the current state of the store, we do the following, we compare it to the value stops that we found once and that we never reconsider.
+
+53:55  
+If it is no greater, then we don't enter the loop or the again.
+
+54:01  
+Otherwise,
+
+54:05  
+what we do is actually we set the control variable to I. So this gives us some storage.
+
+54:13  
+Then we execute the statement in that storage,
+
+54:19  
+which gives us the new storage. And then we recursively call the helper again.
+
+54:27  
+But now no longer with it, but i plus one as the current
+
+54:34  
+value of the control variable.
+
+54:36  
+And
+
+54:40  
+then also
+
+54:45  
+Yeah, in the new store, so maybe I should I could
+
+54:53  
+write it out, maybe more stepwise. So what happens here is in the else case,
+
+55:01  
+Is that we do a whole bunch of things. So first we change the store a bit.
+
+55:07  
+So we,
+
+55:09  
+we set
+
+55:12  
+the value of x to y, x to I in the store. So this gives us a new store.
+
+55:18  
+Yeah. Then
+
+55:22  
+we execute the statement, the statement in this store, and we get the new one,
+
+55:28  
+maybe like this.
+
+55:34  
+Right.
+
+55:36  
+And then we recursively call loop.
+
+55:42  
+But again, in the newer state of the store,
+
+55:48  
+that's exactly the same as what was written here. It's just that here, I didn't use these intermediate names for these sub expressions here. But maybe, to see the order in which things happen. This is maybe more illuminating.
+
+56:07  
+And now at this point, you should perhaps ask is this all kind of right to do?
+
+56:14  
+Because various strange things can happen. This
+
+56:20  
+control variable, of course, may be modified in the loop body. So maybe x is my control variable, but maybe the loop body also changes this control variable, then what should happen in the loop then, and you may have sort of very different ideas
+
+56:39  
+about this. And this is not the only possible semantics for for loop. And here's the issue. So for loop, what a for loop does, it's very clear when this thing is just the numeral. And it's also very clear when statement doesn't contain any assignments to x.
+
+57:00  
+But, but if statement, if this statement here contains assignments to x is no longer so clear what what even the right meaning should be. So here, it's fixed in some way. We can look at examples.
+
+57:15  
+What happens in strange programmes, and I will do this shortly after the coffee break. But
+
+57:25  
+yes,
+
+57:27  
+the moment that you start to write down a language processor, even for such a simple language, you will start to ask questions that often you don't ask yourself.
+
+57:38  
+Typically, because you use the for loop in a certain way.
+
+57:43  
+I mean, with sufficient hygiene, you keep names sufficiently apart, you follow certain conventions. But
+
+57:51  
+these conventions are not mandatory, you're also allowed to write programmes that use the control variable in strange ways. And then all of a sudden, it becomes an important question to decide what is supposed to happen, because the language processor
+
+58:08  
+should probably follow some intended semantics of the language. And then the question is, what is this? And does every programmer understand it the same way?
+
+58:18  
+Okay, let me maybe show you some examples. Before we go on, take a break, and then I'll show you some other examples after. So
+
+58:33  
+what can I do here
+
+58:48  
+I can write little programmes. And, of course, they do get verbose in this abstract syntax. And so I'll also show
+
+58:56  
+how they look
+
+58:58  
+if you
+
+59:00  
+if you write them in concrete syntax, so here is maybe one of the simpler things that you may want to write
+
+59:07  
+is a programme that involves two
+
+59:11  
+variables, two names summon it I
+
+59:16  
+and it just sums numbers from a certain interval and the interval here is actually
+
+59:23  
+fixed, it is numbers from
+
+59:29  
+zero to 100 inclusive.
+
+59:33  
+And all that it does is it adds together these numbers and then finally, it prints the sun.
+
+59:40  
+So when you want to formalise this as abstract syntax tree, you have to think what is going on here? Well, the whole thing of course, is a sequence or a block even. So with braces we do know that so we have a block. In the block we have three things. That is assignment, there is an assignment, which is this there is a for loop, which is this
+
+1:00:03  
+And then there is a print command.
+
+1:00:07  
+Afterwards
+
+1:00:10  
+in that the assignment looks like this.
+
+1:00:15  
+So
+
+1:00:18  
+to the variable sum, but the left hand side is always a variable, I don't need to say var here, an assignment simply takes a string some, I assign an expression, which is numeral zero, which is perfect, then there is a for loop. It's determined by two expressions, which are very simple here, because they're just numerals.
+
+1:00:37  
+And the body isn't even a block it need not be because it's a single command. So I can just straightforwardly state it as a command, which is an assignment.
+
+1:00:47  
+And of course, here on the right, I can't write simply some,
+
+1:00:51  
+but I have to write var, some because some is not an expression with var sum is similar for var I.
+
+1:01:00  
+And then at the end, I want to print again, not sum, but var sum. So let's see if this is a valid expression. Or sorry, a valid statement.
+
+1:01:20  
+So F sharp indeed thinks this is a valid statement. And then I can
+
+1:01:27  
+start running it, what does running mean? Running means executing a statement in the empty store. So if every variable is initialised,
+
+1:01:37  
+in the programme, then I don't need any interesting store to to run it, I can run into the empty store. Let's see what happens.
+
+1:01:48  
+I say Ron, next one. And the result is the naive store.
+
+1:01:54  
+So this is that implementation. Now that replaced lists here, where it is 100 doesn't Assamese 5050.
+
+1:02:05  
+So you can see that I took various values during its lifetime, but at the end, it was 100.
+
+1:02:14  
+And then this was printed out.
+
+1:02:18  
+Okay, maybe this is not convincing, maybe we should want to see some intermediate results. So
+
+1:02:31  
+here is a little variation. That's also just for the fun of it use these while instead of four. So a different way to do this is I initialise, some to zero but I also initialise, I don't say one or zero doesn't matter.
+
+1:02:48  
+Maybe I should actually put zero to complete your line with this.
+
+1:02:53  
+And then
+
+1:03:00  
+we could do this for example.
+
+1:03:07  
+Okay, let me first keep the values that are there, but then we can do also the variations. So here, the, the programme is also different in in the sense that we don't actually control the loop by the value of AI. But we actually check
+
+1:03:24  
+how much the sum is. And we are willing to sum as long as the sum doesn't exceed
+
+1:03:33  
+10,000. And here's the here's the code. But we look at all intermediate sums. And then we finally look at the final is the final sum.
+
+1:03:45  
+If you were to formalise it, it's very similar to before, but now of course, the body of the wine isn't the single
+
+1:03:53  
+command. But it's a sequence of commands, you have to make it the block for this to be syntactically valid, to kind of put parentheses around the whole thing.
+
+1:04:04  
+Otherwise, then we are fine.
+
+1:04:08  
+So let's look at that one as well.
+
+1:04:12  
+Yes, so I've shot like Dewey's that this is what it is, and then when I
+
+1:04:17  
+run it,
+
+1:04:21  
+then I get the whole bunch of numbers,
+
+1:04:25  
+a large number
+
+1:04:28  
+which are the running sums of adding together stuff. So zero, plus one plus two plus three plus four plus five plus six plus seven, you can follow that these are correct. And then it goes a long way and at the very end,
+
+1:04:44  
+we print
+
+1:04:47  
+the eye that was reached and also then the first some that actually exceeded 10,000.
+
+1:04:52  
+So between this and this number, that is 130 41. So we would have continued if the loop had
+
+1:05:00  
+allowed us with the, with the, with the value of it being 142.
+
+1:05:05  
+and here also you can see what the final storage was that was reached.
+
+1:05:15  
+Now, of course,
+
+1:05:22  
+we don't have to initialise all the variables, ourselves. So I can also maybe do this little modification that
+
+1:05:31  
+say we do
+
+1:05:33  
+the modified first example, where say the sum is not initialised.
+
+1:05:40  
+Here.
+
+1:05:47  
+So that's exactly the same as before, except
+
+1:05:53  
+the first guy is gone.
+
+1:05:56  
+And then we have to run it in a different way, right?
+
+1:06:16  
+Yeah, no, I can't run it naively.
+
+1:06:34  
+until we find the whole point, just in case.
+
+1:06:58  
+Lucky today.
+
+1:07:01  
+Maybe this is the perfect time for a short break. I think it is that
+
+1:07:07  
+I think I can also fix this quickly, and then we'll take a short break here.
+
+1:07:20  
+Okay, so that was it. So now we have also.
+
+1:07:29  
+Now we also have x one prime.
+
+1:07:32  
+And when I try to run it, of course, it will complain because it will try to find
+
+1:07:42  
+a value
+
+1:07:44  
+for some at this place. And initially, there is nothing. So this can't quite work.
+
+1:07:52  
+And you get a lot of complaints. But the real one was here, the given key was not present in the dictionary. So that's about this something here. But then actually, of course, I can provide my own
+
+1:08:06  
+store to the thing. So we can just execute the thing in say,
+
+1:08:18  
+not the empty store.
+
+1:08:21  
+But we want to do set store.
+
+1:08:26  
+Which order are the arguments?
+
+1:08:29  
+Yes, set store empty store.
+
+1:08:34  
+And then give some value for the sum.
+
+1:08:39  
+For example,
+
+1:08:41  
+that sum is zero.
+
+1:08:49  
+And that is fine. And it works right then now of course, I can start with the different sum. So let's, let's make it something where we recognise what the correct value is. So now we should get a bigger value simply.
+
+1:09:03  
+So instead of 5050, it will be 15,050.
+
+1:09:09  
+So that's not so complicated, not so controversial. So let's take a short break, and unless you have questions, after that, I want to discuss the semantics of for a bit, because this was a particularly simple case of a for loop. And what happened was intuitively correct, that
+
+1:09:28  
+it's not so clear, that this is the only possible meaning if if things happen in the body of the for loop. So for in particular, if I here would actually be assigned something in the body of the for water, maybe I occurred
+
+1:09:45  
+here in this top expression. So then we have to discuss whether what we wrote was correct or whether it's some other modifications that we may intend is correct. Is there
+
+1:09:57  
+any questions?
+
+1:10:12  
+Okay, if there are no questions,
+
+1:10:16  
+then I suggest we take a break.
+
+1:10:20  
+Maybe a little longer can we say like until 335. So that's eight minutes.
+
+1:10:27  
+And then I can continue for another 2025. And we won't do a lot today. So I'll discuss the semantics of for loops. Maybe I'll give you
+
+1:10:40  
+a preview into what we will add, which are pointers, but I don't think we will get there. I think it's more important to to understand this manipulation of storage and what are the possible variations here?
+
+1:11:00  
+Okay,
+
+1:11:04  
+good, so break until
+
+1:11:10  
+335
+
+1:11:16  
+just
+
+1:19:41  
+Okay so let us continue let me share my screen
+
+1:19:49  
+again
+
+1:19:51  
+everything good theory yes
+
+1:20:00  
+So we saw a few programmes, let me just keep writing here, underneath
+
+1:20:09  
+where it was
+
+1:20:12  
+clear
+
+1:20:14  
+what should happen. So let's just go by modifying the first guy here.
+
+1:20:21  
+And let's write some variations.
+
+1:20:32  
+I've got a few worries.
+
+1:20:35  
+So one is, for example,
+
+1:20:38  
+what will happen if we modify this programme that we had by saying something like the sum is sum plus i.
+
+1:20:55  
+But then also, maybe we say i is
+
+1:20:59  
+i times two are
+
+1:21:04  
+in the loop. Now, what should happen?
+
+1:21:12  
+Maybe I'll modify also, so that it's uncontroversial. Let me start from equal one.
+
+1:21:21  
+Because if we multiply zero by two, we never get very far. But we start from one in the loop of the body, I increment the sum by I,
+
+1:21:33  
+I multiplied by what should happen, the first time that we enter the loop,
+
+1:21:39  
+I is one, I think this is non controversial.
+
+1:21:44  
+Then here we say I is iper, i times two, we could even say print I also in the
+
+1:21:52  
+inside the loop. And let me let me create some more structure here for you so that it's visible what is happening. So that's the
+
+1:22:01  
+structured rendering of the of the code.
+
+1:22:07  
+Now, what do you think I hear is too.
+
+1:22:12  
+Well, where do I continue? Maybe I continue with i equals two anyway, at this stage, but then I do my addition, then I multiply it by two is four in the next repetition will ID three or will it before?
+
+1:22:30  
+And what is added together?
+
+1:22:34  
+And how many times do we execute the loop?
+
+1:22:38  
+Let me maybe modify it a bit more so that we will also see a bit more so let's do the loop from one to 10.
+
+1:22:49  
+Well, we can check what happens but for that we need to write it up in our abstract syntax, but that's not so hard.
+
+1:22:55  
+It's a small modification of this piece of code here
+
+1:23:00  
+then we can play.
+
+1:23:03  
+So, let this be example three. So sum is zero, I is from one to 10
+
+1:23:11  
+then we have this but actually we want a block structure here.
+
+1:23:18  
+So this is a block
+
+1:23:21  
+and in this block we have all these things
+
+1:23:30  
+right.
+
+1:23:34  
+In the block we also do is i plus two blah, blah, blah, etc. Then we finished the block at one point.
+
+1:23:44  
+And then we do this here inside the block what happens
+
+1:23:50  
+is we want to do i is eight times 2.2 to array
+
+1:24:00  
+please.
+
+1:24:03  
+Only
+
+1:24:09  
+variable to print pie.
+
+1:24:17  
+This should be something
+
+1:24:19  
+that should do something. Let's see.
+
+1:24:30  
+What is unexpected
+
+1:24:55  
+think this is thinking quits to
+
+1:24:57  
+know what
+
+1:25:03  
+Now you can help me.
+
+1:25:06  
+That's one it's correct.
+
+1:25:08  
+Everyone is correct.
+
+1:25:11  
+Correct.
+
+1:25:14  
+This one is not correct. Okay, so here are some things happening. I'm not finishing my four
+
+1:25:22  
+bit problem. So it should be like this.
+
+1:25:31  
+I'm not sure who is tabulating here.
+
+1:25:39  
+Okay, so that's an expression. And we can see what happens. So when I run x three,
+
+1:25:50  
+when I open, and then I run x three,
+
+1:25:56  
+then I don't get something. Um,
+
+1:25:58  
+and we can observe what
+
+1:26:06  
+interestingly,
+
+1:26:10  
+the way I develops is like this, we can see that
+
+1:26:21  
+we can't directly see what it is, but we can see what has been added.
+
+1:26:26  
+Sorry.
+
+1:26:29  
+What is happening? print the
+
+1:26:33  
+patient, zero push to be one.
+
+1:26:37  
+When you assign it to the block, extra policy?
+
+1:26:46  
+Yes. Can you tell me what exactly is it? Okay, I guess.
+
+1:26:50  
+That's what I didn't like. I think that's better now, although I'm still surprised.
+
+1:26:59  
+Zero is from one to 10. Yes. And the rest is correct. I hope
+
+1:27:23  
+this doesn't change so much. So what is happening? Let's see.
+
+1:27:27  
+I think still, I'm doing something wrong in some other place. So
+
+1:27:36  
+I know it's good. It's good. It's good. So we print out I,
+
+1:27:41  
+which is
+
+1:27:43  
+cool. 468 10. So from this, we can figure out that before we multiply by two, it has been 1-234-567-8910.
+
+1:27:59  
+So the fact that we multiply by two, so say, for example, that it's here, six,
+
+1:28:07  
+it doesn't mean that in the next time when I enter the loop again, that it would be seven, and that I would then get the result 14.
+
+1:28:18  
+The Loop just goes sort of at its own pace, right.
+
+1:28:23  
+It had to use i equal 1234567, blah, blah, blah, blah. And what we do to Why do I here has very little significance. You can also see here from the final result, 55, which is the sum of numbers from zero or one to 10. Yeah.
+
+1:28:46  
+Yeah, the whole difference. So even whether I started here at zero, or one didn't matter, so much it was it was just the first guy is different. But since the each time I entered the loop, again, the the value of it is set, you know, based on the kind of internal accumulator that we have in the implementation of the loop. It doesn't matter that multiplying zero by two doesn't ever take us off the ground, right? Because that guy still will add one, two, first 012, etc. So that works well. So is this the intended semantics for for loops, or isn't it?
+
+1:29:25  
+Well, you could say these, but you could say it isn't just depending on what your taste is. And then you could go to your favourite programming language, type in the programme and see what it does for you.
+
+1:29:37  
+Because
+
+1:29:40  
+you could also say this is garbage, this should never happen, because
+
+1:29:45  
+this for thing he should increment i. But surely, if I changes in the loop, I should be able to take this into account, right.
+
+1:29:55  
+At least this is what happens in C style loops that you just specify by
+
+1:30:00  
+Given a control variable, giving something that is done each time you go through the loop and then giving something that is that is checked at the end of the loop.
+
+1:30:11  
+And in C style loops,
+
+1:30:14  
+surely,
+
+1:30:16  
+you know, whatever you do to your control variable, it will affect the whole loop it will affect the next repetitions. So, here this doesn't happen From where did this creeping? And do we want to keep it?
+
+1:30:29  
+Well, it must have crept in here when we were we defined for so this was one particular definition. And we chose
+
+1:30:38  
+to do exactly this. So, what decided this behaviour was the following.
+
+1:30:46  
+I is
+
+1:30:52  
+kept, is an accumulator for this helper loop. So help the helper loop keeps track of it. So, initially, it is determined by the start expression.
+
+1:31:04  
+And then at every recursive call,
+
+1:31:10  
+we just
+
+1:31:13  
+make the recursive call with the new value of the accumulator, which is the old value of the accumulator plus one.
+
+1:31:20  
+And we pay no attention to what has happened to the storage, isn't it?
+
+1:31:31  
+Well, we use the value of AI by sort of updating the storage, but we never read from the storage, we don't ever check what the value of x is in the store.
+
+1:31:43  
+So we could try to modify it and then we get the different semantics for for
+
+1:31:53  
+let's see what we do.
+
+1:31:56  
+We should make a little comment this is
+
+1:32:03  
+this is what usually
+
+1:32:06  
+what, oh,
+
+1:32:22  
+let's do our own version. So what could we possibly want to do?
+
+1:32:27  
+I might want to do the following.
+
+1:32:31  
+Let's also write that in this style. Maybe this is better readable. Or you can write more concisely.
+
+1:32:38  
+So let's write our own.
+
+1:33:00  
+How could we ever take into account but to take this into account. So here's the current accumulator, we compare it to stop that's very good. Then we update the store based on the accumulator. That's the one in which we execute the loop body.
+
+1:33:18  
+And then we repeat, but we don't look at what the value of x is, in the newest version of the store, which is store prep time. Rather, we continue with i plus one. So let's do something different. At this place, we don't really need to write i plus one we could write, we get store,
+
+1:33:39  
+store plus storage,
+
+1:33:42  
+prime prime, and then x, isn't it? And then add one to that. Do you agree? So then we will also take into account the changes to the loop variable that we've
+
+1:33:53  
+applied during the loop of the let me just check the time putting the arguments in the right order. Yes, yeah.
+
+1:34:00  
+So how about that this is not so bad.
+
+1:34:05  
+Where's my code here.
+
+1:34:07  
+So the change would be don't use
+
+1:34:11  
+i plus one,
+
+1:34:13  
+we actually
+
+1:34:15  
+use AI, we have we, at the beginning of the loop body, we, we we we take the value of x to be that guy.
+
+1:34:27  
+And then when we leave
+
+1:34:30  
+the current iteration of the loop body, we remember what the value of x is currently.
+
+1:34:39  
+So the next time when we enter the loop body, we will have taken the value of x added one to it and written the new value back to the store. So to say, you know, speaking in imperative terms, is this reasonable? I think it should be provided I got all my parentheses right. So let's try
+
+1:35:01  
+Block following this left is unfinished. Yes, because I forgot to copy something.
+
+1:35:19  
+There's some other interpretation or similar mistake.
+
+1:35:26  
+store with line 133.
+
+1:35:38  
+Raise your IQ
+
+1:35:55  
+another tabulation? I'm not sure from where these come?
+
+1:36:05  
+No.
+
+1:36:07  
+Let's see if we make a mistake in some other place. let let let Q,
+
+1:36:14  
+start stone.
+
+1:36:17  
+Can one of you see this?
+
+1:36:30  
+For me just on the fly everything here.
+
+1:36:39  
+Guess how much better I don't know what this editor is doing. So let's see our programme now.
+
+1:36:47  
+And let us observe if we have any,
+
+1:36:51  
+any difference in the behaviour.
+
+1:36:55  
+This is the piece of code, what do we expect should not happen? I expect we enter with one, then here we multiply one by two, then the next time we should go to the to the loop body again, we increment two by one, we should get three, we multiply three by two, we add one, then we shall already have seven. So we should only repeat the loop very few times. Let's see if this is what actually happens.
+
+1:37:22  
+We can then say
+
+1:37:29  
+then learn
+
+1:37:31  
+from one extreme
+
+1:37:35  
+when we get to 614 and 11, which indeed confirms that the first time went through the loop is one, then the next time we enter is three which gets multiplied by two, then it's six. Then the next time we enter is seven, which gets multiplied by two which 14
+
+1:37:52  
+and that's already greater than 10. So we won't go We won't carry on and what is 1111 should be the sum of the current eyes, which were one three
+
+1:38:05  
+and seven and there are some is 11 Yeah. So this is one possible semantics now, but there is one further issue with with loops. Namely, what happens
+
+1:38:25  
+if for example,
+
+1:38:30  
+we
+
+1:38:35  
+also use them
+
+1:38:39  
+use something non constant in the in the bounds here.
+
+1:38:45  
+So here we have
+
+1:38:48  
+because you saw before and let me do something. So here we had
+
+1:38:53  
+that the loop goes from one to 10.
+
+1:39:05  
+But why should they look go from one to 10 the loop
+
+1:39:10  
+this this this here could be something that is actually
+
+1:39:19  
+study, right? So it's already dynamic. So I could put in other things here. So So what about if I put
+
+1:39:27  
+10 minus some
+
+1:39:32  
+for example. So where do I need to put it?
+
+1:39:36  
+Here is this place so that would be
+
+1:39:47  
+minus
+
+1:39:50  
+10
+
+1:39:54  
+Sun
+
+1:40:01  
+And that should already be,
+
+1:40:05  
+let's see,
+
+1:40:10  
+really works against me today.
+
+1:40:14  
+And I don't plan
+
+1:40:16  
+for where those attempts come.
+
+1:40:24  
+Okay?
+
+1:40:26  
+Now if I run x for what happens?
+
+1:40:32  
+I do get this.
+
+1:40:37  
+Okay, this is maybe a bit difficult to understand.
+
+1:40:41  
+Alright, but let's keep it so we clearly compared to 10. So we stopped when the sum had exceeded.
+
+1:40:53  
+We stopped when I had become greater than 10.
+
+1:40:57  
+And why was this because initially when we evaluate 10, minus some sum is zero. So the comparison is to 10. So the moment when we see seven is smaller, sorry,
+
+1:41:13  
+in the moment that we see
+
+1:41:18  
+14, in fact, 15 is greater than 10. Because
+
+1:41:26  
+no 14 is greater than 10. At that point we stop.
+
+1:41:32  
+But maybe, if I use some here, and some is actually something that changes in the loop, maybe I should take this into account.
+
+1:41:42  
+And actually check at each time I enter the loop again, whether I'm in a good position and whether I should already stop, because initially I need to compare to 10. But by the time I've been through the loop,
+
+1:41:58  
+the sum is maybe no longer zero, it is maybe already one and then it is something else, then I think it was for one plus three. So we keep changing this. And then maybe we should actually finish the loop earlier.
+
+1:42:16  
+Let's see what happens. So where is this hidden here,
+
+1:42:22  
+where
+
+1:42:24  
+we only evaluate stop once, which is at the very beginning of the loop. Instead, of course,
+
+1:42:31  
+we could consider doing this dynamically. So each time I need to compare it to the stop condition, I should find what the stop condition is. And that could be an alternative definition. So let's do another version.
+
+1:43:08  
+I'm really shocked.
+
+1:43:15  
+Okay, let's do another version. So what could that be? So maybe we don't want to use this. But actually, I should evaluate the stop at this point.
+
+1:43:37  
+Actually, let me put the
+
+1:43:40  
+seizure three.
+
+1:43:43  
+I just put Let's stop here. Let's stop the eval the Stop, stop. And then now this is the current storage with which with which I am in my loop.
+
+1:43:55  
+And let's see if something now changes.
+
+1:44:01  
+Let's see.
+
+1:44:12  
+I'm pretty sure this editor is against me. So let me play everything here.
+
+1:44:23  
+And see if we can again get different behaviour. So
+
+1:45:03  
+Understand this now.
+
+1:45:08  
+In addition problem, this is all properly aligned. This is also
+
+1:45:15  
+this is also
+
+1:45:43  
+what is your issue now?
+
+1:46:05  
+Okay, I'm
+
+1:46:12  
+afraid this is against some stupid special symbol that now crept in.
+
+1:46:40  
+Yes, open.
+
+1:46:49  
+This is too bad. Maybe I have to leave you here. I wanted to demonstrate how the behaviour now changes again with the silly thing argues with me.
+
+1:46:59  
+Could it possibly be the the star parentheses right below loop start stuff at the top right now. Yes. Now above that one.
+
+1:47:11  
+The closing one above that loop start stuff. Yeah, that one. Could it be that?
+
+1:47:18  
+I don't think so. Because
+
+1:47:25  
+Because nasty
+
+1:47:28  
+comments are okay. Okay.
+
+1:47:32  
+I can change this, but I think it is super
+
+1:47:36  
+mad.
+
+1:48:06  
+I just can't see this. Or
+
+1:48:14  
+I can maybe do something very early.
+
+1:48:17  
+But
+
+1:48:20  
+just to get over it for now.
+
+1:48:25  
+But it shouldn't be like this.
+
+1:48:43  
+Okay, I'll do another thing. I just put it here.
+
+1:48:47  
+This shouldn't be like this.
+
+1:48:49  
+I don't
+
+1:48:52  
+introduce this extra name. I just put the condition directly in the right place. But maybe there is some special symbol, it still complains about the same thing.
+
+1:49:04  
+So it's really something that I cannot see.
+
+1:49:23  
+None of this should matter.
+
+1:49:25  
+I'm afraid there is still some
+
+1:49:29  
+special symbol somewhere.
+
+1:49:35  
+Yeah, sorry, I have to leave it here. Now then. Because my editor is letting me down.
+
+1:49:41  
+But the point should be
+
+1:49:48  
+where was I?
+
+1:49:50  
+The point should be that I should get a different result from the comparison now because we can do it manually and then I'll stop. So we start with i equal one
+
+1:50:00  
+So, here we say sum surely equals zero plus one which is one then we say is two then we print I then we actually add one to two and then we continue with three
+
+1:50:12  
+and then we say okay the sum is the current sum which was one plus three, which is four
+
+1:50:21  
+and i is i times tools, this is six, six is printed, then we continue with seven at this point, when
+
+1:50:33  
+we have to compare
+
+1:50:38  
+the value of i 210 minus some 10 minus some right now is six okay.
+
+1:50:49  
+And the current value
+
+1:50:51  
+is
+
+1:50:53  
+already seven. So, we will actually not do the third repetition of the loop. So, that should be the point if we if we each time re evaluate the stop condition. Now, in a language like this, maybe you don't do this, I mean the the first one that I wrote down before my editor stopped me
+
+1:51:12  
+is the standard one that you do.
+
+1:51:16  
+However, in languages like C, where a for loop is simply given by
+
+1:51:25  
+by like a loop initialisation what you do with each loop repetition and then the loop body, there is no specific notion of
+
+1:51:33  
+of control variables and sort of independently incrementing it.
+
+1:51:38  
+So, you manually Say what you want to increment or what else you do. So, there of course, whatever happens in the loop body is taken into account and the stop condition is checked, each time you go through the loop again. So, four is the first imperative construct, which sounds perhaps as the simplest possible, but actually already deciding what the for loop needs to do. In in cases, where
+
+1:52:09  
+where you change the control variable in the loop, or maybe where you use the control variable or some other variable that is changed in the loop in the stock on addition, you know, in the in the boundary,
+
+1:52:23  
+when you have to decide what, what what semantics you're after.
+
+1:52:29  
+Always this now I really ran out of time because of his stupid mistakes.
+
+1:52:34  
+Is this clear.
+
+1:52:39  
+So the main message is you manipulate instead of an environment can manipulate the store. The store fundamentally is mutable. Here, it's implemented by passing around the store as an argument, we could have a different implementation where you use immutable store data structure.
+
+1:53:01  
+But fundamentally,
+
+1:53:03  
+in low condition in lieu constructions, you have to decide
+
+1:53:10  
+you know, how you treat to control variables.
+
+1:53:13  
+And what happens during the loop body.
+
+1:53:16  
+It's time that we write the loop.
+
+1:53:20  
+Okay.
+
+1:53:25  
+Fair enough.
+
+1:53:27  
+If this is all I'll stop here. I'll stop the recording and we say bye. For today. Continue on Thursday with a C like language.
+
+1:53:39  
+All right. Thank you.
+
+Transcribed by https://otter.ai

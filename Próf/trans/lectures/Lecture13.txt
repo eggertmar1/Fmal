@@ -1,0 +1,1810 @@
+2:34  
+Hello
+
+2:36  
+could they
+
+2:38  
+complain? Can you hear me?
+
+2:41  
+Oh, yes. Always very good. Okay, then we can get started here.
+
+2:51  
+My setup is today a bit different I hope that connection holds and we can work.
+
+3:05  
+So what did we talk about last time introduced the difficult topic which was explaining
+
+3:14  
+the mystery behind type inference in higher order languages, F sharp in particular. And actually their little functional language we are writing on our own as well. And I did this by going slowly and informally through through a few examples and try to explain why these like this that when you're right
+
+3:43  
+definitions like maybe let
+
+3:49  
+x equal x.
+
+3:52  
+Why is it then that we get polymorphic types? Now I realise I better share my screen to start talking about this.
+
+4:07  
+Yes, can you see my screen you must be able to. So we're playing with examples like this, I said when you're writing F sharp a function definition like full of x equals x, then some work happens. And F sharp figures out that this is a function of great generality, it actually works on any type a
+
+4:30  
+as an argument type and then the corresponding return type is also a and then we have more complicated ones where I said let phobia to place function takes two arguments,
+
+4:42  
+X and Y but just returns x just as a start.
+
+4:47  
+And then I explained look this also has a very general type.
+
+4:52  
+The function works for any type A and B for x and y.
+
+4:59  
+It doesn't need
+
+5:00  
+They'll be integers, Boolean floating point numbers, anything. Specifically,
+
+5:06  
+what happens is two arguments come in, we don't need to care about their types because nothing really is applied to the, to the arguments, the only thing we do is we throw away one of the arguments and return.
+
+5:21  
+The other actually here, the first. And this is the general type A to B to A.
+
+5:29  
+Here, A and B are type variables, they signify the fact that x and y can be arbitrary here.
+
+5:36  
+But then once I fixed that the type of x is a, what comes back cannot be an arbitrary type as to be of type the same type A.
+
+5:45  
+And then there were a few more examples, let me maybe show one of them that they have.
+
+5:51  
+And then we go on them. So I had one that looked like this
+
+5:57  
+is a far more complicated one. And it's a bit more difficult to understand what is happening when you give it to,
+
+6:06  
+to F sharp, for example, the same thing happens in our language, then mysteriously,
+
+6:13  
+but I explained part of the mystery, what happens is, of course, type inference, or we'll find out that this is a three place function, it takes three arguments, this, this Papa, this one by one, then return something. But then the first argument is no longer arbitrary, or like somewhat arbitrary, but at least it has to be a function just to be a two place function between arbitrary types. Once you've decided about these types,
+
+6:44  
+the second argument is also a function.
+
+6:48  
+And here are the types aren't arbitrary anymore, the the first argument type has to be the argument type has to agree with the type of the first argument of this guy, the return type has to agree with the second argument type of this guy. Finally, the type of the third argument also has to be one of those.
+
+7:08  
+And the return type of whole thing for has to be whatever x returns. And this was sort of clear, we're looking at it even on the surface, because we say full of these things. Because x of these things. So clearly, after I've applied for two, three arguments, I should get back the same thing as applying X to two different arguments. And this is exactly the same here. And here.
+
+7:36  
+Okay.
+
+7:38  
+And I said, this type inference goes by going through the programme, and collecting equational constraints saying, Well, my types can be maybe, you know, relatively arbitrary. But if I made a decision about this type here, it's this about that type versus that, then maybe these two have to agree and certain types have to be the same. So here, for example,
+
+8:04  
+this C has to be the same as as what I get here.
+
+8:09  
+And then you collect these equations, in the end of the day, you have a whole lot of equation, then you just solve them. Not everything will become fully determined. If it were, then your programme would be monomorphic. It just works on some rigid, fixed types. But here, there is a bit more generally, the many things can be different. But everything depends on my choice of a and b, and c, as soon as I fixed A and B, and C, everything is determined. So for example, if I apply for here, now to
+
+8:42  
+two arguments of specific type, maybe I want to apply it to the
+
+8:49  
+function of checking the quality of some things. Let me write on
+
+9:00  
+W,
+
+9:01  
+maybe I want to compare
+
+9:04  
+the
+
+9:07  
+W times three.
+
+9:10  
+This fixes things quite a bit, right. I've already given that my first argument to four is a two base function.
+
+9:21  
+I haven't explicitly given any type annotations, but I've said what I want to return is V less than w times three
+
+9:29  
+times three indicates w also has to be an integer, otherwise, I can't two times three. And then I can only compare integers to integers, so v also must be an integer. And the result of the comparison must be Boolean. So as soon as I've made this sort of commitment, my type is far more specific.
+
+9:51  
+So we can see that a was fixed to int B was fixed to bool. Sorry, int, C was fixed to bool. I've already applied the function
+
+10:00  
+For one argument, now, what what is returned is the function that takes in Y and Zed and gives me
+
+10:08  
+an element of C.
+
+10:10  
+But the type of y has already become more precise. Here, since a is inconvenient, of course, it has to be this is in. So here's my third argument needs to be. And what comes back to the end of the day is born. This is informally how it went. And then I promised, today I would show how to actually implement this. This involves a lot of detail. And it's not my plan to sort of get you through all of the tiniest bits of the detail. But maybe some of the most central concepts are interesting and important here.
+
+10:52  
+The the file I've got open here is called higher fund infer, to higher fund
+
+11:00  
+type inference for high fund. And it's a complete type inference programme, everything you need is here, other than the language itself, which is contained in this other final higher form that you need to load at the same time, and then open because we need to bring the names to scope.
+
+11:21  
+But it's really complete. And it's, it's a couple of 100 lines.
+
+11:27  
+So what is going on here, we work with our expressions language, right, which was this higher fun.
+
+11:36  
+Let me remember, or recall
+
+11:42  
+here what the syntax was. So it's a language where we can write these kinds of things. So we can write arithmetic and Boolean expressions over variables, which can be locally defined, we can also specifically locally defined functions to something of this form.
+
+12:03  
+And we can apply functions, but functions are first class, so we don't even have to apply them, we can simply pass them out. A function unapplied is already a valid expression, as well.
+
+12:18  
+That's the language.
+
+12:21  
+And now we want to infer types of this sort polymorphic types.
+
+12:29  
+So let's fix our language of types. What kind of types do we allow, that type will be
+
+12:36  
+sort of somewhat familiarly to us?
+
+12:41  
+One of these things, either an integer, yeah, of course, I think can be an integer. An expression can also be in the form of a Boolean of the Boolean type. And then we've got function types, they're written fun, parentheses, some type some other type, but they really stand for function types.
+
+13:00  
+So pairs t t prime, where t is
+
+13:05  
+the argument type t prime,
+
+13:08  
+excuse me,
+
+13:11  
+is the return type.
+
+13:13  
+But we need a bit more of course, we need these type variables because sometimes nothing determines anything too much. And we can
+
+13:23  
+in the final, sorry, inferred type say
+
+13:28  
+show something that involves type variables.
+
+13:31  
+Now a type variable you would think is a simple thing, it should be maybe just some sort of a string identifier maybe we want to prefix this prefix it with a quote sign, so it's more like F sharp,
+
+13:43  
+but actually, implementation wise
+
+13:50  
+it will play off the payoff to be a bit clever.
+
+13:57  
+So we could say that the type variable is basically just an identifier, which
+
+14:04  
+we just state as a string,
+
+14:08  
+but we have these equations that we collect and actually it makes sense to call to solve these equations as we go because
+
+14:19  
+if you remember from the last time a typical equation I will have will be something of the form
+
+14:29  
+say I learned at some point that
+
+14:33  
+the type variable a is nothing else then it has to be a function of time.
+
+14:41  
+And
+
+14:43  
+the these equations are
+
+14:46  
+most often of the form a type variable equals some type expression.
+
+14:52  
+And when you solve this equation, it just means you say, Okay, I don't want to see this type variable a anywhere anymore. I just did
+
+15:00  
+Place it with the arrow see throughout, this kind of substitution goes on all the time. So it actually makes sense as we collect equations, solve them in the same go. So we can do it. In a functional language, we do not normally have mutability, but if we use reference types, we could play the game. But initially, a type variable really is nothing but the name. But when you've learned more about it, in the same place where you're storing your type variable, you can actually say what's equal what is equal to, so you can put some real type there, which of course, in turn can depend on other type variables.
+
+15:42  
+Plus, for technical reasons, it makes sense for us to keep track of
+
+15:50  
+how deep in the expression a variable was
+
+15:56  
+defined. So we talk about levels of binding variables. And this just corresponds to nesting structure or to the depth of a variable in the nesting structure.
+
+16:10  
+So if you if you have three nested loops, and, you
+
+16:17  
+know, you define the variable in the inner most of those, so that corresponds to level three or two, depending on how you count.
+
+16:27  
+Okay, so actually, therefore, we will say, type variables are a thing, but they're far more complicated. The type to give a type variable means to give a type bar. And type var is a type synonym for a reference
+
+16:44  
+to a pair. The second guy here is the level, which is an integer. That's just a technical thing. And the first one is,
+
+16:57  
+is the kind that the type variable is of, there are two kinds of type variables, there are type variables that I yet completely uninstalled shape. So it's just a string, it's just a name, which we call no link.
+
+17:12  
+So no link applied to x, for example, would be a variable.
+
+17:17  
+But it could be, it could be something else, it could be that initially, I had a pointer to a no link. But then I learned, for example, that this a was B arrow C, and then I replace it to link to so we could imagine that, you know, initially,
+
+17:37  
+I represent my variable as a no link,
+
+17:41  
+maybe something like this.
+
+17:44  
+And it's not literally that it's a reference to that.
+
+17:49  
+And then I actually update the reference as I learn more and I say no, no, no, it's not that one, it's actually fun.
+
+17:59  
+And then fever
+
+18:06  
+No, Link
+
+18:10  
+B No, the link
+
+18:14  
+to see something like this.
+
+18:19  
+So initially, when you when you sort of establish the variable it is a reference to this thing.
+
+18:25  
+And as you as you get wiser you sort of you read point, you make your reference point to to this thing that I'm missing one was not perfect at all.
+
+18:41  
+So it's a fun between two different t bars, which both are so far on instantiate Is that okay?
+
+18:51  
+Otherwise, I mean apart
+
+18:55  
+from this trouble,
+
+18:57  
+the rest concerning
+
+19:04  
+type variable or three types is simple, we just have simple types like in born into board etc. But if the ball is represented as fun
+
+19:17  
+and I should say I was already
+
+19:21  
+I was already imprecise here because T var
+
+19:25  
+doesn't take such a thing directly as an argument, but p var in turn takes a pointer. So what we really have, what we have is like p here maybe
+
+19:38  
+p bar P P or Q, where p
+
+19:45  
+points to
+
+19:48  
+and Q points to
+
+19:52  
+this thing, that would be a better way of saying what is happening
+
+20:00  
+Okay, what else do we need,
+
+20:04  
+I can very soon go to the algorithm itself, and then work backwards in the file explaining every auxiliary function we need. But I need to introduce one more thing.
+
+20:17  
+So
+
+20:21  
+we will have typed variables around in two roles. One is like unknowns from the point of view of these equations that we're solving. Like, I could say there is this a for which I don't yet know a value, I want to learn about it. And it will become more precise. These are like unknowns for for from the point of view of equation solving.
+
+20:43  
+But then, at one point, I have solved the equation. And I found out that foo has a type of this generality. And here, I want to say I don't want to make a and b and see more precise anymore, at least for saying what the type of foo is, I want to record the fact that all of a and b and c I can choose freely. And this is done in this notion of a type scheme.
+
+21:10  
+The type scheme
+
+21:13  
+is morally just a pair of a type, maybe like this one here.
+
+21:20  
+And an explicit list of the variables, which I want to consider it
+
+21:28  
+generic in or polymorphic. In.
+
+21:33  
+So informally, he was writing it or maybe in concrete syntax, you would write something like this, you've got this type T.
+
+21:40  
+And
+
+21:45  
+we want to say, for example, that some function has this type T for all of these type variables, maybe I should save is of type variables
+
+21:55  
+that we use within our patient further down.
+
+21:58  
+So we just extract from a type and the list of variables that we say the type is, is already generic or polymorphic. In
+
+22:14  
+Is this good?
+
+22:17  
+No, I'm afraid I have to show you the real thing.
+
+22:20  
+There is a horrible, awful technical complication.
+
+22:24  
+But the big scheme of things is not so complicated. So let's look at it first. And then let's work backwards slowly.
+
+22:35  
+So our aim here is to basically infer the type.
+
+22:42  
+So one of these things integer Boolean function type, or a type variable
+
+22:49  
+for an expression.
+
+22:55  
+So infer takes this expression argument and it's supposed to return a type it takes two more arguments and they are kind of auxiliary they work like accumulators. The first one is
+
+23:09  
+is kind of a helper think level stands for level of course, and it just indicates
+
+23:17  
+our nesting depth
+
+23:20  
+in the top level expression, and this is to keep track of when we see letter letter definitions which level we are and to take it into account. generalisation specialisation business.
+
+23:37  
+The other
+
+23:41  
+important ingredient as often in these things is an environment, which here is a list
+
+23:49  
+of variable name, no programme variables, no type variables, variable name and type scheme pairs. So
+
+24:00  
+whatever I am,
+
+24:02  
+in the global expression with my type inference, I'm looking at the particular sub expression, I already know
+
+24:10  
+what are my sub I'm supposed to know the types to some precision, all
+
+24:20  
+of the variables in scope.
+
+24:23  
+And I'll try to make it clear they they will I mean by to some precision. So, so to to every variable that is supposed to define it to be defined.
+
+24:36  
+Where I am in my expression that is supposed to be in scope, I expect that this environment and knows its type, actually the type scheme because I could have polymorphic things in my context like I could have defined food locally, and it has this polymorphic type, which means that wherever I now want to apply my food, I can use all
+
+25:00  
+All sorts of possibilities that patients have for maybe with intent and bool, but maybe with completely different types. So these are in the environment, and I hope to be able to look up types there.
+
+25:16  
+Right.
+
+25:18  
+Okay. So this is important to keep in mind, we want to infer a type for an expression E, that is on level level, which is an integer. And in an environment where I already know, the type schemes for my variables in scope, and the type scheme, remember was a type plus the knowledge in which variables we should understand this type is generic, there may be other variables
+
+25:49  
+which just don't know yet and which may need to be
+
+25:54  
+about which I may need to acquire more knowledge.
+
+25:59  
+Okay, this of course, as you could expect goes by looking at all the different possible expression forms. And for more complicated expression forms, you would use recursion and you go deeper and deeper into the expression. I hope the problem simplifies. Let's look at the simple cases. First, as always, the simple cases are the ones that have to do with with arithmetic and audience.
+
+26:30  
+So, clearly, when I see a numeral I just say this is typing.
+
+26:46  
+When I see plus,
+
+26:48  
+and two things, now we're in a language where we don't have floating point numbers, we just have only integers and Boolean, when I say plus, what I need to do is I infer a one, I infer e two
+
+27:01  
+fives for both with their current.
+
+27:05  
+This is buggy with a current level
+
+27:10  
+and the current environment.
+
+27:14  
+Now you'd expect that these should come out this in. But that's not necessarily the case in a polymorphic language. Maybe.
+
+27:24  
+Maybe one, for example,
+
+27:30  
+is a variable whose type is entirely unconstrained.
+
+27:35  
+Or maybe it is a variable whose type is actually Boolean. So what I need to do is what is called unifying, we need to unify g one. And in so that's a bit like trying to solve
+
+27:53  
+the equation in equals T one.
+
+27:57  
+Yeah. So if T one is also in fingertip solved, fine, no problem.
+
+28:06  
+If it is cool, then you say console, so the whole thing will just raise an exception here. But if it's something of the form in equals
+
+28:18  
+maybe typed variable A, then you can say Ah, okay, so, a, a previous previously T one was a, which was just a type variable and an unconstrained one. So like a nollie.
+
+28:32  
+But now I learned it has to be equal to int. And that's the point when I say, you sort of solve the equation on the go, you say ah, from now on, I know that actually a has to be taken into account throughout everywhere.
+
+28:51  
+So that is what is happening here. Then also, of course, you infer the type for the second expression, and then
+
+29:00  
+let's call it T two, we must also be able to unify infant T two, and it could very well be that T two, maybe some other type variable b. And then we learn that D also equals a.
+
+29:13  
+So,
+
+29:16  
+as you work on this plus sub expression of the top level expression, you may get to know new knowledge about type variables that you have around.
+
+29:28  
+But you may also get inconsistent equations to solve like in equals some function space or in p equals all
+
+29:35  
+these ones just mean that the whole thing phase the expression is not well typed.
+
+29:44  
+Now any other medical operation is of course, similar. Negative on have a have a number is also similar.
+
+29:54  
+So you just infer the type of your expression your hope is an entity
+
+30:00  
+If it is, then you return the integer. So I should tell you, these guys here have returned type unit, as you'll see later, I'll show you the code for unify.
+
+30:14  
+So they have, that they don't return anything.
+
+30:21  
+But this doesn't mean that they don't do anything. So this is like, was in the final part of my Crash Course, crash course in F sharp
+
+30:31  
+commands are things or functions that return
+
+30:36  
+type unit.
+
+30:39  
+They don't return anything interesting, because in the unit, there is exactly one element named be empty parentheses empty tuple. But they have side effects. And here the side effect is that the pointers that have that I have lying around, these do get updated. Yeah, they they know point for something else.
+
+31:02  
+My equations have become more and more solved, or
+
+31:07  
+Yeah, more and more constraints have been imposed on my type variables. So the type variables get more and more specialised.
+
+31:16  
+Okay. And something very similar happens to say, the Boolean part comparisons and also if then else isn't as interesting. So let's consider that.
+
+31:27  
+So it is if then else, here's the guard, here's the two branches.
+
+31:36  
+What do we need to do?
+
+31:39  
+Well, you can do things in different order you it doesn't really matter. One very important thing is that must succeed is you, you have to infer the type of the guard, of course, and this must be unified with board.
+
+31:56  
+So if this comes out as a type variable, this type variable Henceforth, you know, is specialised to bool.
+
+32:04  
+Or you've learned that it has to be born.
+
+32:08  
+And if something else comes out here, this is just wrong.
+
+32:13  
+Then we also infer the types of the two branches can names for these, then we unify them.
+
+32:22  
+And now interesting things can happen, because of course, you can get various things. So for example, you can very well have that T one is maybe a times m and T two maybe is ball times v.
+
+32:42  
+Why not?
+
+32:44  
+I mean, it can very well be that the both branches of your if then else return a pair.
+
+32:50  
+About one pair, you do get to know
+
+32:54  
+that the second component is in the first can be anything, maybe about the second, you do get to know that
+
+33:10  
+the first component is bool. And the second is E. But it's important for SNL so that the two branches get exactly the same type. And once you do get such
+
+33:23  
+an unification problem, the only solution to it is really that a henceforth will be bool and B will be in because there is no other way to satisfy the whole equation, isn't it. And this is actually what this guy will do.
+
+33:39  
+And then once we are done, we just return T one, which by that stage
+
+33:45  
+is actually a type that is equal to T two, if we didn't raise an exception before.
+
+33:53  
+Okay.
+
+33:59  
+Now, let me also show you that the top level what happens in the end, we are really interested in inferring the type for the top level expression, we say the binding level on the top level is zero.
+
+34:16  
+And we see the environment on the top level is zero, then we need to do a few more things. So of course, I want to see that type nicely printed as a string. So for that type of this function show type here. But more importantly, before I even get going,
+
+34:33  
+it's wise to start the little counter. Because you see in this process, we need to generate type variable names like here we have ABC and if more were needed, I would generate the name D.
+
+34:47  
+Then all the way up until Zed then I run out of characters then I maybe start using to letter
+
+34:55  
+identify fires, etc.
+
+34:58  
+So what we're here to do
+
+35:04  
+We
+
+35:06  
+we set this counter to zero and this is also fine somewhere.
+
+35:13  
+Okay.
+
+35:15  
+Now
+
+35:17  
+let me tell you a few more things before we take the coffee break.
+
+35:23  
+Maybe even before we go forward, I haven't explained you var and let them call and let fun at all, which are the complicated things. Let me tell you about unification. What is this?
+
+35:51  
+here's the here's the function. Of course, he's not self contained, it depends on further functions that are further above here. But let me start the explanation from here.
+
+36:03  
+The purpose of unification is to solve these equations, saying one type equals another completely general not the variable equals a type, but two type expressions are equal like we saw in the cases of the branches of if
+
+36:21  
+How should then that go to types are given T one T two
+
+36:26  
+and nothing of interest should come back. But the point is, something happens while while we provide the computer's user information, how is this done?
+
+36:42  
+Well, we have to look at cases what a T one and T two like
+
+36:47  
+this goes as follows.
+
+36:49  
+For the moment, you can ignore this But later I have to explain this. We normalise T one and T two. So they may change a little bit. And that again has to do with variables which are the most complicated part.
+
+37:02  
+But for the moment, just think p one prime p two prime are exactly the given p one and P two,
+
+37:09  
+then we just need to look at cases, which are some good cases. Some good cases are if both are in then they are unified but they are the same type. The unification means make two pipes the same try to make them the same.
+
+37:24  
+All and all other teams. So in this case, we returned with success
+
+37:33  
+to things of the form fund something something and funds something else something else they are good.
+
+37:41  
+If
+
+37:44  
+So this here is the function type t 112 t One, two, this one here is the function type T 212, T two, two, when our two function types to say, Well, if both the argument types are the same. And the return types are the same, isn't it?
+
+38:01  
+So easy. So therefore I just need to unify the argument types, and the return types and there is nothing else to do.
+
+38:10  
+So here I wrote this out, it also appeared before so what is what a semicolon. semicolon is something that you use when you want to put things in a sequence.
+
+38:21  
+But it's
+
+38:23  
+and it's typical for commands, but it's really literally shorthand for
+
+38:30  
+evaluating F.
+
+38:33  
+This return is something which we can ignore, or we can pattern match it against the empty tuple. Because that's the only thing that can come back. And then Geez What we return afterwards, so that the whole point is just to do fng in a row. And we don't care about what f returns.
+
+38:51  
+So here, in most cases, g also doesn't return anything of interest.
+
+38:57  
+But anyway to sequence in construct.
+
+39:00  
+So these are some good cases.
+
+39:07  
+When we need to say that two variables are the same, then we should just remember that these two variables are the same. And here is some efficient way of doing it. And they have to be more precise about it and explain what it means. But basically, it's like, you know, you get to know that variables a and b need to be the same and you record the knowledge.
+
+39:28  
+Here it's done.
+
+39:30  
+Specifically like this. So remember a variable is given by a variable kind which is there's no link or link to and the level.
+
+39:42  
+Yeah, so we are first extracted
+
+39:46  
+interested in extracting the levels of the two things. So we dereference the two pointers we look at the levels
+
+39:57  
+when the two variables are literally
+
+40:00  
+The same by the,
+
+40:02  
+then we just say they were unified well, but otherwise, a good principle is to say that variables that come from higher up
+
+40:13  
+in the expression, so they have a smaller level number, they sort of have priority. So if the level of TV one type of level one is smaller than the level of TV two, then we should say that
+
+40:29  
+we
+
+40:31  
+link
+
+40:35  
+TV One,
+
+40:40  
+two, T two, but I have to explain what this means. But this is a way to make two variables equals and in the other case, sort of you prefer the other one. So if,
+
+40:51  
+if T two has a lower level, then then we basically remember it the other way around. So,
+
+41:01  
+you could imagine that, for example, if a had a smaller level than B,
+
+41:07  
+which just means that everywhere instead of B, I will in the future read a So, I've solved a to b, I've solved B to be equal to A.
+
+41:18  
+Okay,
+
+41:21  
+then what else is there?
+
+41:23  
+Uh huh.
+
+41:25  
+Then,
+
+41:28  
+if one side is the variable, but the other is something else, like Boolean or so, that also basically amounts to just remembering the solution. So, so.
+
+41:39  
+So, if, for example, I get to know that the variable a has to be unified with bool, then we link a to board and then later explain how this is precisely.
+
+41:51  
+If on the other hand, it's not the case that the first one is not the variable, but the second one is, then we link the second guy to whatever the first guy is. So here, we link t TV to the variable type variable to two t one.
+
+42:07  
+And this here corresponds to all the other cases, which are the bad cases like when I tried to,
+
+42:14  
+for which no pattern is given in this part. So for example, in and bowl doesn't occur anywhere here. So that should be a failure, or Buland in or funding something and ball or instant fund something. These are all on unify with cases, like an integer can never be the same as a function. So therefore, we say no, an integer is not a Boolean, etc.
+
+42:42  
+That's a unification.
+
+42:48  
+This here is just some simple gadget for us to generate the error messages, it's really not important.
+
+43:00  
+I should then explain link bar
+
+43:07  
+to type. So link bar to type is used
+
+43:17  
+in these places, it is important to know that when you've normalised
+
+43:29  
+Actually, it's not important for them to have Alright.
+
+43:32  
+Let's talk about link words.
+
+43:35  
+So link words the type with a mysterious thing that was that was used here. So what does it really do?
+
+43:47  
+Well, it has to do what the name says. So for example, I must be able to somehow record that from now on the variable a
+
+44:00  
+Boolean, for example.
+
+44:04  
+So, previously, I thought
+
+44:07  
+I could work with a completely unconstrained type a type variable a but now we've found out that no no, this type
+
+44:16  
+actually has to be Boolean. So wherever I previously said a I now have to think Boolean.
+
+44:22  
+Remember this was about
+
+44:24  
+you know first having recorded that we have a pointer to no link a
+
+44:32  
+and now this must get replaced to something that says link to
+
+44:39  
+some pointer where
+
+44:43  
+P points
+
+44:51  
+but it can be a more complicated thing.
+
+44:54  
+Okay, so how is this done?
+
+44:59  
+30
+
+45:00  
+Some technology here.
+
+45:03  
+So on the level of types, of course, nothing complicated happens. So one of the things I have to be given is a type variable.
+
+45:12  
+So like here, this TV one, which was an argument of T var.
+
+45:18  
+And remember, these type variables are these pointers to pairs of a type variable coins, which can be either no link or link to,
+
+45:30  
+and then a level. So this is one of the things we're given. The other one is, is, is any type, what will come back is really nothing of interest. It's the empty tuple. But the question is, do we even succeed? And what are the side effects of, of
+
+45:52  
+evaluating a function like this, and given an argument?
+
+45:56  
+So here, what happens is the following.
+
+46:00  
+Because of normalisation, we only ever
+
+46:06  
+actually have the situation where that when we did reference TV, then what comes back is no link something so it can't be a link to, to this is kind of a new variant in this programme. But first of all, what do we do we extract a level that's good to remember, then we find out which are all of the type variables in the type t,
+
+46:32  
+then we check
+
+46:38  
+if the given type variable is not perhaps among these free type variables, if it is, it is a big problem, I'll explain why in a sec. And in this case, we say so this occurs, check makes sense that the TV is not among PBS,
+
+46:59  
+then
+
+47:01  
+essentially, what we do is
+
+47:04  
+we adapt the level so t var currently has level LBL.
+
+47:12  
+But
+
+47:15  
+these levels in these variables in TPS can be different.
+
+47:21  
+And then we prune them accordingly.
+
+47:24  
+This is against some auxiliary function. And then finally, what we do is, we change the kind of this guy dTT tivos. tv was what TV was a reference to a pair
+
+47:38  
+of type variable kind and the level the level we don't change, but we we destructively update the coin to be linked to so the thing was previously unknown link.
+
+47:50  
+And now it's a link to some type.
+
+47:55  
+That is what is happening now I have to, unfortunately, explain to more things that curse check.
+
+48:08  
+A curse check is a simple programme, but the question is more likely, why do we do this thing? So we are given a type variable and the list of type variables.
+
+48:22  
+And we will return nothing of interest, but we may raise an exception. What do we do? We just check if TV is in the list tedious using the library function list contains.
+
+48:35  
+And if it's there, then we fail. To circularity, we say otherwise, we're happy. So why is this done? The problem is I may get unification problems like maybe a equals in arrow
+
+48:53  
+a
+
+48:55  
+it may be that
+
+48:58  
+I'm trying to make a equal to inter way.
+
+49:03  
+But of course, that shouldn't be possible because if a equals intero A then it also equals int arrow
+
+49:14  
+arrow a just by substituting what a has to be into this expression, then it also applies the same thing, but yet more unfolding, then you see that if you for real or to solve this thing,
+
+49:33  
+you get
+
+49:35  
+an infinite type expression right because this can grow forever, when when you keep unfolding. So this is the kind of situation that we try to capture. if if if this kind of thing occurs,
+
+49:47  
+then we say this is not good. Actually, maybe this is best illustrated here. I can create this expression like this.
+
+49:56  
+We can say
+
+50:07  
+Maybe simply something like let x equals x applied to zero.
+
+50:15  
+which must be nonsense.
+
+50:18  
+Like this lead track, I want to say,
+
+50:21  
+Okay, he's not allowed
+
+50:29  
+to be like this.
+
+50:32  
+And,
+
+50:34  
+and we get the situation where I need
+
+50:40  
+to unify A and B or Jose.
+
+50:44  
+And of course, it's impossible because if I were to substitute dr Jose into eighth year, and you'll get the similar kind of repetition, so that's not okay.
+
+50:55  
+Okay, explain the curse check and know there's the final thing to to explain for now,
+
+51:02  
+which is pruned level.
+
+51:07  
+This is harder to explain than occurs check on a conceptual level, cause this level business is tricky, it has to do with
+
+51:16  
+specialisation and generalisation of type variables and where it is allowed and where not.
+
+51:22  
+But let me try to do something informally.
+
+51:32  
+The idea then, is the following.
+
+51:37  
+I want
+
+51:40  
+to do this linking of of a variable to a type so maybe,
+
+51:45  
+maybe maybe, because I'm solving this equation saying A equals
+
+51:51  
+B arrow See,
+
+51:55  
+I had a completely unconstrained type variable before, but now I've learned from somewhere that this type actually has to be a function type. So, therefore, I have to say more specifically that it is
+
+52:08  
+something like this.
+
+52:13  
+Now, this a has a fixed level, yeah, it corresponds to a variable defined on some nesting level in my top level programme.
+
+52:22  
+The PS B and C can have different levels.
+
+52:27  
+And if it is the case, then I should manipulate the level of their types and this is done with this pro level. So, we take the level of a
+
+52:38  
+DVS are the free variables in this type expression here currently B and C. And then I apply this function of pro level pro level takes the given level called max level here and it takes a bunch of pipe variables
+
+52:53  
+and it basically goes through these type variables this list
+
+53:00  
+and it reduces the the level of each of those How does it do it takes a type variable, which is a pointer, it looks up with level by dereferencing and then projecting to the right and then just adjusted. So, this interactively changes the level to the minimum of what it was so far. And what is actually maximally allowed. So it may in general be lowered
+
+53:29  
+to bring it sort of in sync with the level of
+
+53:35  
+of the type variably. Okay, why this is important, is surely not clear at this stage. But it has to do with the cases that we didn't cover yet, but we still have to tell you a bit after the break, which are then the important cases of the type inference right. So, we already dealt with simple things like plus or minus
+
+54:01  
+comparisons if then else, but of course,
+
+54:05  
+the real fun stuff to say happens here and this is also where the mystery of type inference
+
+54:12  
+happens. So I have to postpone explaining this a bit.
+
+54:24  
+No, let me see if you're there.
+
+54:28  
+I suppose this must have been very, very tedious.
+
+54:35  
+I'm afraid this is the nature of
+
+54:39  
+what I try to get across was
+
+54:43  
+this idea that you infer types for different parts of the programme, often independently like here for Plus, you may have two huge programmes for which both you try to infer the types and then they may come out some way but
+
+55:00  
+You may need to be MC, you may need them to be something else. And there is this unification, you're trying to solve an equation to see if you can do it or not.
+
+55:09  
+And this is one type of equations that come from everywhere in these places, something has to be of a fixed type.
+
+55:17  
+And then there are other situations where nothing is fixed.
+
+55:22  
+But things have to be equal anyway. And the typical case of this is if the nails when we say that two branches, for which we infer types have to be equal.
+
+55:34  
+And therefore, we have to call this activity called unification. And unification. What it did was the kinds of things that I showed.
+
+55:47  
+Let me give you one more example. So when you have for example, something like this, that says,
+
+55:56  
+from from one branch of if then else, you get to know that well, I'm, it will return a pair like this, from the other brands, maybe that else brands, you get to know that a pair like this comes back, when you start sewing this thing, things will become more precise, right? Because the first components have to be equal, then you learn A and B have to be the same thing.
+
+56:20  
+The second component has to be sorry, are you for a topic? you're sharing your screen? Oh,
+
+56:28  
+yeah, exactly. So I forgot. So
+
+56:33  
+I didn't show much else. But now I started to say something again, yes. So I said there were these two cases, where, sorry, went this way. And where were you we saw so far that we needed unification. And this was the most important part so far. One is, for example, when you do something like plus, where you're independently
+
+56:54  
+infer some some types. And then these types have to actually agree with something that is predetermined like plus only works with integers.
+
+57:05  
+And then there was the more complicated case where you infer Some types independently like e one and B two.
+
+57:12  
+For the two branches,
+
+57:15  
+e one and E two are two branches of the if then else, we get two types back
+
+57:20  
+completely independently, so they may come back as whatever. And then we get an equation to solve, which says these have to be the same. And this thing I started distributed, which I forgot to share was this. So for example, this could be another example of what can happen, one branch of if then else can give you this thing and other can give you this.
+
+57:43  
+And when you start solving, here, it looks like there is a lot of freedom, both branches think there is a lot of freedom. But the moment when you say these two have to be the same,
+
+57:52  
+all of your freedom is taken away from you. Because you start learning things like the first components of the parents have to be on the same type. So therefore A and B have to be the same type. The second components of the parents have to be of the same type, therefore, a and n have to be the same type. In summary, you've learned that
+
+58:13  
+B already points to a
+
+58:16  
+maybe it was introduced later, but a further point swing so everything is the same type actually B is A and A is into therefore also B's in everything is the same type here
+
+58:27  
+and this is how these types become more precise as you do the type inference in unification. unification, then is the art given to type expressions try to make them the same by
+
+58:42  
+by learning more about the type variables involved.
+
+58:46  
+And of course, you may discover inconsistency if it says something like this, there is nothing you can do because the second components cannot be made of the same type. Therefore the two things cannot be made the same.
+
+58:59  
+Okay, but I really went too far.
+
+59:05  
+Yes,
+
+59:07  
+you're not expected to, to learn this code or not, or to write it, but you're expected to understand what unification is and what it does, how it works.
+
+59:18  
+So sort of on the level of what the fine tune trickery here is for variables is not so important. But it's important to understand that you know, you can only unify in the interpolant bowl, and four functions, types when the argument types and result types can be unified recursively.
+
+59:40  
+I have one of the types is a variable the other one isn't, then you can learn that you make the variable equal to the other thing if they're completely incompatible in your faith, that is the
+
+59:51  
+essence of this fake
+
+59:57  
+right.
+
+59:59  
+And I could
+
+1:00:00  
+Suggest perhaps like
+
+1:00:03  
+a five minute break and then my ambition is not more than go will be not more than go through these four clauses
+
+1:00:14  
+which don't involve so much else compared to what we had before. But I have to explain at least a little bit these two things here called specialise and generalise the rest who have already more or less seen, and then I try to show you some examples of this in action.
+
+1:00:35  
+Okay,
+
+1:00:38  
+yep, brakes off. But, yes, I can propose that we
+
+1:00:43  
+carry on like at 325 or so and then spent another hopefully 15 or 20 minutes.
+
+1:00:50  
+More.
+
+1:00:51  
+Yes, sounds good. Yeah. Perfect.
+
+1:08:23  
+Okay
+
+1:08:27  
+back there. So I discovered a question in the chat, which I didn't see before, which is an excellent question.
+
+1:08:36  
+How would this work for operator? overloads? Indeed, yes.
+
+1:08:45  
+That's Look,
+
+1:08:53  
+a very good case would already be addition. Suppose we
+
+1:08:59  
+had it overloaded for integers
+
+1:09:04  
+and floats, isn't it?
+
+1:09:09  
+What on earth would we do?
+
+1:09:14  
+Then we have to write a bit more complicated code. And in some sense, you need a bit of
+
+1:09:21  
+backtracking, I mean, different tries.
+
+1:09:24  
+But let's see, what are the possibilities
+
+1:09:29  
+good and bad.
+
+1:09:32  
+here Actually, it's not too complicated, because let's infer types. So
+
+1:09:38  
+I think the only reasonable cases are
+
+1:09:42  
+when
+
+1:09:46  
+both the type of one that is inferred and the type of Ito that are inferred are numerical types. I mean, of course, it's possible that one of them is numerical and the other one is just a type variable. Like one is float the other is a very
+
+1:10:00  
+Boom,
+
+1:10:01  
+then it's good.
+
+1:10:03  
+Because the the type of this operand for which we know the type determines the type of the other. Yeah, maybe I should write a small example here. So
+
+1:10:18  
+suppose I have something like
+
+1:10:22  
+5.0 plus x. And maybe I know that x currently, my inference has invented that it has type unconstrained. It's, it's just a,
+
+1:10:36  
+then my unification problem will be that I have to unify the two types float. And they and that's good.
+
+1:10:45  
+I do this by just saying, Okay, now I've learned that a for the future has to be float.
+
+1:10:52  
+Yeah. So we replace this.
+
+1:10:56  
+In our algorithm, we will look at is no link
+
+1:11:01  
+string a, which gets replaced with a link to a pointer to float. That's good. And similarly, when when one of these is is a
+
+1:11:16  
+is
+
+1:11:24  
+sorry, is the integer right? So maybe we could have something like like plus three,
+
+1:11:30  
+where we say is of type
+
+1:11:34  
+B, then we get this equation to solve that B has to be equal to 10. That's also good.
+
+1:11:42  
+We can get here other equations that we don't like, like,
+
+1:11:51  
+what can we get, we can get, maybe in this case, we can get them equation flow equals in and then we just simply unhappy and reject the programme that can happen.
+
+1:12:06  
+What else
+
+1:12:07  
+is interesting?
+
+1:12:20  
+If it both types are given for some reason. So maybe we have something like x plus a Zed, but we already know x, and Zed is in, then the equation is in equals int, and we're perfectly happy.
+
+1:12:43  
+Then the truly interesting question is, what do we do in the case when you have extra set? But so far, you know that x is of type A?
+
+1:12:56  
+And Zed is of maybe type B,
+
+1:13:01  
+shall we now say what
+
+1:13:04  
+floats are in?
+
+1:13:07  
+Or maybe we just say that the two types are equal for the time being? And then we see for later.
+
+1:13:25  
+Now, yeah,
+
+1:13:28  
+clearly, this algorithm needs to be modified because at this stage, we can reasonably say A and B have to be equal.
+
+1:13:37  
+But that's not enough information to record because we should also record for ourselves for later
+
+1:13:45  
+that a can only be interval, right? Sorry, can only be inter float.
+
+1:13:54  
+I'm currently we have no mechanism of saying
+
+1:14:02  
+because there can be something that determines the type later, like x plus f can be part of something bigger, like x plus that plus seven. And then why are you working on this bit? You have the problem that we had here now we don't know what to do.
+
+1:14:19  
+And then when we add seven, we know Okay, perhaps should be any feature.
+
+1:14:29  
+So there are these issues. And also, maybe you've noticed playing with F sharp that it makes sometimes some decisions that are a bit unexpected. The trouble with these overloaded operators is always that they are some way towards polymorphism, but not not universal polymorphism. In the sense that plus is not defined for every type is defined for certain numeric types int and float in particular.
+
+1:14:58  
+But
+
+1:15:00  
+But the general
+
+1:15:02  
+type inference algorithm here that we're looking at is well prepared for universal polymorphism. is prepared for functions that have specific types, but but not so well prepared for things in between. And then what?
+
+1:15:21  
+What F sharp tends to do when you when you, when you do type inference? It defaults to four plus, for example to be of type int when it doesn't know any better.
+
+1:15:34  
+Less you have perhaps noticed. So I think even when you just check what the type of plus is,
+
+1:15:43  
+say it says it's a Twin Twin From where did they get it?
+
+1:15:49  
+I may very well say that it's float to float the float and it will be happy then.
+
+1:15:57  
+But by itself, it has to default to something because there is like no reasonable generalisation. You can't say it's a great way.
+
+1:16:10  
+And there is there is no language mechanism to say that is some A, which is only integer float. So I can myself fixed the type to be float, but
+
+1:16:20  
+when it specialises in this sort of completely undetermined situation, it makes a biassed choice towards integers.
+
+1:16:30  
+Okay.
+
+1:16:34  
+So, yeah, that the question is how to propagate this information out, inside out. If for the moment you don't get now and currently this this, this sort of structure of the algorithm is not prepared for this. So we need to tweak it a bit to fit this in.
+
+1:16:52  
+Because you do want to get the type for such a thing, right.
+
+1:17:00  
+Let's try
+
+1:17:10  
+see the
+
+1:17:12  
+the type inference manages to deal with it. So it manages to decide that these are inputs in this particular case. And I think it will also manage when I say 5.0 so it can look a bit the head
+
+1:17:26  
+until this kind of propagation here.
+
+1:17:30  
+So at this stage, you only learn exons that have to be of the same type. And then the further outer context maybe gives you more information.
+
+1:17:43  
+Is this good?
+
+1:17:48  
+Okay, let's look at the remaining cases. Now very briefly.
+
+1:17:54  
+What do I want to start
+
+1:17:56  
+maybe here,
+
+1:17:58  
+when you have a variable
+
+1:18:02  
+you want to know what its type is the environment should know its type.
+
+1:18:07  
+You can look it up in the environment, but that gives a polymorphic type for it. So
+
+1:18:14  
+in general, if the type contains type variables, it says they can be anything so so for example, I can be in this context where I've said Let food
+
+1:18:26  
+x equals x and then I do something.
+
+1:18:29  
+If I here look at the type of food, it is very general it is
+
+1:18:35  
+a to a but in any use of foo, I actually need to specialise it depending on
+
+1:18:43  
+what kind of argument I want to apply for.
+
+1:18:49  
+So in general, you may need to specialise
+
+1:18:54  
+the types that you learn from the environment. So this is a type scheme it contains all these unconstrained variables. And this is what specialisation does. It replaces all these unconstrained variables with copies there off, which can then be made more special.
+
+1:19:12  
+If this var is embedded in some bigger context that enforces that these variables take some particular renders. So that specialisation it takes into account the level of choice Okay.
+
+1:19:25  
+How about let
+
+1:19:28  
+the idea about let is always some sort of extension of the environment right because the body can use one more variable compared to for example, this right hand side.
+
+1:19:40  
+So LBL prime will just be the increment of LPL. Then what do we do? We infer
+
+1:19:50  
+the type for the right hand side
+
+1:19:54  
+with level parameter LBL prime not LBL because this is on deeper
+
+1:20:13  
+I think it is we infer the type
+
+1:20:18  
+and then what we do
+
+1:20:21  
+when we build a new environment
+
+1:20:25  
+and
+
+1:20:28  
+this is just the extension of the old one with the knowledge about x type, but at this point we say
+
+1:20:35  
+we derive the type for for TX this may be a function maybe it like is like this full here maybe it is very general type and at this stage we say all type variables we see around now, depending on the level
+
+1:20:50  
+yeah all type variables have the correct level that we see around we are universal in some way we do this generalisation things, we turn a pipe into a type scheme, listing those variables as unconstrained
+
+1:21:05  
+and then finally, we infer the type of the body in this new environment.
+
+1:21:19  
+Yes.
+
+1:21:22  
+Okay.
+
+1:21:25  
+Then
+
+1:21:29  
+that was about four and left,
+
+1:21:32  
+when it comes to functions, we have to talk about function calls and defining new functions. With functions, always there has to be the agreement between the function type
+
+1:21:45  
+at the use place.
+
+1:21:48  
+So, when we apply a function to an argument,
+
+1:21:52  
+the argument type has to agree with the declared argument type of the function right.
+
+1:21:59  
+And then something comes back and that has to agree with
+
+1:22:04  
+the return type of that,
+
+1:22:07  
+of what has been the carrot and, and this has been this is made sure at the call. So a call consists of what so there is a function expression and an argument expression, one apply to the other, what we can do is we apply the type of the function, we apply the type of the argument
+
+1:22:30  
+and then we do a trick, then we we just invent the type variable for the result.
+
+1:22:41  
+Type.
+
+1:22:43  
+And then we do a following do the following unification we say the function type has to be the same as fun dx, where TX is what we infer for the argument.
+
+1:22:57  
+And here we put tr for the return type because we have no better idea. So here we invented the new variable name, and that gives us an equation.
+
+1:23:08  
+And if the unification succeeds, when we return the return type, let me give you an example here. So, suppose we do something like
+
+1:23:22  
+I don't know, we apply f Two, three. And maybe
+
+1:23:28  
+when we do the type inference for F, we have found the following type we have found that it's from it goes from int to bool.
+
+1:23:36  
+Then the trick that we do is we invent the type variable for the return type. And then we unify the following things we unify the functions type, which is to bool.
+
+1:23:50  
+With the first argument, which is in here, in this case,
+
+1:23:57  
+and some invented variable to speech.
+
+1:24:01  
+And when we do the unification of course, we learned that this B will have to be bold, in this particular case, but it could be more complicated.
+
+1:24:10  
+In any case,
+
+1:24:12  
+tr is returned. And by that stage, I mean it was it was it was defined as a T bar,
+
+1:24:21  
+where we've done a new type bar, so this creates a new reference to
+
+1:24:28  
+to the pair consisting of the given level. And then normally to refresh variable name.
+
+1:24:36  
+But by the time we get here, it may have gotten more precise because of this unification thing here.
+
+1:24:43  
+Okay, let's also look at let fun. Now that's the most complicated.
+
+1:24:49  
+So here's the function name, parameter name, right hand side, that's the body of the function e body which is the body of the left
+
+1:24:57  
+what needs to be done
+
+1:24:59  
+there
+
+1:25:00  
+prime is just the next level.
+
+1:25:07  
+Now, this is type inference without any type annotation. So here we have no idea about the type of effort, we just invent some types, TF will have will be of this type, t x will be of this type, these are new type of variables at level LBL prime,
+
+1:25:26  
+then we extend the given environment by adding their that x is of this type that we just invented for x and f of this type that we just invented for F.
+
+1:25:38  
+And we consider these type schemes where nothing is general, because these new type variables that we invented,
+
+1:25:49  
+we are not universal in them, they're just names for something that may need to be concretized when we solve equations,
+
+1:25:56  
+then tr is what then in this extended environment, so, we just give gave some hypothetical types to F and x,
+
+1:26:06  
+we try to infer a type for the right hand side.
+
+1:26:13  
+And then we hope that the type that we invented for TF or
+
+1:26:22  
+or some more precise version thereof,
+
+1:26:25  
+that we already have by this stage can be unified with fun of TX tr. So, first TF is a is a type variable, but then we want to unify it with something of this more specific form.
+
+1:26:39  
+Okay, if this succeeds at all, I mean, if the function definition is not nonsense,
+
+1:26:46  
+then we can build a different environment, which again uses TF, but this time generalised because
+
+1:26:55  
+if after all this activity, there are still type variables left in whatever TF has become equal to, then these are the type variables in which we are universal, and we can then accordingly generalise and then finally, we define a further type of the body in this given new environment, or sorry, in this in this newly formed environment.
+
+1:27:20  
+So it comes in several stages, you know, guess the type, I mean, not gets invented, type ref, just apply for event type for x, put these invented types in the environment, infer the type for the right hand side, then try to make sense of it. This is the unification stage, if everything made sense, then
+
+1:27:43  
+extended environment differently with a generalised function type. So we say all the type variables you now have your universal in, and then infer the type for the body.
+
+1:27:57  
+What is an example of this?
+
+1:28:07  
+So we have some examples of this. So for example,
+
+1:28:13  
+all of these are coded. So we can look at what happens. So for example, this add one, maybe it's a simple programme,
+
+1:28:22  
+I can apply,
+
+1:28:25  
+I can apply.
+
+1:28:43  
+And it tells me it's in tweak. And this is not f sharps
+
+1:28:49  
+type inference. It's our type inference. Because we've used
+
+1:28:54  
+we've used power coding for top and what comes back is really not not really not the type in the F sharp sense, it's just upstream we produced it look like this.
+
+1:29:06  
+And
+
+1:29:08  
+here are some other ones. So for example, this was the definition of pipe
+
+1:29:13  
+written in our little language.
+
+1:29:17  
+Pipe just
+
+1:29:20  
+is something that you can use for applying a function to an argument but in a different order.
+
+1:29:27  
+And this is defined here, and if you like to pipe
+
+1:29:34  
+you to get the right result here to see how the name generation has,
+
+1:29:40  
+has worked. So some names A, B, C, D, E, F, and maybe some more were invented.
+
+1:29:46  
+But then some of the lanes have to be the same.
+
+1:29:50  
+Or sorry, some of the names
+
+1:29:53  
+didn't have to be the same. Maybe they have to be the same but they had to be equal to some other types. So they we
+
+1:30:00  
+We got rid of them. But finally, we've got two names that are still unconstrained CNF for example,
+
+1:30:09  
+maybe I can just show you a little glimpse of specialising generalised.
+
+1:30:15  
+generalised is not so bad.
+
+1:30:19  
+It takes
+
+1:30:27  
+it takes a type and it turns it into a type scheme by saying, which are the exact
+
+1:30:34  
+variables type variables occurring in the type in which we are universal. And that's done by looking at levels.
+
+1:30:43  
+So, really, what comes back is a type scheme t vs T, where T is the given type of PVS is some list of variable names that we have found. How is it done, we collect all type variables that the current T
+
+1:30:58  
+and then we just
+
+1:31:02  
+filter out those that are not free in the current context. These are the ones that in which we are not universal. What is this non free in context, this is defined locally here. So for every type variable, you just actually check
+
+1:31:21  
+if it comes from a deeper nesting level than the current one. And in this case,
+
+1:31:28  
+we can't say that this is that we universal in that type variable.
+
+1:31:35  
+This is maybe a bit difficult to explain in words at all.
+
+1:31:41  
+But if you write down examples and think
+
+1:31:46  
+what, what what to type variables coming from deeper levels, meaning when you see realise that this is the case.
+
+1:31:55  
+This generalised and specialised
+
+1:31:59  
+is kind of a worst thing. So here, the idea was I'm I'm given a cosy the opposite direction, we're given a type scheme. And we just want to get a type,
+
+1:32:12  
+which is obtained by
+
+1:32:15  
+taking all these type variables in which we were universal, and replacing them with new type variables that we are happy to actually make more precise if the applications
+
+1:32:29  
+require so.
+
+1:32:32  
+And this is done by
+
+1:32:43  
+the following thing. So we innovate, we invent new variables for each of these three variables here, that's called bind fresh.
+
+1:32:54  
+And then, essentially, one walks through
+
+1:32:59  
+the type and replaces every occurrence of a variable with a new copy of it. And thereby we call up the whole type with the substitution.
+
+1:33:12  
+Okay,
+
+1:33:14  
+that is really technical, and I think, hard to explain on a conceptual level. This is a trickery in this album.
+
+1:33:24  
+But the big part was, what the big part is, is these checks here.
+
+1:33:30  
+So
+
+1:33:34  
+with type annotations,
+
+1:33:38  
+the situation is a bit simpler. But here, when when we define a function, we first have to start with like a clean sheet with the with the function and the parameter, we have no idea what what their types are, we just put type variables that we solve equations, we come up with something and then we check if the whole thing makes sense.
+
+1:34:01  
+So we insist that whatever we invented for the function, agrees with this thing with
+
+1:34:07  
+a t, x and t are the types we have invented for the arguments and the return value.
+
+1:34:15  
+And similar thing in a call.
+
+1:34:21  
+Okay, and here are some more examples that you can then play with.
+
+1:34:30  
+Things to take home. This is maybe the first place where we've needed actually a bit of imperative programming to make the algorithm nice and efficient. In that, this solution, we don't really collect equations, we solve them as we go. Partially in this unification thing and partially just doing this re linking of
+
+1:34:54  
+variables to more specific information we've learned
+
+1:34:59  
+and
+
+1:35:00  
+This linking uses the fact that we have cleverly represented a type variable that is initially really a variable as a string. But as soon as you know that the type variable, which is thought of as kind of an unknown, is something more precise, then you replace the no link with a link tool.
+
+1:35:20  
+And you know that you've already instantiate it into something, and then you get these chains of link tools.
+
+1:35:34  
+That should be it for now, for my part,
+
+1:35:39  
+I can promise that the remaining
+
+1:35:44  
+lectures on functional programming are gonna be much, much simpler No, again, so this was by far, I think, the hardest
+
+1:35:54  
+thing in the whole course that we know, discussed over two lectures type inference.
+
+1:36:00  
+And I just hope that you've got some glimpse into it.
+
+1:36:05  
+On the level of ideas, it's very important to have a feel for what is going on, either in F sharp or in our own type inference. But the details of it are fairly involved.
+
+1:36:24  
+On Thursday, and next week, I'll talk a bit more about sort of foundations of functional programming, we will actually look at the very small core with which one can express everything we've done so far. It's called the lambda calculus, it was actually invented before any real FP languages
+
+1:36:48  
+were conceived for computer programming.
+
+1:36:53  
+And certain things are easier to see and explain. They're actually also on the level even though of this type inference, but it's very important to understand that this is
+
+1:37:04  
+ultimately ultimately all functional programming reduces to this and everything else is is syntactic sugar and niceties that you build to
+
+1:37:17  
+to have a really convenient programming language on top of this underlying
+
+1:37:23  
+little computation mechanism.
+
+1:37:26  
+What is going to come?
+
+1:37:37  
+How about more questions?
+
+1:37:53  
+Throw me phonologies Okay, yes, let it sink.
+
+1:37:59  
+And yes, we go on to different things. So in the next lectures, I'll show a bit more slides or maybe just
+
+1:38:08  
+write on this whiteboard. And yeah, it will be of a different flavour. Okay, then. I do stop here
+
+1:38:22  
+and seal on Thursday.
+
+Transcribed by https://otter.ai

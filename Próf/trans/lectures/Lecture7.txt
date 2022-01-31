@@ -1,0 +1,2341 @@
+3:49  
+Okay
+
+3:52  
+let's start with today Let me check
+
+3:57  
+if you can hear me and if I can hear you can someone assist? It's working it's working very good
+
+4:09  
+someone says there is no audio but I hope
+
+4:13  
+it okay
+
+4:16  
+okay good
+
+4:19  
+oh no
+
+4:21  
+I can hear you. Okay.
+
+4:24  
+Works for me someone cannot hear but I think then it's a problem
+
+4:31  
+not on this site out okay it's not for everyone okay perfect. We can then get going
+
+4:38  
+Today the topic is gonna be lexing. So this is about how to get from concrete syntax to, to abstract without first have to finish something that we didn't quite finish last time, which was the discussion of, of the expression language with
+
+4:59  
+with local
+
+5:00  
+names. So I showed the syntax, and I showed how the relation goes. But we didn't get discussed
+
+5:09  
+the stack machine and the compilation for for this extended language. And now we'll do it, we'll go back to the same file expressions three To start with, and only then to Alexa.
+
+5:22  
+And actually, I'm gonna go to show you two different stack machines. So let's go there. And let me share my screen. And then let's recall where we stopped.
+
+5:46  
+Thank you.
+
+5:51  
+Okay, I told you about the little expression language in in sort of three stages.
+
+6:07  
+So there were
+
+6:11  
+simple expressions with
+
+6:13  
+no variable to the names, whichever you follow.
+
+6:20  
+Then we had
+
+6:24  
+expressions with global names only.
+
+6:30  
+So your expression could contain some variables, like I could have written x plus three, or y plus seven.
+
+6:39  
+No declaration of names, all the names that are there are in the top level scope, they are not declared in any particular way or defined in any particular way. So in particular, if you want to evaluate an expression, an outside environment has to tell you what you want the values of your variables to be. And then the last thing we started to look at was
+
+7:02  
+Global's names on sorry,
+
+7:06  
+the last thing I wanted to show you was expressions with local needs to
+
+7:16  
+go, then, of course.
+
+7:19  
+Okay, let's, let's recall what the syntax was.
+
+7:24  
+So in the simplest case of expressions, we said, our expressions could only have been numerals or little operator expressions, which are of the form some operator symbol, and then two expression arguments to that one where the symbol could be plus times minus typically, then in the next stage, we introduced variable names.
+
+7:47  
+So expressions could use variable names, but there was no means to to declare variables, or even to define them in the sense of also giving the variables a value. So for that one, then in the last page, in the first stage, in this file expressions three, I introduced this,
+
+8:06  
+this fourth kind of option, or our case here in the data type expressions,
+
+8:14  
+within concrete syntax corresponds to something like this. So the idea is we say,
+
+8:20  
+the whole thing is an expression. The part the main part of interest is is is here after in, and that's what we call the body of that expression. But then there is this definition part in the expression. And the idea is, I'm defining locally a name.
+
+8:38  
+Together, I also indicate an expression whose value is then the value of the name and the scope of this name is exactly this body,
+
+8:48  
+and nowhere else.
+
+8:50  
+And this sort of usual game of visibility appears here in the sense that you can reuse names, I can already have a name in scope, I can introduce it again with let construct
+
+9:05  
+and then I sort of have two versions of the same name and in our scope and in an outer scope.
+
+9:11  
+And the inner scope shadows out the definition of the name in the outer scope and the near the name from the other scope is not then not reachable from the inner scope. And then we looked at quite a few examples, both in concrete and concrete syntax and abstract syntax. I will not revisit them. Let's just straight go where we finished off.
+
+9:35  
+And then let's go on.
+
+9:40  
+So this is as far as I got. I stopped here last time.
+
+9:47  
+I gave you an interpreter of these sort of expressions with respect to an environment
+
+9:55  
+and an environment is something
+
+10:00  
+I also introduced last time,
+
+10:03  
+when we were discussing this file expressions to where we only have global names. The idea of an environment is some expressions don't make sense alone, but only to sort of in the outer world they're embedded in. And here, this outer world that we might also call the be calling environment should be
+
+10:24  
+sort of information on top or outside an expression that says, Well, if we use names here, global names, and we haven't defined them, something should should fix what their values are. And this data structure that does it is called an environment.
+
+10:43  
+You can implement it in various ways, you could do a search tree, here, we do the simplest possible thing, I just formed a sort of list format, a dictionary, a list of string, and integer pairs, where the strings are variable names that I want to map into integers. So the idea then was that
+
+11:04  
+if I do something like x, three, y, five,
+
+11:14  
+this is a two element list of pairs.
+
+11:19  
+This is of the appropriate type that we also call an error here for environment.
+
+11:26  
+This is a little dictionary, where I can say I want to look up what the value of x is. And you just walk down the list and see that the first occurrence of x here is associated to value three, in fact, there is only one occurrence of x, which is sort of good for y, I get a similar thing. And if I was to look at that here, I will be told that this name is not found in the dictionary. And if a name appeared twice in a dictionary, or three times or more,
+
+11:55  
+then this lookup function only finds the first occurrence.
+
+12:01  
+And the trick here is what I also already managed to show last time was that we use this facility
+
+12:09  
+that VLOOKUP only finds the first occurrence to actually implement shadowing at no extra cost. So this was a kind of a free lunch phenomenon of the last time. Yeah, free lunches is very uncommon. But it happens today, there will be actually a bit more of it.
+
+12:30  
+So what was the trick, the evaluator was quite a bit like before.
+
+12:36  
+So it's, it is a function, defined recursively the function is called the Val.
+
+12:42  
+The main thing that goes in is an expression E of type expert. Yeah. And what comes out is the value of that expression, then under evaluation, which has to be an integer. But then there is also the second argument and of type n where, so an environment that helps us.
+
+13:01  
+So we've got a whole number of cases here, but this one will help us in the variable case. Because if my expression is a variable, I have no idea what its value is.
+
+13:12  
+You are the environment to me, and you have to tell me what it is.
+
+13:20  
+And then it's possible.
+
+13:23  
+Okay.
+
+13:26  
+All the other cases here,
+
+13:29  
+work by
+
+13:32  
+the numerous cases, utterly trivial, but the operator cases worked by evaluating each of the arguments, and then just applying the appropriate operation,
+
+13:44  
+where the important point is that object language, so expression, language operations, plus times minus here, which are just strings, get implemented in terms of what a meta language here, F sharp gives us.
+
+13:59  
+This one, I'm not inventing a wheel, I'm not writing my own multiplication, F sharp has it.
+
+14:08  
+And that's all pretty familiar. Okay, n is important to be passed down, it's important to pass it down from the main call to two recursive calls. Everyone wants to see our values of variables. So not only the top level, so this is actually the way that the environment reaches the, you know, the leaf case of the expression, which is an abstract syntax tree. So we can actually do some look up there.
+
+14:36  
+And the only interesting extra case, which will do the free lunch for us was this one. Let me go through it once quickly, again, because this is the most important
+
+14:49  
+thing to understand here.
+
+14:52  
+Well, it's written in little small steps. Actually, I could write it in one line, but but maybe these local names x Val, and then one
+
+15:00  
+Help us to read what is going on.
+
+15:03  
+So what's the situation? Suppose I need to evaluate an expression, which is specifically a let expression.
+
+15:12  
+So I know some variable that is defined there some local variable, I know what the definition is in terms of the right hand side of the definition. And I know what the body of the left construct is, or let expressions.
+
+15:26  
+Also the environment is passed down to me, I have some environment to work with.
+
+15:34  
+Fundamentally, what is interesting to us is the value of the body, that's what we want to return.
+
+15:41  
+So, we need to evaluate the body.
+
+15:44  
+But in which environment. So, in all other cases, except this, the environment in which you evaluate sub expressions is just the same in which you apply or evaluate the given expression.
+
+16:00  
+Not so here.
+
+16:02  
+Why? Well, because the body can contain variables beyond those that are known to the environment that is passed down to us. Why? Because the body may also contain the newly introduced variable x, or maybe that reintroduced variable x if x was already in the scope before. But now we want to have a local
+
+16:25  
+sort of similarly named variable
+
+16:30  
+with its own scope.
+
+16:32  
+So, then, actually,
+
+16:35  
+I can't use the environment I'm given, I should use a modified environment that is called anyone here. So From where does anyone come? So let me just read this thing backwards here. And one is actually the extension of the given environment that comes in
+
+16:51  
+with an extra entry in the dictionary, which says, well, the value of the new variable x is going to be x Val.
+
+17:06  
+Is this okay?
+
+17:08  
+And then, then we need to say, okay, so from where does x Malcolm X well, has to be given by whatever the definition of axes, which is this right hand side here, so that is an expression
+
+17:21  
+erhs or it's just the right hand side E for expression. And that needs to be evaluated just in the environment that was handed down to us not they're not the extended one, because then I would go in a circle right?
+
+17:34  
+I'm about to define x, but then I would already assume that I have a definition for x No, I just use the environment that is given to me. So, the right hand side is evaluated in the old environment or the environment from the outside
+
+17:51  
+whereas the body is evaluated in a in a sort of extended environment that also knows about the value of the
+
+18:00  
+of the newly defined local
+
+18:03  
+variable.
+
+18:06  
+So, in some cases, we might be very lucky in that all variables in my expression e
+
+18:12  
+are local to that expression, then we need nothing from outside to actually evaluate an expression. So, this works for closed expressions.
+
+18:45  
+evaluations, especially if
+
+18:53  
+they can be evaluated
+
+18:58  
+in the empty environment.
+
+19:14  
+Okay.
+
+19:17  
+Let me give you an example of this and then we go on and look at the new
+
+19:25  
+material.
+
+19:31  
+So let's work with
+
+19:35  
+something like this actually, let me slightly modified
+
+19:43  
+let me just do this. So, here it is, here is an expression but let me do it slightly differently. So the expression really is let x be 17 in Zed plus x. So now you see this is an expression
+
+20:01  
+That
+
+20:04  
+has x as a top level variable that is not defined inside the expression.
+
+20:10  
+But the zap here is local. Yeah. Because 17 is the definition of that contains no variables. But in the body, I already used that. But this is just as that that I defined here. This is a valid expression.
+
+20:27  
+What do you think? It's very easy if I try to evaluate it in?
+
+20:35  
+Maybe I'll just try to evaluate it in the empty environment.
+
+20:42  
+Let me give it the proper name.
+
+20:45  
+Let my expert be this one.
+
+20:50  
+I mean, it will be called it's called it now. But the next time it won't be any more. So this is my expression. So what do you think? Where can I evaluate it? If I evaluate it in?
+
+21:04  
+Let's try to evaluate it in the environment, what do you think will happen?
+
+21:11  
+Any suggestion.
+
+21:16  
+So I've got an expression with one global variable, and one local variable.
+
+21:22  
+And if we return everything right, then the value of the local variable in its scope should be 17.
+
+21:30  
+To see, we know, we have no value for the variable x. So maybe it doesn't work like this.
+
+21:35  
+Indeed, when I tried to evaluate this,
+
+21:41  
+I goes to places in my evaluator, but fundamentally, at some point, I want to look up the string x and the string set, which are the names here, this this with Zed, there is going to be no problem because I will only need to look it up in the invalid extended environment. Where is that is 17. But with x, I'm in trouble. because x is not introduced locally. And you can find it here either.
+
+22:10  
+So let's try something better than I can maybe try to evaluate it in the environment where x is one.
+
+22:18  
+What am I doing wrong?
+
+22:24  
+Maybe I should put x in quotes what you think?
+
+22:28  
+When if the value is 18? Why is that? Well, because I'm adding together as an index. That is fundamentally the value I'm after. And I do this in the scope where the value of 3017 for x, we don't know the value based on the expression alone, but the environment tells us is one. Okay?
+
+22:51  
+I don't like that. It's one Let it be 100. And then I get worried 17? Because I'm adding 170.
+
+22:58  
+I don't like 100. I want 200.
+
+23:04  
+What do you think will happen now?
+
+23:10  
+101 on something. Yeah, exactly. Because this is the x that will actually find in the dictionary, right? And the longer dictionary would kind of be useful. If it was not given from the top level, if it's given from the top level, you will never reach the second occurrence of x. But if if a dictionary like this arose locally inside the expression, then it makes perfect sense because I may
+
+23:39  
+declare x with lead as well. And there may might be an alter x and then maybe I have a local x which is 100. And then there could be a top level x which is 200. Right.
+
+23:50  
+Let's do one more thing here. So let me try to
+
+23:56  
+let me try to influence the game. So I don't think that is 17 I think that honestly is 42
+
+24:07  
+what do you think will happen now?
+
+24:11  
+Still 117 Yes, perfect. Why? Because
+
+24:17  
+the other new set will be pushed in front. Yeah, exactly. So we don't see quite here. But if we if we were able to step back, then at one point
+
+24:28  
+there will be a different environment
+
+24:31  
+with which the
+
+24:34  
+with which the body is evaluated or with respect to which the body is evaluated. And that will look like this.
+
+24:40  
+Yep.
+
+24:44  
+So that would be this kind of n. So if the if this guy were n at one point, or maybe these sort of on the top level, as we pass it in here, then the end one
+
+24:56  
+at the point in which we evaluate the inner guy
+
+25:00  
+Here, this one will actually look like I wrote here. Yeah.
+
+25:08  
+Is this fine? with everyone?
+
+25:14  
+Say something. I can't see you any of you. I only see my screen.
+
+25:24  
+Did you all go to get coffee?
+
+25:28  
+No, no, that's good. That's good. Thank you.
+
+25:34  
+Yes, I, I think this is fine. I guess I think there's just a little bit time to sink in. Yes. And I will give you more stuff, which hopefully will pile on top of these things. So it will make the whole load levier heavier, and it will sink in. So
+
+25:55  
+So yes, let's see.
+
+25:58  
+So here is a little exercise that's kind of useful.
+
+26:02  
+It would be nice to be able to determine for given expression, whether it's closed. And closed really means exactly this thing that,
+
+26:11  
+you know, an environment that I could basically,
+
+26:15  
+sorry.
+
+26:17  
+Closed is an expression that I could evaluate in the empty environment. So this means that then the expression really self contained, it doesn't need any outside definitions, every variable used is already locally defined on some level inside this expression.
+
+26:34  
+How would we implement this?
+
+26:41  
+Well, if we didn't have the local definition facility, then it's very easy to do a check whether
+
+26:49  
+an expression is closed. So if an expression is not allowed to use left,
+
+26:57  
+then it's closed precisely when it doesn't use var either, right?
+
+27:02  
+Because if I'm not in the position, to define any local variables, then all the variables I can use are, are, are the global ones.
+
+27:14  
+And if I then forbid global ones as well, then then I shouldn't simply be able to use any variables, right.
+
+27:22  
+So that's a nice situation. But if we want to keep track, whether an expression is closed, in the presence of lead constructions, that's actually not so easy to programme. And you may need to think about
+
+27:37  
+how to do it at all.
+
+27:40  
+And the trick is, you could recurse over the expression.
+
+27:47  
+And wherever you are, you could try to see
+
+27:54  
+if the variables that are used.
+
+27:59  
+They're all defined in the lead constructs that sort of enclosed you. So imagine you're somewhere deep in the ASD. And you see at the leaf that now here is the use of a variable.
+
+28:15  
+So this use of a variable is fine in the sense that you don't need an outside environment if between this leaf
+
+28:24  
+and the root of the tree which the expression is there is no lead on the way that
+
+28:30  
+sorry, there is a lead on the way that defines this variable, right? So if somewhere you see var x, then you expect that you're part of some lead x in blah.
+
+28:43  
+Okay.
+
+28:45  
+So then the idea is, when I process a tree, I could I could work with a little accumulator, so that when I walk down the tree, I record the names that have already been defined on the way to wherever I am in the tree.
+
+29:02  
+And then when I hit the leaf, when I when I, when I hit the var leaf in the tree, I just have to check whether my variable is in the accumulator. Okay,
+
+29:14  
+then that's not so complicated. So what do I need, I first need a trivial helper function that just checks for any given value and the list where the value is in the list.
+
+29:26  
+I call it contains, sometimes it's called the curse. Maybe it's called, maybe it was called the curse in in one of the problems, that's actually Anyway, here is a very simple definition of it.
+
+29:42  
+We could say, if my given list is empty, then it surely doesn't contain x is false. And if my given list is y followed by some rest of the list, then there is only two ways that x could appear in this list. Either x is the head element, or it's somewhere in the rest
+
+30:00  
+The list right, you can only be in the list if you are the tail. Sorry, if you are the head of the list, which is this check here. Or if you're in the day.
+
+30:10  
+checking if you're in the tail is a smaller problem than the main problem of checking if you're in the whole list, so you reduce the bigger problem to a smaller problem.
+
+30:23  
+Once we have this helper,
+
+30:27  
+I can actually write the function. I think here I've done some anything you can also write contains with the help of a built in function list exists. But if I've already defined contains, I should really say contains
+
+30:41  
+x axis here, which is the same thing.
+
+30:46  
+Okay, so. So what's the idea then checking if an expression is closed, so the top level programme will be called closed.
+
+30:56  
+And it takes an expression, maybe I should give you the type.
+
+31:00  
+And it returns a Boolean, which just says whether the expression is closed or not. So true for closed, forms for not closed.
+
+31:09  
+And this is defined by calling a helper function called closed in,
+
+31:14  
+which actually, strictly speaking, doesn't check if is closed, it just checks if all variables in E appear in the given list, which is this accumulator here.
+
+31:28  
+Okay, the definition of closed in is here.
+
+31:34  
+Thanks any expression, and takes this string here, the accumulator returns a Boolean.
+
+31:41  
+How does it work?
+
+31:44  
+In the variable case, I just check if the variable is in the list that I tolerate.
+
+31:50  
+By the given sort of pointing the tree,
+
+31:54  
+I mean, at this leaf of the tree,
+
+31:57  
+probably because along the way, I sort of accumulated this list going through the lens. So these are all the variables that are defined somewhere in the tree.
+
+32:09  
+Above us,
+
+32:13  
+numeral is clearly just closed. And then operator term
+
+32:18  
+is closed, or has all of its variables occurring. The next is if both of the sub expressions have their very well contained indexes.
+
+32:31  
+And of course, all the work well the interesting work happens in the lead case.
+
+32:41  
+So when can I say
+
+32:46  
+that all the uses
+
+32:50  
+of variables in a lead expression are contained in a given list exists?
+
+32:57  
+Well, I need two things. So first of all,
+
+33:04  
+the data definition, the definition of x doesn't take effect in the right hand side, right, the definition only takes effect here in the body. This is where you can use the newly defined variable. So
+
+33:15  
+So here's a list of variables where my uses of variables are allowed to be
+
+33:21  
+for E, and exact the same variables are allowed then for the right hand side of the definition.
+
+33:30  
+In the body, I can use one variable more in the body, I can actually use not only the variables Xs, but I can also use the newly defined variable x.
+
+33:44  
+Okay, let's try what this means.
+
+33:49  
+Let's see.
+
+33:51  
+What is my expression? Let me remember, remind you what my question is.
+
+33:57  
+So that's my expression. It is let Zed be 17 in Zed plus x.
+
+34:05  
+Let's check if it's closed or
+
+34:12  
+not closed. Yeah, well, indeed is not closed, because that is defined in the expression. But x doesn't have a definition inside the expression. So to evaluate this, we need the definition from outside in an environment.
+
+34:29  
+Let's check if it's closed in the empty list.
+
+34:39  
+No, of course, I mean, closed in the empty list is exactly the same thing as being just closed.
+
+34:47  
+Maybe it's closed in the list consisting of x only. And that's true. So basically, this says, As soon as I know the value for x, I can already evaluate my expert because this
+
+35:00  
+is the only variable
+
+35:03  
+which is not defined locally?
+
+35:06  
+Surely I'm also closed in excellent. Why?
+
+35:14  
+What did I do wrong?
+
+35:21  
+Don't
+
+35:25  
+know I'm in some bad mode.
+
+35:34  
+I don't know what that press sorry for this.
+
+35:38  
+Mr. Mr. Comma
+
+35:41  
+what is the comma?
+
+35:44  
+But on the way?
+
+35:48  
+Here, let me see Yeah, okay, I completely confused it because there is a quote
+
+35:55  
+that is unbalanced. Okay, too bad.
+
+36:06  
+Even worse.
+
+36:14  
+Yes, thank you. No.
+
+36:19  
+Okay, that was not meant to happen.
+
+36:31  
+Oh, my No, I also managed to lose it.
+
+36:34  
+Oh, lucky.
+
+36:43  
+I think it was this.
+
+36:50  
+That was my impression. And the check that I wanted to do was whether this was also closed in now let me do it properly.
+
+36:58  
+So this was the missile
+
+37:02  
+close in.
+
+37:05  
+And it's true. Why?
+
+37:08  
+Because all of the variables in this expression that are not local, namely, just x is contained in this bigger list x and y. So I'm closed in that list. Excellent. I'm already closed the next.
+
+37:26  
+Okay, do something more important. Now, we are ready to compile.
+
+37:34  
+So remember last time,
+
+37:37  
+I had sort of two languages that we went through. One was combined expressions name cutting expressions to expressions, where instead of variable names, we use sort of memory allocations for variables. So instead of var of string, data constructor, we will have a T bar of int data constructor, what are the entities is like,
+
+38:07  
+location rather than an or address. So we say
+
+38:19  
+the idea was that as we
+
+38:23  
+I can I can combine my my expression with global names
+
+38:31  
+into this kind of target code that have
+
+38:35  
+number what number these named Germans? Yes, that's the a number of variables, provided I have some compile compile time.
+
+38:44  
+environment, which tells me which variable i want to put that which address.
+
+38:52  
+We can play exactly the same game here.
+
+38:55  
+But actually, there is an interesting aspect now. And that's important. That's also maybe the reason why it makes sense to discuss this intermediate language as one in its own right.
+
+39:06  
+So
+
+39:11  
+remember, our left
+
+39:15  
+so the left here works with
+
+39:18  
+a variable name. That's the new variable that I'm introducing
+
+39:24  
+its definition and then the body of the lead
+
+39:27  
+here in the target language, I will have a slightly different lead.
+
+39:32  
+This may look frightening from the beginning. For some reason t lead only takes two arguments. So there is one expression. So this corresponds to
+
+39:50  
+to the right hand side of the definition and this one corresponds to the body.
+
+39:54  
+Why am I not saying at which address I want to put the local variable
+
+40:02  
+And here's a trick,
+
+40:06  
+I can always put it in the same place,
+
+40:10  
+provided I move the other things around.
+
+40:13  
+I mean, we may discuss whether this is a wise thing to do or not with the real heat. But for modelling, it actually makes perfect sense. So what I could do is a new variable always gets numbers zero.
+
+40:28  
+But there might have been
+
+40:30  
+older variables, right, that had their other that had their own address numbers, and one of them could also have been zero. So what I can do is to shift all the other addresses up by one
+
+40:46  
+address.
+
+41:00  
+I could do that, right.
+
+41:02  
+So this is often costly. I mean, you don't want to move things around. But suppose you implement it, you implement it, the memory actually also by a stack, and then it makes perfect sense, because these numbers then just correspond to positions in the stack. And introducing a new variable just corresponds to pushing a new value on the stack, and keeping all the other values in place. And then there is no associated cost. I mean, it looks like there is a cost it would be if you were to move things around in a memory. But if you work with a stack data structure, there is no associated cost. Do you agree with this?
+
+41:42  
+And, and then that's the language. Otherwise, it's just the old one.
+
+41:50  
+Let's see if I can interpret these target expressions.
+
+41:54  
+Well, let's first write one target expression. So what could be a reasonable target expression.
+
+42:02  
+Let's, for example, take this one.
+
+42:08  
+So here, maybe I already have some
+
+42:13  
+variable, maybe it's variable two.
+
+42:17  
+And here I'd like to use variables zero.
+
+42:21  
+And here,
+
+42:24  
+I'd like to use the lead and then of course, these are t let t non
+
+42:29  
+t up
+
+42:31  
+to our T bar.
+
+42:33  
+That should be okay.
+
+42:36  
+See, t let now has one argument as opposed to let which had three.
+
+42:41  
+So that is a valid t expert, we're good.
+
+42:45  
+I should be able to interpret this one with respect to a runtime environment.
+
+42:54  
+So previously, an expression is sorry, an environment was a dictionary. So it was a pair sorry, it was a list of variable name and value pairs.
+
+43:05  
+variable name and integer pairs where these were integers. Now it suffices to just have a list of integers. And the idea is, the zero with value is to address zero is sort of the beginning of the list address. One is the next position in the list address two is is yet the next position in the list, etc.
+
+43:53  
+Okay, and here is the evaluator. The evaluator is exactly the same one as before.
+
+44:00  
+But I need to change to cases, the bar and let the rest is like I let I write capital T's and little things everywhere. Because I'm changing eval to give the eval and all my data constructors have different names.
+
+44:15  
+So when I want to know what the value of the variable
+
+44:22  
+and ease, what do I need to do? Well, I simply have to look up the NF element in the list list item just indexes into a list here and AR n is a list of integers. Simple.
+
+44:36  
+When I do let 10, there are only two arguments. This is the definition of the new variable, that's the body of the left.
+
+44:43  
+The idea is exactly the same as before you want to return the value of the body in the extended environment. We extended the environment is the old environment extended within your value. And look what happens here. The new value on purpose
+
+45:00  
+As I placed a position zero at the beginning of the list,
+
+45:04  
+and the positions or the addresses of all the old values have been shifted up by one. So whatever was at position two in the list before is now in the new list this one, Lauren is at position three.
+
+45:20  
+And From where does the value come? The value comes by evaluating the definition, or the right hand side of the definition in the, in the environment passed down, not the modified one.
+
+45:34  
+Okay, that's interesting. Now let's do a little evaluation of my expert. This is the new expression, right?
+
+45:43  
+We need a bit of environment to do this. So we need some numbers.
+
+45:50  
+Let me give you some numbers. They are always the same, like 40. Cool. 1011 2021.
+
+46:04  
+What else do you want?
+
+46:12  
+Running out of numbers?
+
+46:16  
+Maybe minus three?
+
+46:21  
+Question.
+
+46:25  
+This is a quiz.
+
+46:27  
+What value will I now get from this expression?
+
+46:31  
+So I'm adding together
+
+46:34  
+the zeroeth variable.
+
+46:39  
+And the second variable.
+
+46:49  
+So any guesses?
+
+46:56  
+How much
+
+46:58  
+2063 2063 2063. Okay, so what you did was you added together a very good guess, but not completely correct. You add it together this one?
+
+47:16  
+And this one? Yeah. Or like this? Second?
+
+47:23  
+This should be 17 plus 1010 11.
+
+47:29  
+That is actually correct. But why was the first one almost correct, but wrong? And why is yours? Correct?
+
+47:38  
+Because it's the inner scope environments. Exactly. So.
+
+47:46  
+So the point is, by this stage, we reach here,
+
+47:49  
+my environment, my environment is slightly different, right? My environment is actually already 1740 to get to 2021 and minus three.
+
+48:02  
+Right?
+
+48:04  
+So yes, 17 plus.
+
+48:09  
+So after I think Tina,
+
+48:12  
+approaches you bring up Tina is the shito. element.
+
+48:17  
+Well, not so much processing, Tina, Tina itself doesn't change anything. But it's the fact that we are in the Tila.
+
+48:25  
+And the whole thing here is the second argument of Tila. So this is one of these he bodies here, it's this 114, right? To see this.
+
+48:37  
+So if we pattern match this one against this, then the body is this one.
+
+48:43  
+So it's not so much the team that matters. Well, the TNM gives us the value that goes in in front of the dictionary. But But what really affects us is the t let the fact that we are the second argument. So everything here gets shifted, but very good guesses. So we could also do another one. Namely, let's do t eval.
+
+49:05  
+Let's just take the new one. This one here.
+
+49:09  
+Let me see if I can get my parentheses right.
+
+49:15  
+Did you just do the no 1am? I good? No. Yes. In the same old environment here.
+
+49:25  
+And now, we will actually have one of your suggested before. Too bad. I can't see yours here.
+
+49:32  
+So this will should now be actually what you just said. So 42 and 2021, which is 2063.
+
+49:42  
+Yeah.
+
+49:45  
+And then you can imagine how this game goes.
+
+49:48  
+So this is the idea of how sort of scope mounts and accordingly these dictionaries grow
+
+49:56  
+or just naked environments grow here.
+
+50:02  
+Let's do compilation. compilation is fun. So we want to go from source expressions to target expressions.
+
+50:11  
+What do I need here?
+
+50:16  
+This is again a variation of a simpler piece of code that you had expressions to. But the new aspect is that we have the lead construct here, and we have to worry about it.
+
+50:29  
+Okay.
+
+50:32  
+So when I want my game nowadays, I want to compile a source expression, the one that has sort of name carrying variables to target expressions, where my my variables are just addresses.
+
+50:50  
+I can do this move provided that someone gives me what we call a compile time environment, which is for the global names, someone should tell us where do we want to see them
+
+51:06  
+at which addresses. So this is kind of an agreement between the the compiler
+
+51:13  
+and ourselves, so to say,
+
+51:19  
+but that we only need four global variables, because for these ones, we need to decide where they are in the environment. As soon as we get local variables, they automatically get their own addresses. And actually, the fact they do get some addresses pushes around the other variables addresses, they will get shifted up.
+
+51:39  
+So let's see.
+
+51:42  
+This function we also had before, it is a thing that takes a variable name.
+
+51:50  
+And the list of variable names and it finds the position of that variable name in the list if it's there at all.
+
+51:56  
+Actually, the function is a bit more polymorphic. doesn't even matter that this works for strings, it works for any type.
+
+52:06  
+So long as it's type supporting the quality check which we need here.
+
+52:12  
+So the idea is very simple. If you want to look up the variable name in a list of variable names, you just go down the list, if you're at the empty list, you didn't find it.
+
+52:23  
+If you're looking at name up in this list, you check if it's the head, if not,
+
+52:29  
+you check if it's the head, then you if it is the head, then you know it's at that position zero in the list, or at index zero, or at address zero, these all synonyms. Else, it's somewhere deeper, if it is anywhere at all, then you can just go down with a recursion and whatever recursion tells you, you just add to this
+
+52:49  
+add one to this
+
+52:51  
+compilation, how did it go.
+
+52:55  
+And number is compiled to a number an operator expression is compiled to an operator expression. But you have to go sort of recursively deep into the sub expressions and you need to compile them. Why? Because somewhere deep down in the expression, you actually have the uses of the variables. And your source syntax uses names, but your target syntax uses numbers. So, when you read the use of a variable, you better check where this variable name is in the compile time environment. And this one will tell you an address and you just replace the name Korean variable with that sort of address carrying variable
+
+53:40  
+something happens
+
+53:53  
+and again this kind of again about extending an environment.
+
+53:58  
+So when I compile a let expression, it has to go into a t let t let doesn't even give me a possibility to indicate any number here. The reason is the number is the default one is zero, the new variable is always zero.
+
+54:16  
+The right hand side is compiled using the same compile time environment environment as the whole lead expression. Because the numbers haven't shifted there.
+
+54:27  
+The body has to be compiled in a new runtime environment in which x is at position zero at address zero at index zero whatever you call it
+
+54:38  
+and all the other variables have shifted up by one
+
+54:43  
+Is this good? And then we could play the compilation game this is the this is the this is the story. Suppose now
+
+54:53  
+what
+
+54:55  
+maybe I want to compile
+
+54:58  
+first, this one
+
+55:07  
+My ex,
+
+55:18  
+sorry, this is just, if I want to compile it,
+
+55:23  
+I need to provide some idea where I want Exocet to be, maybe my idea is
+
+55:38  
+maybe my idea is the following. So
+
+55:42  
+why?
+
+55:54  
+Now you can guess what the compiled code would be?
+
+56:07  
+Anyone?
+
+56:18  
+So, the inner set would be t voir cirro.
+
+56:24  
+And the x would be t word to?
+
+56:31  
+Well, for the moment, it's not even intersect, right? I mean, the answer is correct. But, I mean, I'm just looking at the sub expression here. And from the point of view of this sub expression, everything is global, right? Yeah, exactly. But But you do get 1012. That's exactly right.
+
+56:51  
+Let's try to do something else. Let's now try
+
+56:59  
+the real one of interest.
+
+57:03  
+So how do I fix it? You fix it like this?
+
+57:09  
+Surely I do something wrong with the parentheses?
+
+57:17  
+Yes. Now, I'm back at the old expression to agree.
+
+57:21  
+Maybe now let's play this game here.
+
+57:27  
+So I don't have a set in my sort of environment that is passed in the compile time environment.
+
+57:35  
+What do you expect will happen now?
+
+57:54  
+t var. Shiro I guess.
+
+57:58  
+And t var. Two again?
+
+58:03  
+Yes. And all this is in a T land? Yeah, no. 17. Right. Exactly.
+
+58:10  
+So is everyone with me on the same page? I mean, this is excellent. So in the environment that is posting, the idea is one is either a zero and x is a dangerous one.
+
+58:24  
+But the point is,
+
+58:27  
+this sub expression has a different view of the world. Actually, not this one. Rather, I should say this one has a different view of the world, right? This one will already see a compile time environment, which is Zed y x. And then basically the old thing will happen.
+
+58:46  
+Just for clarification, the number 17 there. Haha said
+
+58:52  
+its significance there. As in if the said gets acetal. If that's the value, or it should just not map to the Ah, no, no, no, no, no, no, no, that's an excellent question. But But the answer is a bit different. So
+
+59:14  
+Well, the answer we will see when we actually start to evaluate this thing, which by the way already occurred, right? Because this is exactly the environment at one point, I was working here.
+
+59:27  
+Yeah.
+
+59:29  
+So So let's do this. You agree that these two are exactly the same, this and this was in whitespace.
+
+59:37  
+And here, we actually we call it my experiment, we tried to evaluate it.
+
+59:42  
+And the interesting thing was, it should add together the variable 012.
+
+59:50  
+But when you look at the values that are passed in from the top level to the evaluator,
+
+59:56  
+they are
+
+59:58  
+42 2010
+
+1:00:00  
+11 and 2021. And I'm not adding together the zero with and the second
+
+1:00:08  
+position in this list
+
+1:00:12  
+to get
+
+1:00:14  
+2063 rather, as the answer, we got
+
+1:00:20  
+1028. And the reason was exactly this genome. So this, this 17 is pushed in front of this list
+
+1:00:30  
+when I reach there with my evaluation, so therefore, I will get again,
+
+1:00:41  
+yeah
+
+1:00:43  
+17 plus 1011, which is 1028.
+
+1:00:49  
+Okay, so this may be a bit difficult to wrap your head around at first, that is a very
+
+1:01:01  
+I mean this this trickery with addresses.
+
+1:01:05  
+I understand that this can be counterintuitive at first, but this is really the mechanics of this kind of things.
+
+1:01:12  
+I mean, whatever you do, so here I'm showing you a very naive implementation of things. But actually, the real stack frames
+
+1:01:20  
+work exactly the same way.
+
+1:01:24  
+What we got there.
+
+1:01:26  
+Now, I need to do one more thing, before we can get to our actual lecture, which is a simple, simpler thing,
+
+1:01:33  
+I want to show you that we can go one level deeper, and we can do a stack machine.
+
+1:01:41  
+So, remember the one that we had before,
+
+1:01:45  
+where we worked, like we did little calculations, like three, plus two times five, or whatever. And we worked with a little stack of intermediate results to calculate such things here is exactly the same. This is our old stack machine instruction set.
+
+1:02:03  
+Except
+
+1:02:05  
+various,
+
+1:02:08  
+three more instructions.
+
+1:02:17  
+There is one that is called our load. And the idea is
+
+1:02:22  
+this stack machine will actually work with sort of two stacks. One is the stack for intermediate values like we had before.
+
+1:02:29  
+And the other one is, let's do kind of a joke. It's like a stack implementation of heap for variable bound values or this environment that we have.
+
+1:02:40  
+So I have all these local variables and the global variables as well. And they are in a data structure, which is this list or stack that we saw.
+
+1:02:49  
+And now and then I may want to look up things from there, this is like loading from heap to my intermediate value stack. So you load from the environment,
+
+1:03:00  
+I should say, to the top of the stack and
+
+1:03:12  
+to the top of the intermediate value stack.
+
+1:03:17  
+Our story is kind of the opposite. And this is an an instruction you will use to actually reorganise your environment. So this is the one that you will use that the new variable definition.
+
+1:03:29  
+So you push a thing into the environment a value into the environment, which means that the addresses of everything will also move one up, but they go down in their stack, but their addresses will be shifted up.
+
+1:03:43  
+It's not my fault that stacks are usually drawn sort of from top to bottom. So the highest level is called zero and the lowest This is a big number.
+
+1:03:54  
+And arrays is what you use to sort of garbage collect. So when you're done with your local scope, you want to go back to the to the outer scope, which means you want to shift your
+
+1:04:11  
+your environment back so you want to get rid of the zeros position. And you want to move all the other positions down which corresponds to sort of shifting this environment
+
+1:04:23  
+back up again.
+
+1:04:27  
+Okay.
+
+1:04:29  
+Now there is very little to show. I want to show how you run the state machine code, but this is pretty much the old thing. And then finally how to compile a target expression into state machine code.
+
+1:04:45  
+The interpreter looks big,
+
+1:04:48  
+but it's the it's the same one that we had in
+
+1:04:54  
+in expressions to except for these new two instructions.
+
+1:05:01  
+which allow us to sort of grow the environment and shrink the environment again.
+
+1:05:09  
+So remember, when you load from a certain position in the environment, then you just look up
+
+1:05:17  
+at the right position in the environment, and you push the result on the stack. So the recursive call happens within your stack, for the next instruction that you're gonna interpret.
+
+1:05:29  
+And the only new ones here are stored in the race.
+
+1:05:34  
+So store works with something on top of the stack, and you move it into the environment to the beginning of the environment, this is a thing that we will use
+
+1:05:46  
+to implement a local definition
+
+1:05:49  
+of a lead. And the race is something that we use at the end of a lead.
+
+1:05:55  
+So if you try to run an eraser to execute an erase instruction
+
+1:06:02  
+with a certain state of the stack,
+
+1:06:06  
+you will go on with the same stack.
+
+1:06:10  
+But your environment will be just the tail of the given one. So you throw away the head element,
+
+1:06:18  
+which means positions are all shifted
+
+1:06:20  
+down again.
+
+1:06:23  
+Okay, if this is the mechanics, how could I possibly compile?
+
+1:06:30  
+It's the old compiler.
+
+1:06:32  
+So what are we doing, we are compiling an expression,
+
+1:06:37  
+the target expression, the one that has address getting variable deceivers into the stack machine code.
+
+1:06:47  
+The code is exactly the old one. With the exception of the only new clause here, the D lead, which is our new thing.
+
+1:06:56  
+So remember what we did there, some of the things were not so hard.
+
+1:07:01  
+Remember, also, the idea of the SEC machine is that I want to find the value of my expression
+
+1:07:08  
+at the end of the execution of the stack machine at the top of the stack. So if my expression is just the T num,
+
+1:07:16  
+my only instruction should be put the number on top of the stack, this is our NumPy.
+
+1:07:25  
+Also, if my expression is just the use of a variable, then I just want to see the value of the variable at the top of the stack, so my single instruction here will be load that variable from the environment to the stack.
+
+1:07:43  
+For an for any operator, you do a similar thing, you'll compile the two parts, the two sub expressions, and they give you two instruction sequences that you just concatenate together. The idea is this one will produce you the value of a one on top of the stack, this one will do some more work with a stack, but at the end,
+
+1:08:04  
+it will have added the value of IE two on top of the stack. So finally, the two values are the topmost element of the stack. And then you just need to concatenate the our ADD instruction, whose effect is to pop off these two elements, add them together and push the result back.
+
+1:08:24  
+Now, the only interesting part is here, what's with my tea left, though?
+
+1:08:33  
+This is a clever thing.
+
+1:08:37  
+So let's think what the idea of Pilates like the T lead here.
+
+1:08:43  
+If I were to
+
+1:08:46  
+evaluate this thing in which order did we do this and how to compile it to stack machine code, the idea should be your first so there is two expressions involved
+
+1:08:57  
+the definition of the new variable
+
+1:09:00  
+and the body of the lead.
+
+1:09:03  
+So you should really first
+
+1:09:06  
+process the definition of the new variable, this will give you a bit of code that will produce the value of the new variable on the top of the stack.
+
+1:09:16  
+Hmm, very good. I could do that.
+
+1:09:20  
+So combine the right hand side so this is a bit of code that will produce the value of the new variable on top of the stack. Actually don't want this on top of the stack. I want this in my in my environment in the zero position Aha. This I can implement by just
+
+1:09:39  
+adding a little our store
+
+1:09:43  
+instruction here.
+
+1:09:46  
+So this will place this value at the zero is position in the environment and will push everything down in the environment or shift or others is up if you wish.
+
+1:09:58  
+So now
+
+1:10:00  
+I will go to compiling the body.
+
+1:10:03  
+But the compiled code for a body will actually work with an environment which is shifted. But that's great, because this is also how these addresses work in compiled code for.
+
+1:10:15  
+For bodies, I mean, they, the moral is you already think everything has been shifted. And now this guy actually gets the real environment with all the value shifted.
+
+1:10:26  
+So we do that.
+
+1:10:30  
+And this is almost good. So after that, I have exactly the right thing on top of my stack, which is
+
+1:10:40  
+the value of the body.
+
+1:10:42  
+But somehow, I need to do one more step I need to put also at the end of this instruction sequence, one final instruction, which is called array arrays, why is this?
+
+1:10:58  
+Well, because the T lead could be part of a bigger expression.
+
+1:11:05  
+So maybe my whole expression is some t let
+
+1:11:08  
+a plus y.
+
+1:11:12  
+And the why, of course, will have to be interpreted in the global scope or in the outer scope. So I better when I leave processing, the T lab, I should restore what my environment was before before the extension, so therefore, they are arrays. So get rid of the value of the zeros position, which is no longer needed, after all the definition was local.
+
+1:11:36  
+And shift
+
+1:11:38  
+shift all other addresses down.
+
+1:11:42  
+Yeah.
+
+1:11:44  
+Okay.
+
+1:11:45  
+And then then we can actually compile a thing like this to,
+
+1:11:51  
+to target to stack machine code. So here is one example. That's already an expression. Let me just compile it. So I'll take our concrete or combo, it is the last thing here.
+
+1:12:04  
+Let's see what happens.
+
+1:12:08  
+Huh?
+
+1:12:11  
+What is this?
+
+1:12:14  
+It says. So this is how we actually evaluate the thing.
+
+1:12:22  
+Our exercise is to push
+
+1:12:27  
+number 17 on top of the intermediate value stack,
+
+1:12:32  
+and then immediately pop it off and move it to the environment. Aha. So whatever environment came in,
+
+1:12:42  
+if I were to execute this compiled code,
+
+1:12:46  
+this environment is now shifted, and 17 is at the beginning, and the rest is further down
+
+1:12:51  
+in that list, which is the environment, then I load zero. So I take the zeroeth element from the environment, I put it on top of the stack, I also take the second
+
+1:13:07  
+position, or the value from the second position in the environment from address to put it on top of the stack,
+
+1:13:13  
+then I pop both off, and I add them together. So therefore, now the result of the addition is on top of the stack. And that is actually what I need to see at the end of my computation. But moreover, so here only for hygiene purposes. But of course, if this thing we're concatenated with more code is really important, I also make sure that I establish or that I restore my old environment at the end.
+
+1:13:39  
+So now I can take this code,
+
+1:13:42  
+and I can actually run the register machine. So I can do Ravel, it, it is now this code
+
+1:13:54  
+on some environment and let the environment be the same one that we keep working with here. So I wanted to be well exactly this thing.
+
+1:14:10  
+And now let's see what happens. Now.
+
+1:14:16  
+What arguments does it take Ravel also wants to have a stack argument the stack is initially empty.
+
+1:14:22  
+So, Ravel takes what it takes stack machine code, which is it, it takes a stack for intermediate results, which is initially empty and at the end I want to collect the value there. And then it takes this environment which has the values of all global variables numbered 0123 originally, but they can get shaky.
+
+1:14:44  
+And then when I evaluate it, I get the old thing again.
+
+1:14:49  
+We which is 1028. Why? Because by the time
+
+1:14:55  
+I get to our load zero and our load two I've done
+
+1:15:00  
+Our store, which actually store 17, but also shifts around all the addresses. So what was
+
+1:15:10  
+01? Is no one and what was to what? Sorry, what was zero before is no one. And what was to before is now free.
+
+1:15:17  
+And instead, what was one before is now two.
+
+1:15:23  
+And the zero position is simply 17. So I'm adding together again 17 Anthony,
+
+1:15:28  
+Is this good?
+
+1:15:32  
+I think I want to the last part, which is compiling
+
+1:15:38  
+to work with a different stack machine, which is a clever one in that it has both intermediate and variable bound values all in a single stack. Maybe I want to return to it later, but just to let this part sink. Let me
+
+1:15:54  
+let us pause a bit. So
+
+1:16:02  
+do you have questions?
+
+1:16:04  
+Should I repeat something? Should we take stock and just see where we are?
+
+1:16:13  
+No, I think we are all a bit out of breath here.
+
+1:16:17  
+That's good. Yes.
+
+1:16:21  
+That's that's what it's called agile programming. The idea is, you do everything quickly and together and you can only think after because there is this competitive situation and someone wants to show off. So in this case, me.
+
+1:16:37  
+But the big picture is this we looked at three different Okay, we looked at three different levels of expressions, very simple ones, no variables and global variables and local variables. And for each of those, I well not each of those, but at least four already with a situation with names.
+
+1:16:59  
+global or local, we had three different levels of language that was the source language with name carrying variables, there was kind of a little intermediate one where straight in the expression syntax, you start writing not variable names, but the address is where they happen to be at the given moment
+
+1:17:18  
+in your implementation of the heap, which is that like,
+
+1:17:22  
+and third there is a register machine. And then there is or stack machine, stack and register machine I should say.
+
+1:17:30  
+And,
+
+1:17:32  
+and then the idea was to demonstrate how you work with scope.
+
+1:17:37  
+And also how you work with multiple levels of languages, right, you can, you can either do an evaluator directly for the source language, maybe for the intermediate language, which are here these target expression, maybe for the lowest level of a language, which here is this tech machine code.
+
+1:17:53  
+But you can also combine between these levels. So there is like, so here, there is really how many,
+
+1:18:00  
+I will say there is three workflows to actually evaluate an expression either evaluate directly a source expression, or you compile it down to a target expression and evaluate there, or you compile it further down to stack machine code and run that one.
+
+1:18:18  
+Okay.
+
+1:18:22  
+I leave you with this burden. But you have to bear with me for 20 more minutes, which is exactly right.
+
+1:18:30  
+To
+
+1:18:32  
+throw the Lexa on you, and I have to tell you, this is a much simpler thing.
+
+1:18:42  
+We'll do it also just for a very
+
+1:18:47  
+well more or less for the same language really.
+
+1:18:50  
+So I want to consider this language war let know instead of up I have separately plus minus times, but otherwise is the same.
+
+1:18:59  
+But we're not doing anything deep semantic or evaluation or compilation or something like this. All we do is
+
+1:19:06  
+we want to think how to not write such unreadable stuff. But how should we able, how should we be able to just write what we ordinarily write
+
+1:19:17  
+like concrete syntax,
+
+1:19:25  
+which is to say, I'd like to write
+
+1:19:30  
+Let's set equal 17 in that plus x
+
+1:19:36  
+rather than
+
+1:19:43  
+the horrendous thing here.
+
+1:19:45  
+That's the game now.
+
+1:19:49  
+You must agree with me
+
+1:19:52  
+that this is more human friendly.
+
+1:19:56  
+And this would actually be quite nice if it were written down as a tree like
+
+1:20:00  
+In a, like drawing on a paper two dimensionally, but like this linearly is really difficult to read.
+
+1:20:07  
+So this thing is a flat string is called concrete syntax. This is called abstract syntax. Abstract Syntax is easy to process by pattern matching. That's really the beauty of how you normally do language processing and functional languages because of pattern matching, in particular, perfect for this.
+
+1:20:27  
+But this is what you want to write, you want to get from here to here, we already talked about this a bit. So getting from here to here is called pretty printing.
+
+1:20:38  
+Going from abstract syntax to concrete syntax, going from concrete to abstract, which is what you want in a language process, the front end
+
+1:20:46  
+is usually called parsing. But if you look into it closer,
+
+1:20:51  
+parsing is used in two meanings. Its main, either used for the whole workflow here.
+
+1:20:57  
+Or maybe just the second face, other sort of a bit more refined workflow.
+
+1:21:05  
+So what's the game, you start with a flat string like this.
+
+1:21:11  
+And rather than going from here, to here directly,
+
+1:21:18  
+there is an intermediate thing you could do, which in this case would be to, you know, this is like, you're listening to a foreign language, like, I don't know, French,
+
+1:21:30  
+I hope not so many of your can, French. So the first problem you have when someone speaks French is not so much to understand the sentence structure or so you just want to cut the flow
+
+1:21:42  
+into words, people out there, right, isn't it.
+
+1:21:46  
+And then you hope you can look up these these words or recognise them or, you know, repeat them to pair up them to some sort of online translator, word by word. So here is a similar game. So when we are given a string, the first thing you may want to do is to lexer tokenize. it these are synonyms, the result is a list of tokens. And this is a nice sort of intermediate level from which to then actually go and parse to an abstract syntax tree.
+
+1:22:27  
+So in our case, the list of tokens could be something like lead. So I first recognise that there is a keyword here, then there is a white space white space below, it plays no other role other than telling us that
+
+1:22:42  
+something new is gonna start. And here the thing that is going to start is called forgot name.
+
+1:22:51  
+So the next thing we'll find is a name that is that.
+
+1:22:55  
+And then we maybe find an equal sign, what is the phone call?
+
+1:23:04  
+Let's call the call.
+
+1:23:10  
+And then I'd like to find that Well, here I have a numeral.
+
+1:23:15  
+So it's just an in 17.
+
+1:23:20  
+So I'd like not to worry about one and seven, but just to see as characters, but I'd like already to work with a number 17 in F sharp, then I'd like to see okay, there is a keyword in then maybe I'd like to see there is a name again.
+
+1:23:36  
+Then I'd like to recognise there is a plus sign. And then I'd like to recognise there is a name again, which is
+
+1:23:44  
+which is
+
+1:23:49  
+does it feel reasonable. That's what you do. And from here, you want to go to here. So the first step would be called lexing. And the second phase is like parsing proper.
+
+1:24:03  
+And the point here is not to worry about like, is it whitespace, maybe three white spaces.
+
+1:24:09  
+Maybe there is no whitespace at all. I mean, he right here, it's okay not to write the whitespace. But here Surely, the story here, it's not okay to not write the whitespace you need the whitespace. But here it's not needed. Because
+
+1:24:23  
+a name is a sequence of characters and maybe also numbers. But as soon as you see the equal sign,
+
+1:24:29  
+this works just as well as a separator, you know that the next thing is already a thing on its own
+
+1:24:35  
+usual stuff. And maybe even new line is allowed, maybe multiple are allowed. So we shouldn't worry about this. I just want to see a list of sort of
+
+1:24:46  
+atomic building blocks for for for the process of
+
+1:24:53  
+actually parsing is this good. So all I want to do in the remaining 30 minutes is to get
+
+1:25:00  
+I'm here
+
+1:25:01  
+to hear.
+
+1:25:04  
+And believe me, this is not so hard.
+
+1:25:08  
+So first of all, I should clarify myself, what is it that I'm after? Well, I'm after a list of tokens, a list of tokens is literally a list of tokens. What is a token? These kinds of things are tokens.
+
+1:25:21  
+Yeah, so I bet they're first ticks what I want to collect, I want to collect tokens like this. You go, yes, good. Thank you.
+
+1:25:30  
+This is my data type of tokens.
+
+1:25:37  
+You're you've already seen almost everything.
+
+1:25:40  
+You haven't seen parentheses, but left and right parentheses can come up minus can come up times can come up.
+
+1:25:47  
+error is a good special token to have for something incomprehensible that may occur in my expression. So if such a thing occurs, of course, it means that the lexing already failed, but then I can also indicate why.
+
+1:26:05  
+Okay.
+
+1:26:08  
+I should also say, the integers I collect are not the real integers, they are unsigned integers. So we'll separately deal with negation.
+
+1:26:20  
+So you have to find out minuses, they will come up like this, actually, and it's later our job to to distinguish the binary minus which is subtraction from the unary minus which is
+
+1:26:32  
+negation of a number.
+
+1:26:37  
+In F sharp, there is a type car, chair, character, whatever you call it, char
+
+1:26:45  
+four characters. Character values are indicated in single quotes. As opposed to strings, which are in double quotes.
+
+1:26:53  
+We can write some easy nonsense to recognise digits, lowercase letters, uppercase letters, or something that is a letter, which is then lowercase or uppercase. And that's done simply with comparison, because
+
+1:27:09  
+comparison for less than or less than equal is available for characters. And then you can easily define what the digit is by just using an interval. And similarly for lower and uppercase letters. Finally, you can easily convert the character to an integer if it is a digit. So if a character is in is in the right range, then you'll find it out what it is as an integer. And for that, I don't even need to know
+
+1:27:40  
+what the right offset is, because I can ask F sharp to convert characters zero to an integer
+
+1:27:52  
+then
+
+1:27:54  
+it's clear that if I have some other character, say for example, four seven, then I can find its numerical value simply by
+
+1:28:06  
+subtracting the position of seven in the alphabet from the position of zero in the alphabet that gives me the actual value of a number seven.
+
+1:28:15  
+Um, I can do another thing, this is useful. So
+
+1:28:22  
+one of the things we will find in in these concrete so in strings, we will look for three concrete things, either special characters, like equals, or parentheses, or plus, or we look for numerals or we look for names. Words, there are two kinds of words that are keywords, let them then
+
+1:28:42  
+everything else that looks like a word qualifies as a variable name. So we use these as names.
+
+1:28:49  
+So whenever I have a string, that is a legal world word, I can convert it to a token like this. So the string length goes to the token length, the string int goes to the
+
+1:29:02  
+token in
+
+1:29:04  
+and whatever other string, maybe even illegal ones that contain spaces or numbers or special characters that should not be allowed. Or maybe start with a number of digits etc. I can I can just say they are named string because the convention for calling this function is I only call it with with strings that qualify as words.
+
+1:29:51  
+So these are not good words, but we will never call Berta tokens with this one.
+
+1:29:57  
+So we're all set up. All I need to do is to
+
+1:30:00  
+Right Alexa for you.
+
+1:30:03  
+What should the idea be? Let me explain it on this string. The idea should simply be that you walk down the string, which you have actually converted to a list of characters for your convenience that you can easily do.
+
+1:30:20  
+And then you look at every single character, you're either kind of in a default mode, when you look for the next thing to begin, like I'm at the whitespace, then I know that I'm in the middle of two tokens, I can just go on maybe there is another whitespace or so
+
+1:30:35  
+when I see a letter, this is a clear sign that I'm at the beginning of a word, hopefully.
+
+1:30:43  
+Then I go into the mode of recognising a word or collecting a word.
+
+1:30:48  
+Yeah. And then later, I'll determine if my word was a was a letter in keyword, or if it was just some name.
+
+1:30:58  
+So what was it I've got a default mode are working working down in this in the in this list of characters, which makes a string, I can be in the mode of collecting an a word, but I can also be in the mode of collecting an integer, an unsigned integer.
+
+1:31:15  
+Any moment,
+
+1:31:17  
+I see a digit after a separator, or after a special symbol, but not in the middle of a name. I start looking for a numeral
+
+1:31:29  
+right? And I just keep looking for digits until I find the next special symbol or separator. So so this is 17. Because
+
+1:31:39  
+a whitespace follows, right?
+
+1:31:42  
+If this was 17 plus three, then this would be 17. Because plus follows and I don't even need a whitespace here.
+
+1:31:49  
+But if I have like set one, or is it Tuesday, then I know that two is a name because it starts with that these two doesn't know start the numeral it's just part of, of a name.
+
+1:32:01  
+So I'll detect this when I look forwards.
+
+1:32:04  
+Does it make sense? I mean, what else could you do even
+
+1:32:09  
+if you think about it.
+
+1:32:15  
+So the important thing to realise is lexing, also called tokenizing is is really about always a little state machine, where you're sort of where the states are the sort of modes in which you are.
+
+1:32:29  
+And this state machine can actually collect some data as it as it walks down the string or list of characters. Like when I detect this is number one, I have to remember it. Because when I now see seven, I say, Aha, this one maybe needs to be multiplied by 10. So it becomes 10. And then I need to add seven to get 17. And then I've converted the sequence of two characters, one and seven to the number 70.
+
+1:32:58  
+I've told you everything we need.
+
+1:33:01  
+Did this happen?
+
+1:33:08  
+How can I control this? Okay, I define three functions by simultaneous recursion. So they implement this little state machine traversing the given string.
+
+1:33:18  
+And the idea is wherever I am in the top level string that I'm processing, the machine is in one of three modes or states, there is the default mode, which is corresponds to the function tokenize, which takes a list of characters into a list of tokens.
+
+1:33:34  
+I can be in the middle of lexing, an unsigned integer. So this will be done with the function tokenizing which actually collects digits as it goes and accumulates the result in some integer.
+
+1:33:49  
+And I can also be in the middle of lexical word, which means I remember the, the symbols I've seen, the sequence of symbols has to start with the character. And the idea is I want to, I want to, you know, I want to collect the word.
+
+1:34:06  
+And then what happens is, you just inspect characters one by one from the string or list of characters, and you switch mode based on what you see. Or maybe you keep in the same mode, keep going in the same mode and then you go to the next car, nothing else.
+
+1:34:22  
+So here are the three functions they actually were fit fully on this part of the screen. They are defined all simultaneously you can see his left rec, and and so a simultaneous recursive definition of three functions they call each other.
+
+1:34:40  
+So this is the main one. It calls some helpers, but the helpers also go go back to the main one.
+
+1:34:49  
+Oh, okay.
+
+1:34:51  
+Am I really
+
+1:34:54  
+this this evil correct?
+
+1:35:00  
+This is even not true. I could not define these ones first.
+
+1:35:04  
+And then this one, because tokenized calls these two, but these two don't call tokenize.
+
+1:35:10  
+It's really like, Oh, no, no, it's not right. Of course. No, I was right. They do call tokenize. Yeah, when you finish tokenizing, an integer tokenizing the word of course you call tokenize. Again,
+
+1:35:22  
+how do you tokenize you're given a list of characters, you want to produce a list of tokens. So here are the possible things that can happen. You have no characters at all, great, no tokens to produce.
+
+1:35:36  
+You see, plus you say, Okay, I found a plus and you just tokenize the rest, the same for minus times equals
+
+1:35:46  
+you'll find a whitespace.
+
+1:35:50  
+You just ignore it. So keep tokenizing
+
+1:35:56  
+you find the tap symbol, you're, you're good, you just keep tokenizing you'll find a new line, you keep tokenizing. The rest?
+
+1:36:08  
+Well, these things should play some role.
+
+1:36:12  
+But not here, they actually play some role when you when you want to finish tokenizing an integer or word, but you'll see we'll get there. When you see a left parenthesis, you say okay, I found the left parentheses and you tokenize the rest. When you see a right parenthesis similar
+
+1:36:33  
+when you Okay, so here's something you haven't seen before. So we this is a combination of pattern matching with a when clause. So when there's like, if
+
+1:36:45  
+a bit like if the nails tibbett, except that there is no else, and you use it together with a pattern, the idea is
+
+1:36:52  
+this clause is applied or this branch is applied when the pattern matches and the condition is true.
+
+1:37:00  
+And if the pattern matches, and the condition isn't true, you just go to the next line to the next case, if the pattern doesn't match, then of course, you also go to the next line. So this is a gives you some economy in writing case distinctions. So if your first character is a digit, then we actually go to the,
+
+1:37:19  
+to the tokenized. Int mode.
+
+1:37:22  
+And tokenizing actually works with an accumulator. So it gets in both a list of characters, but also an integer. And here we call this tokenizing with the rest of the characters that are still to be read. But also with a little seed value. This is the initial accumulator, which is just the integer value of this digit, which is a character. So say, if it's a character seven, then digit to int, we'll take it to the number the integer seven.
+
+1:37:55  
+Does it make sense?
+
+1:37:57  
+Then, what is another possibility, another possibilities, I'm hitting the beginning of the word over word, a word here we agree has to begin with a lowercase letter.
+
+1:38:12  
+And if I see such a thing, then I just tokenize the rest of the given string, the rest of the given list of characters.
+
+1:38:20  
+But I also remember the characters that I've seen, and I've already converted this character to a string, as you can see.
+
+1:38:28  
+So C is a character string C is a string made of that character.
+
+1:38:33  
+In all other cases, which is like I'm in the default mode, but all of a sudden, I see a special symbol that I don't recognise, or maybe I see a capital letter, then I see.
+
+1:38:44  
+I saw something that was not tokenized double, but I could go on what I could stop here, doesn't really matter. What we wanted, depends on what we want to do. Here we just carry on, so we tolerate some noise in the
+
+1:38:58  
+in the syntax.
+
+1:39:01  
+Now, tokenize input and tokenized world are similar to each others. Let's look at tokenizing.
+
+1:39:07  
+So what's the situation I've got some characters still to process, but I've already collected some integer in the accumulator.
+
+1:39:17  
+I look at the next character. So I match the list of characters with with the head and the tail.
+
+1:39:24  
+If the head is still a digit, then I have to continue tokenizing an integer.
+
+1:39:35  
+But
+
+1:39:39  
+what is my accumulator? Well, I can convert the part of the integer I've already seen to the integer as I go. So what is suffices is to multiply the current accumulator with 10
+
+1:39:55  
+and add whatever the newest digit is that I saw
+
+1:40:00  
+And then carry on with that accumulator. So for example, if you see the string 124, maybe you've already processed one, then the moment that you go and look at two, you say, Aha, I've seen one times 10 plus two, which is 12. Then 12 is your accumulator, you see four, I say, Oh, okay. 12 times 10 plus four is 124. And then you ask, is the next thing, perhaps another is sorry, digit, or maybe it's now like a special symbol also.
+
+1:40:34  
+So what are the other cases that can happen? The other cases is, you find something that is not a digit. So whether the next thing is now a character, or maybe a space, or tab, or new line, or an illegal character, even you say, I found a token, which is an integer, and its value is whatever I accumulated, and then I go back to my default mode. So I call the rest of the list of characters. Sorry, I call tokenized. With the rest of the list of characters, which is this Yes, here? No, no, no. Which is not Yes. Which is this Yes, is the whole of CES, including the first character.
+
+1:41:16  
+Yeah. To see, this CES here with which I go further is the tail. But here I've used the underscore
+
+1:41:25  
+pattern. So the CES, I'm referring to is the one from the match.
+
+1:41:34  
+Cause construct, so I'm tokenizing, all of the rest, and we the word is exactly the same. So you've already accumulated a string, when you see another character, you check whether it's a letter or a digit, if it is, that's okay. that qualifies to be part of your string. So you carry on with the rest of the list of characters, and you add the character to the string you already have. So plus is concatenation of strings. But they first have to convert my character to a string as well, I can't come catenate the string and the character directly.
+
+1:42:12  
+When I find the thing that doesn't fit anymore, which is not the letter, not the GG,
+
+1:42:17  
+I just
+
+1:42:19  
+basically apply my helper back, which looks at the word I collected that depending on whether it was led, or in or something else, it says this was led or in or if it was just the name, ack, and then I tokenize the rest.
+
+1:42:34  
+That's all you need. You also need a little helper, that course that convert strings to chars, that's not very important. And then finally, on the top level, lakhs of a string is just tokenize. The list of characters given by the string,
+
+1:42:50  
+no, I better load what I want to load lexer
+
+1:43:01  
+that's my thing. And that, then we could take
+
+1:43:06  
+my
+
+1:43:08  
+expression, which was here.
+
+1:43:12  
+And I could like see it.
+
+1:43:20  
+I hope it's good.
+
+1:43:22  
+Oh, opened, of course, open what open lesson.
+
+1:43:31  
+And this is what comes back.
+
+1:43:34  
+And see this is pretty insensitive to various nonsense you can do so I can, for example, do something like this.
+
+1:43:41  
+And I still get the same thing.
+
+1:43:44  
+But if I was silly enough to do this, so I remove the space between left and zette
+
+1:43:52  
+then the guy doesn't recognise lead anymore thinks I've got the word let's
+
+1:43:58  
+sorry, a name let's a variable name. Let's followed by equal followed by blah, blah, blah. Of course, if you try them further to parse it, you will fail.
+
+1:44:07  
+And it's also okay to
+
+1:44:11  
+to insert things that shouldn't really belong anywhere.
+
+1:44:16  
+Right, like I think I can put the capital letter here at this place.
+
+1:44:22  
+And I still get something.
+
+1:44:24  
+So basically, this capital letter is ignored, but the rest is still tokenized.
+
+1:44:31  
+correctly.
+
+1:44:36  
+Okay, let me very quickly just illustrate one of these additional functions. Like suppose I was in the middle of or something like I'm perhaps in the middle of tokenizing.
+
+1:44:50  
+So
+
+1:44:53  
+I could be at this stage when I do
+
+1:44:57  
+Lex
+
+1:45:02  
+That thing here. So I've already went through the I've already gone through this part sorry.
+
+1:45:09  
+And then maybe I
+
+1:45:15  
+actually have to call tokenizing.
+
+1:45:18  
+Those so I can't quite work with this
+
+1:45:21  
+string here, I want to work with a corresponding list, which is string to chars.
+
+1:45:29  
+If I call tokenize, in then with a suitable accumulator, so maybe I've already figured out that I've seen the number one,
+
+1:45:37  
+based on my seeing the digit one, so I've accumulated number one, then what happens?
+
+1:45:44  
+Let's see if the right thing happens.
+
+1:45:49  
+I think it is.
+
+1:45:51  
+So you see. So this illustrates what happens if I'm in the middle of something I had already accumulated number one,
+
+1:45:58  
+but when the when the rest of the string is this, then I and then since the immediately next thing is seven, I sort of read the one and the seven is one thing.
+
+1:46:09  
+I accumulate the value 17 since the next thing is face, I finish here and they say, okay, collected 17, and the rest is as before in nine plus nine.
+
+1:46:22  
+And that is it.
+
+1:46:27  
+Does this make sense? Do you think you know would be able to write your own lexer?
+
+1:46:36  
+resume been? Maybe not write it?
+
+1:46:41  
+Completely, but that would be the ideas, right? Yes, because it's a similar mechanism. Of course, you may have multiple things, more and more modes in the machine, like maybe you have a default mode, you can be in the middle of recognising the word, you can be in the middle of recognising the name, maybe there are further things that you can be in the middle long recognising. Like maybe you have complicated operator symbols, maybe allow operators symbols, like plus plus, for two pluses like F sharp, when you'd like to say okay, I've seen one plus, but maybe I'll see another plus. So it's not a single plus, but plus plus. So then you just introduce another mode for collecting this kind of information. For example,
+
+1:47:24  
+recognise complicated operators symbols that aren't simply one single character, the idea will always be the same.
+
+1:47:33  
+Go down symbol by symbol. In more complicated cases, maybe you need to do a bit of look ahead here, this doesn't happen. So it's a very straightforward thing
+
+1:47:43  
+I once liked slightly over time, but I covered
+
+1:47:47  
+what I wanted. lexing is really easy. You will see when I have to compare it to parsing next time, but parsing is more interesting. In some sense from here to here.
+
+1:48:00  
+It's not so far.
+
+1:48:03  
+Both are kind of flat things you must agree right? This is a list of characters, this is a list of something else. But here all of a sudden, this becomes a two dimensional things. This is a tree
+
+1:48:13  
+that is more complicated
+
+1:48:17  
+than the whole thing is a topic of a compiler construction course, but I just want to sort of naively show you some principles rather than go deep into the theory for it. So just let you get a feel for what the challenge is.
+
+1:48:31  
+Isn't this similar to DFS and NFS like the concept of this st again, is it the concept of this lexing and parsing this is
+
+1:48:45  
+this is similar as in, in discrete mathematics, the dfas and nfas. But you're
+
+1:48:54  
+What?
+
+1:48:55  
+That's perfect. So.
+
+1:48:57  
+So lexing, you can always do with,
+
+1:49:02  
+with an automaton. So here, it is a DFA strictly, if you look at what I've done,
+
+1:49:08  
+except that
+
+1:49:11  
+Well, maybe not completely in the sense that if there weren't these accumulators, it would exactly be a DFA. Because that is exactly three states right default, in the middle of tokenizing, an integer in the middle of tokenizing word. But now here, actually, in the way that I've implemented it is not even the F in the DFA. It's not the finite state machine, because I can actually collect any integer. And here I have arbitrary sizing integers, if you notice properly, right?
+
+1:49:40  
+Because I'm not putting any limit on the length of the integer. So it could be like any number of digits.
+
+1:49:48  
+And honestly, if you calculate it, this the number of states of this machine you should say it is, you know, from here to get exactly one state default state. Here you get one state for every possibility.
+
+1:50:00  
+And there are infinitely many, and you get one state for every possible stream. But it is like, you know, the most part is a finite automaton. And then there is the kind of data part of the state where we are infinite.
+
+1:50:15  
+But it's exactly that concept. Yes, you're absolutely right.
+
+1:50:19  
+Okay, yeah. And of course, then there is a correspondence, I don't know, if you see in discrete math or not to regular expressions, you can basically characterise,
+
+1:50:29  
+you know, valid concrete syntax in terms of a regular expression. And one way to systematically construct the lexer is take this regular expression that describes the concrete syntax, and just turn it into this machine to the DFA.
+
+1:50:47  
+Maybe I should say there is a bit more because Okay, there is one more aspect normally in a DFA, you just want to accept or reject the string?
+
+1:50:55  
+Yes. Do you want to say yes or no? Is this good? A good string or not? Here, apart from you know, saying whether it's good, we want to say yes, it's good, but it translates to this. So these kind of things in this machine theory, are often called transducers. So they get some input. So the read characters one by one, but every now and then they spit out something. So here are these tokens? I mean, after every after, after each some number of characters, we've learned another token.
+
+1:51:24  
+But it's precisely that, it's a very good question. Keep asking questions.
+
+1:51:29  
+In the tokenize words, I think it is
+
+1:51:36  
+see where you go, when is letter or is digit. And then after that, you do the accumulator plus string C, is the reason why you convert to a string, is that just in case it's a digit? Otherwise, you wouldn't have to come? No, no, no. The reason is that the characters and strings are not the same thing. So character is not the same as a single character string.
+
+1:52:06  
+Okay, so a single character is something like this.
+
+1:52:12  
+But if I apply a string to it,
+
+1:52:15  
+then this is the string.
+
+1:52:18  
+Okay. Okay, so you need to do that, if you want to use plus, of course, you can write your own function that takes a string and the character and makes a new string.
+
+1:52:27  
+But then just use plus lately, I need to do that.
+
+1:52:32  
+Now, okay.
+
+1:52:35  
+So string is a kind of a general helper, that is able to convert many things to strings, when not every time, but almost every.
+
+1:52:45  
+Like, it converts characters to strings, integers to strings, floats to strings, if we apply it to a string, with doesn't do anything with it, it just returns the same string.
+
+1:52:58  
+And of course, this apostrophe here is a type variable. And this is a character, they look very similar, but they have nothing to do with each other.
+
+1:53:10  
+And also, this string is a function, I should say, where does this string here is of type.
+
+1:53:17  
+Purchasing.
+
+1:53:19  
+That's kind of a general principle. So also, you have a thing float,
+
+1:53:25  
+that will take many types to a float, like you can convert an integer to a float like this doesn't work for every type, but for many types.
+
+1:53:38  
+Okay,
+
+1:53:39  
+so maybe, perhaps we should stop here. What do you think?
+
+1:53:44  
+This went much over time?
+
+1:53:47  
+Now with the questions.
+
+1:53:50  
+So let me stop sharing.
+
+1:53:54  
+Yes, I think, at least if I'm speaking for myself, I, I grasp the contents pretty well. But the code itself, I will need some time to let that sink in. Yeah. But also, I mean, the course is not so much that you need to learn this code. But this is more like, you know, I want to show you the concept, the idea, you don't really need to recreate any of this or the exam, but that's not the idea.
+
+1:54:19  
+But okay, that's the thought but the best thing to do in such a way that we don't sort of only explain the theory of it, but every little thing that you do, you can actually you're not, you know, you can take a piece of code and then then you can play with it. I know I'm not sharing any more but
+
+1:54:34  
+but you know,
+
+1:54:36  
+I'll tell you what the tokenizer is and then you can just apply it in the middle of a string and you can see what happens to get you know, to make your hands dirty that is
+
+1:54:46  
+that is somehow the idea. So
+
+1:54:50  
+you may hate it. You may like it, but it's a compulsory course you have to go through it.
+
+1:54:58  
+I think it's just I think
+
+1:55:00  
+It just helps a lot. If we just try it out ourselves, get the solutions and try to, you know, mess it up a bit see what affected? Yes, I think it is helpful if it's just try the given code on on like random inputs, try to see how it works. I showed you some example inputs, but you could try to put in your own and see what happens. And this will give you some feel of what it's like. Yeah, getting the getting the code, or being able to get the code and trying it ourselves has been pretty helpful, I'd say.
+
+1:55:39  
+Yes, you're starting is complaining that it's difficult to grasp the theory using F sharp as a tool to demonstrate I do agree.
+
+1:55:47  
+But this is kind of a necessary evil. Because if I were to implement the same theory, for you, in C, or Python,
+
+1:55:58  
+we wouldn't get anywhere,
+
+1:56:01  
+anytime soon, because you either need library functions for which you don't know what they really do.
+
+1:56:08  
+Or you need to do a whole lot of work to even get anywhere close to getting off the ground. Because things like pattern matching or high orderliness or, you know, these kind of obstructions that FP gives you, they give you this ability that you can write down these things in 20 lines rather than hundreds of lines of code. So it just is like this. I know it's the hard part about this course. So I've got my full sympathy but
+
+1:56:36  
+yeah, it just is like this.
+
+1:56:39  
+I mean, I wish I had more time to do all of this, but I don't. So
+
+1:56:45  
+parts of it are going to be a bit rushed. But
+
+1:56:49  
+I promise I will actually go slower as we get to more complicated things because I know these are more difficult.
+
+1:56:58  
+Okay, then
+
+1:57:02  
+perhaps.
+
+1:57:05  
+Good. Okay. I will stop here. See you
+
+1:57:11  
+again soon. Yeah, thank you as well.
+
+1:57:17  
+Thanks. Bye. Thank you.
+
+Transcribed by https://otter.ai

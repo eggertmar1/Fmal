@@ -1,0 +1,394 @@
+4:35  
+Hello
+
+4:37  
+sorry too
+
+4:38  
+late.
+
+4:40  
+There was a technical complication Can you hear me?
+
+4:46  
+Yes sir.
+
+4:47  
+Very good isn't good
+
+4:57  
+today
+
+4:58  
+we should do something different Front, a bit, I'll try to go slow and informal into a difficult topic or, but but also an interesting one here, which is type checking and type inference. And we'll continue with it next time in some more detail. But for today, I just tried to show sort of on examples, what are some ideas how you would go about finding a type for a programme that comes without any type annotations? Like we are able to write in F sharp and like, we are also able to write in our own little language that we are devising here.
+
+5:40  
+And we
+
+5:42  
+discussed what are the issues, why this is a fun thing to do, why this is a useful thing to do. And what's also the difference between type checking and type inference? So let me share my screen. And then we can discuss recording properly, yes.
+
+6:12  
+Okay.
+
+6:15  
+Whenever there is a question just show up, because in this mode, I can't, I can't see anything about the petition, participant list or check. So where do I start, maybe I start actually, by just showing you some examples. So we have this little expression language of our own that we're developing in a functional direction. And I'm trying to show different things there about it can only be see what we can also maybe just play in the in the F sharp buffer, because F sharp is a similar language by itself. So we've seen that we can write things, function definitions, in F sharp where we give the system the interpreter, no idea whatsoever about the types we have in mind. And then some some sort of guesswork goes on behind the scenes. So for example, if I write something like let's add 2x equals x plus two, this is a function definition, I'm saying here is name, your global name, the parameter for the function, and that's the function body or the we also call the definition, this is what we want to return, no pipes, not anywhere. And when I enter this, and then the system tells me that this is actually a function from integers to integers. And from somewhere this information comes why
+
+7:53  
+I don't know.
+
+7:55  
+I can also write maybe some functions that are tiny bit different, maybe I write x plus two point or 2.0. And then the system makes different throws a different conclusion somehow, based on what I wrote.
+
+8:18  
+I can sometimes do very indirect things. So for example, I can write my own function, say, x, which maybe that's something like, if What if, if, actually, let me give some more x, y. If y is smaller than five, then x pause. may sound like a very stupid programme, right? But I'm just giving you an example of a tricky inference. What do you think what kind of pipe? Will F sharp tell us at this point? Well, it looks like many things can be pretty free here. Especially it looks like I'm not saying a lot of things about x. about why we say something. So here is a comparison of y with five. So if you know a bit of how comparison works in F sharp, then it works between things of the same time. And also these cannot be any type but types that are orderable. So five is an integer. To compare five to anything that other thing also has to be an integer. So y will be found out to be an integer. But how about x? So 2x we don't apply any operation as if but let's see. We get to know Before has the type it's a function taking a Boolean x and an integer y, one by one not as a pair but one after another so that it can also be partially applied to say x only, and returns a Boolean From where does this one get come it comes in a very indirect fashion. Maybe before the return type, it's not even so complicated to figure out that what has to come out is a Boolean. That's because here in the elf browns, we say what we want to return is false and that is a Boolean. But we say nothing particular in the Venn branch. And also we really say nothing particular about x either. But then there is the convention that for such a thing to be well defined. So, the programme works similar type wise whichever branches are taken, this gives us a constraint that the then branch and the and the else branch of if the nails always have to have the same time. Now x is unconstrained. But, but false obviously is constrained false is of type bool. So therefore, this system figures out that makes better be of the same type. Or actually, then brands better be of the same type, but then it's just the variable x. So therefore, x has to be of the type bool. So we know bool comes out, but then this x was also one of the input parameters. So also here we say. So, sometimes things can be very indirect. I can also write functions where f have F sharp has too few clues to decide about concrete types. And then it will say something in terms of type variables. So let me give you an example of this. Maybe I just call it make pair. It takes an X and the Y and the produce is the pair of x and y.
+
+12:16  
+What do you think it is? It's time well the type could be many things. For example it if x is Boolean y is integer what comes back is a pair of x&y, which were Boolean integer, but of course, x&y could be other things, pairs out a polymorphic type. So we know nothing really about pairs. Other than that there is a fixed number of components, while in the case of pairs is two. In any type, it's some fixed number of components. Each can have their own type. But we say nothing beyond that. So let's see what happens. F sharp says make pair takes two arguments, one by 1x
+
+13:05  
+and Y. Give us back a pair of two things. And what are the types the type of x is a that is a type variable.
+
+13:16  
+Here it is an unconstraint type variable, which means that in a real application of look, Bear, I can use any x i want. So any type A qualifies any type A is good. Y is also have an unconstraint type. Here we say Y is of type B, B is another type variable type variables are signified by the little apostrophes Here are quotes. And they are so unconstrained that they don't even have to be the same type X and Y their types can be chosen independently A and B. But then once they are set, it's not arbitrary what the return type of the function is, it has to be a times b times is the type constructor for pairs, but also any other tuples or tuples, of any other length. So this is already fixed in terms of these type variables to see this, right. And if this is not what I mean, if I actually meant MK bear to be far more specific, then now I don't have a choice, I have to actually start giving type annotations, maybe I'm fixated on the idea that y always has to be an integer in this case, then it's okay. From my part, to give a hint. This is what I want. Why has to be constrained in this way. And then the system tries to do its job figuring out the rest of the types for everything here around let's see what comes out. comes out is x remains unconstrained. But But Then of course, something else gets also more precise. So if y is an integer, this pair is not a pair of two arbitrary types, but it's a pair of something of type A and underneath.
+
+15:10  
+Of course,
+
+15:13  
+I can go further I can, I can give the system more information. I can say, okay, no, no, no, x, by the way, is a character. And then F sharp copes with it, it says, Okay, yeah, you want to tie your hands you've done. So this is the type I will then figure out and this is still a well type programme. I can go over the top, I can I can have inconsistent ideas. So for example, I may want this function now to return a Boolean. What happens? Yeah, this is clearly unreasonable. So the system should complain. What does it complain? So it says, I've really been in mixed minds here, or a sort of I've been confused here. So I'm trying to do too many things at once. And it says something interesting, which maybe doesn't quite agree with what we think we wrote. So it complains about this particular point. So the whole of the top level of the right hand side expression, and it says this one was expected to have pipe From where does this one come? Well, it comes from us having said this, right, so the right hand side here determines the return type of the function. With this notation, we've just said, This is what comes back in some other languages, you would put like in C, you would with this rule, at the very beginning here, you would say, we've got the Boolean function make pair, which takes arguments of this type, but here, these things are written in this order. So we can give types two parameters. But the type, the return type of the function is given us the last thing and always sort of, you know, you have to parenthesize correctly here, so you shouldn't, these colons wouldn't better pertain to any parameter, but to the whole thing. The idea is, is bool applies to this. Hmm. So it says we've insisted This is a bool. But then, according to F sharp by some other considerations, it also has type A times B. Now, this might sound funny, because I'm not talking about a and b here. Everything seems pretty rigidly fixed. From where does this come? Well, it comes from the fact that F sharp takes one step at a time. And it had just figured out that this top level expression, which on the one hand, has type Boolean, is defined here as a pair of pairs, generally, not pairs of characters and integers, but pairs purely generally have a type of this form. And at this point, when this complaint was made, the system didn't go even deeper, to check what the types of these two guys are. Because had it done this, it would have told us that bool is not equal to char times int, but you know, for the inconsistency to arise, we don't even have to look so deep. The reason is bool is a primitive type and no primitive type is equal to any tuple type in particular, not to any pair type. And that is it, because inconsistency is here. So we've seen a few features or sort of phenomena happening here. So what are they? So, one is this is a strongly typed language, F sharp and in general, most FP languages, you try to have them this way, because this has important software engineering benefits. The Prime one of the system detects early when you're confused. So the idea is to catch the sort of development errors as early as possible, and forced a certain discipline on you. So that your, you know your freedom is constrained. But this is a sort of usual useful type of, of restriction in that. It's like I don't know, the parents taming their children. You're not allowed to harm yourself, yearn for this, there is a certain discipline.
+
+19:50  
+But then it is a statically typed language, everything has to be well typed. But this is separated from the idea But you have to do the typing No, most of the checking is done for you. And this happens often so seamlessly for you that you don't even have to say anything about pipes yourself. And that's one typical usage of this facility, that type inference happens. But then sometimes you want to take control or you know, you don't want your parents to decide everything about you. You also want to say what you intended. And that's okay. So and that isn't the idea that you can give type annotations, you can fully Say what you want your programme to be like, for this month, bear. If I'm disciplined, I may want to write properly, what I intend and then it is just a job for the system to agree with me nothing else. That's possible. And this is what you will typically have to do in, in languages like, like C, for example, or, or Java, everything is, is, is typed. And by that they they're mean, or not everything is typed, but most things are typed. But, but what is meant by typing in these systems is you have to write the types here is not like this, the language is statically typed. And type errors are not tolerated. But there is support for type inference. So some discipline is imposed on you. But on the other hand, you sort of get compensated for this. You don't have to, to get all the sweat and toil for it yourself. But But you're helped in this matter. Yeah. Does it make sense? So what I want to emphasise, there is the idea of strong typing every subject, so every expression you write, each sub expression of it has to be well typed, two types have to agree. The idea is during the runtime, you shouldn't discover that your computation now we'll get stuck or basically breaks down because some types don't fit. All of this should be avoided at at, let's say, compile time or, or load time to the interpreter. We are piped In this sense, but we are sort of untyped in the sense that we don't have to give the types of ourselves. And that feature is called type inference. Machine infers the types for your the language infers the types for you. People also say type checking by checking typically means that you've already given some hints. And they should agree with the rest of the inference process. So and in particular, if you insist that something is of more of a more special type than the system would otherwise allow you then then the type is specialised for you. And we saw an example here. So if you just don't give any types, then we get the very liberal type inferred by the system. But I can be more specific. And now this sort of software engineering considerations about whether you want to be very general, very specific, or different, you might be very general, because this just means that your, your programme is very user, very reusable, I can use muck bear with any pipes. So I've written something very powerful in some way. Maybe my pair is not the most interesting, powerful functions, right? But anyway, but then you lose the control of sort of unintended uses by not giving more specific types if you actually only had more specific types in your mind, and maybe the particular trickery you wanted to implement was, was supposed to,
+
+23:54  
+was supposed to. Yeah, at some particular purpose, and you really intended your functions to be used in a certain way. Is this clear, static typing, I want to get it across doesn't mean that you have to give your types yourself but they are inferred for you. Or if you've given your own your own annotations, this inference as a component of checking. And then inference is the idea that the system tries to make sense of what you've written in terms of types. But without annotations, it tries to give you the most liberal type possible very often, it's called the principal type. This is the most generic possible type and every other valid typing is an instance substitution instance. So how should this thing work? Some time ago, when I introduced this first order language actually showed you a simple type inference algorithm. But this one was helped by user annotations and broke down without them. So what did we do there? We said, we now want to work in a syntax like this, that whenever you make a function definition, you actually give types to both the parameters and the return value and type inference, then basically, we reduces to checking that all of the little sub expressions that you have lying around everywhere here, they sort of make sense with respect to this discipline. And if something breaks or breaks down, then yeah, then then the system complains. And of course, the main expression itself, the system will tell you what its type is. So here, this is an expression with a local let its value is is is the value of the body expression. And the system will here actually, in this case, tell you that this is an integer. So it is an inference, but with a lot of with a lot of hints given. When these hints are given, and they are in terms of closed types, no type variables, then the types derived also are in terms of clothes types, no type variables, no generousity, or no polymorphism, whatever you call it. But how then does the system figure out the types when you don't give such
+
+26:47  
+information?
+
+26:53  
+I'd like to propose that we sort of go by small examples, I first show them here in the buffer, and then I try to scribble on a on a pad. Let's let's try to invent an algorithm or let's try to see what needs to be done. So let's do something. So let me define for example, for again, if I just say foo x is x, what should the type be? For? How should the system even start thinking about it? I can tell you what happens. First, it is found out that food is a function. Why? Well, because in this let definition, we see that who is given a parameter. So depending on the number of parameters that the system will figure it out, it is a function with this number of arguments here, one. So most Generally, we could then say that this is perhaps a function of type, you know, a to b, where a and b are type variables. But this is perhaps too general. Why? Because the return value has something to do with a parameter, actually, it's equal three, Aha. But then when the return value and the parameter are equal, then they have to be of the same time. And in this particular case, there is nothing else we can learn from what we've written, this is the only constraint the return type, and the input type of this one place, or unary function that we have here have to be the same. And that is what the system computes. It will tell you this is a function from a way, it could have just as well, I've told you that it's a function from b2b there is no difference, you can always rename these type variables that are unconstrained.
+
+28:56  
+If you rename system. That's good. But suppose I did something else. Maybe I say let x y is x. How about now? Well, it's a similar thing. So,
+
+29:22  
+for
+
+29:27  
+buying the number of parameters here is a binary or a two plays function. So somehow, the type of the function should be something of the form a, an OB at OC where a and b and c are type variables, based on just what the left hand side of this definition looks like. But surely, A and B and C. So A is the type of x y is the type of sorry B is the type of y and sees the return type. They cannot be completely arbitrary. Actually, it looks like the type of ad can be completely arbitrary because why? Because y doesn't occur anywhere else. So perhaps B is completely unconstrained. But our A and C, the type of x and the return type independent? No, they aren't, because what we're returning is actually the first parameter. So the type of the first parameter and the return type, they must be the same thing. And that's what the system says. So here we have a function from A to B to A. Because that's what we did. How about if it returned? Why? Well, that's not so much more complicated. Now the type is a to b to b. But then how about something get more complicated? How about this? So this is a famous example. It has a name, it's not usually called foo. But anyway. So here is a complicated definition, as that is missing on the left. So here's a complicated definition for is clearly a three place function. So it's of the Type A to B, two c, two D, for some possibly unconstrained type variables, ABCD. But maybe, maybe they cannot be independent type variables, maybe we need to say something more specific.
+
+31:24  
+And this is figured out by looking at what is happening here. Can you already see some things that are happening here?
+
+31:33  
+Well, this is not just using some some variables, but it's also some function applications. So one of the things we can quickly learn is that since y is applied to Zed, the type of y cannot be any time. So the type of y has to be some function type actually, some some function type with one input. Sorry, some some type of a one place function. X is also applied to arguments, x is applied to Zed, and then the result is applied to Y to Zed. So x is really a two plays function. So it also has to have as type of a pretty specific form. And then it looks like it's probably some complicated calculation of dependencies, what is it like? So let's first not do the computation, let's just see what the system says. And the system says something pretty complicated. It indeed says x is not just anything, x has to be a two plus function. So here, the input types are called A and B, and the return type is called C for this x, which is a function. Y, the second argument to foo also has to be a function, but the one place one, but you see already something very specific is happening, like the input type of y has to agree according to F sharp with an input with the first input type of x, the return or output type of y has to agree with the second input type of B of X. What am I saying the the output type of y, which is B had wanted to say, has to agree with the second input type of x. And then there is more happening, that is a third argument to foo. And its type cannot be any old time. But it has to be the same a that we've already seen if you've been a few places here. And then finally, the return type of the function foo has to be C, which by the way, was also the return type of x, which is yet another kind of knowledge, found somewhere here, that last bit is actually easy to see, because who applied to all of its arguments has to be of type C. But surely, then x apply to all of its arguments has to be of the same type, because you know, the left hand side here equals the right hand side. So that's maybe not surprising that you've seen the same C here in both places. But the message of this, this one here is it can be a non straightforward, non straightforward matter for the system to figure out these types. And sometimes you can write nonsense and things do not have good pipes. So for example, if I write for x equals x applied to x, this is maybe a bit questionable already. And we get some sort of a complaint, which I'll have to explain you what it is. But some of the problem is that you're not a proper part of something cannot be as big as the whole. So, so here, x is applied to x. So therefore x is a function type. Say of Type A to B. But if x is a function type, so if x is of a function type A to B, then it wants an argument of Type A. But of course, it's here also given an argument of Type A to B. So this is exactly actually what the complaint here says. So as soon as you assume x is a function type x cannot be its own argument anymore.
+
+35:33  
+How does this See? Let me unshare for a moment, then I can see you.
+
+35:42  
+Have you written something in the chat? Are you all there? Yes, I have one question to ask. Could you explain a little bit further? The three plays function that you the the complicated one,
+
+36:00  
+let me
+
+36:02  
+Yes, I actually live the royally and I didn't explain right now, at all. You mean, this one? What happens here? Yes. Yeah, this is, this is not straightforward at all. And this really requires some calculation to arrive there. But I mean, maybe for now, and I will show you this, maybe we should do this after the coffee break, actually, but, but do agree that some things are sort of easier to see. And some are harder, like, the fact that food takes three arguments is an indication that well, the whole thing has to have an arrow here, an arrow here and the yet another arrow here, because it's three arguments, taken one by one, right. And then something is written. So on this level, it's kind of clear what is happening. But these types here, of course, and the fact that you know, the same a occurs in certain places, or maybe the same B occurs in certain places, and the C occurs in certain places. This is a bit mysterious. So I think so far, I only come commented that, you know, x has to be a function as well, because it's applied, why it has to be a function as well, because it's applied. And maybe it's not so illogical that the return type of x and the return type of foo itself agree because, well, on the left, here, we have an application of food, three arguments. And here we have an application of x two arguments, and both should do the same thing. But the rest I haven't explained at all, and it's really, really a bit mysterious. Maybe I'll switch to scribbling. I do some one final example. Let me do yet. Let me do a yet different food, shall we say, full of x and y, you've actually seen this one that a different thing before is x applied to y and y. That also feels a bit crazy, perhaps. So what do we learn here, we learned that foo takes two arguments, not as a pair, but one after another so that the partial application who acts also makes sense, and I can pass it around or just use alone. So there's much we can see who takes two arguments. The right hand side
+
+38:28  
+somehow, perhaps indicates to us that x is not the simple argument that the whole thing is a higher order function. So foo is the function taking in functions why? because x is not used in any sort of simple way here, or in harmless way, x is used as a function x is applied x is called. So clearly, then x has to be a function. Moreover, since x is applied to two arguments, one by one, it has to be a two place curried function. But the picture is a bit simpler than here. I mean, this one is really difficult to analyse by heart here is not so hard. So there are certain things we can notice immediately. So x is not applied to any to all things. But but to why twice. This perhaps is an indication that both arguments of x have to be of the same type. Yeah, because y has, well, we're doing type inference while you're playing some fixed time. It's the same type here and here. So x then perhaps has to be a function of the form a arrows a arrows B, where b is the return type, and a is the type of y. And actually, we don't have more constraints. So the type of y is unconstrained. So if we agree the type of y is B, and if we then say, the type of x is a arrows, a arrows B, then we can type the thing, and this is what the system tells us x here, the first argument for the parameter to foo has to be a function of this type. Y has to be what is used twice here. And what comes back is what x delivers. After application. That's also the return type of food. That's perhaps sort of understandable without, you know, making heavy calculations on the back of an envelope, we'll just think. But I suppose many of you must already in this, say, practical exercises or home assignments, stumbled that this point maybe type inference doesn't disturb you so much when everything works well. But then now and then you ask a question, I wanted to do this. But now the system complains, the types don't fit. And maybe sometime it was about mixing, mixing up the say, list element type and list type, or maybe mixing up and option type and, and the type that the option type is over, I mean, there is a difference between int option and just int. And then, then the type insurer of the system complains loudly. But on the other hand, it points to an error that is there in your code anyway. So if if you wouldn't get this early error, while you try to load your code, you would get an error each time you run the code. So that's a good thing. Even if it can be annoying. First, what is maybe not good is that the diagnostics about type inference can be more useful and less useful. And that depends a bit on the type inference strategy. Because type inference can, you know, you can start type inference from different directions. And some directions maybe argue with agree with how you would reason as a human, there can be other strategies that make perfect sense from the algorithmic point of view, but make it more difficult to understand where exactly is the root cause of your error, as opposed to some surface manifestation of sip or symptom of your air.
+
+42:30  
+So this is very important that these kind of messages are useful. And actually, I must say, in the standard
+
+42:40  
+implementations of F sharp, not too much attention has to has been paid to this, they could be far more informative, and better, better for me. But anyway, is there more questions at this point? Because if not, then I would rather like to take a break now. And then we should do some real type calculations. And I'll show you from from where these kinds of things come.
+
+43:07  
+After.
+
+43:14  
+You think
+
+43:24  
+there are no questions right now I propose we take like a seven minute break seven, until 1240. And then we do a number of type inference exercises. This one is a prominent example. I'll do some more with you. And we don't state the algorithm formally yet. I'll show you next time. But what I want to get across is what is actually happening or what is the principle and why does it have to be this way? And why this is actually only natural when you think about
+
+44:07  
+this, okay? Yes. Okay. Then let's let's, let's take a short break. Six minutes, and then then I'll continue after this. Then we don't maybe we spend 2030 minutes on this. Okay. Let us know
+
+50:28  
+Okay, so we tried to continue, then I'll take these examples, and we'll see how we go about them. Let me now try to share a different screen.
+
+50:49  
+Which one?
+
+51:00  
+Can you see an empty screen?
+
+51:04  
+Yes,
+
+51:05  
+yes. I'm not afraid to write something. So we have these examples of functions, whose type, maybe it was not so obvious. There was a very complicated one, there were the simpler ones. Let me start somewhere in the middle. So for example, we had this
+
+51:32  
+for
+
+51:34  
+x and y, the X. How did I reason about this? Well, we said the Foo function takes two arguments. And then there is some return type. So we could play this game that we say this one has type A, y then has type B. And the return type of the function should be C. And so this agreement about letters is sort of to actually conclude, at one point that food would be of the Type A to
+
+52:34  
+B to
+
+52:38  
+C, isn't it? But that's not everything we can learn from here. It's just, it's just, we have sort of recorded for ourselves that foo is a function type. Therefore, its type has to be something of the form a arrow B, arrow, C. Where do we get the rest of the information from? Well, that should somehow be come from the right hand side here.
+
+53:14  
+We should somehow exploit the right hand side. Here, there right hand side is very simple and very particular. We've already agreed that the right hand side has type C. But actually, let's look at what the right hand side consists in. It consists of just one use of variable the variable here is the parameter. But look, we had already made an agreement, what the what the value, sorry, what the type of the parameter is. So we had already fixed it ours for ourselves that this was a, but now at the same time, we have to we are seeing that this is C. So we get this equation type equation that says A and C have to be the same type. Is there anything else for us to sort of guarantee that the right hand side here,
+
+54:11  
+this guy
+
+54:12  
+is a is this well typed? Well, not really, because the right hand side is so simple. It's just one variable. On one hand, for this variable, we have agreed with ourselves what its type is. And on the other hand, for the whole right hand side, we have said it's time to see and there is really nothing else going on at all. Hence, the type of food the most general possible type for for food is actually this one. These actually a Adobe out Oh, a, because C is constrained to be the same thing as a Does this make sense? Maybe this is too simple. And then of course, you can, you can think of little variations here. So for example, if I were, say more constraint, maybe I had said something like, let for x, y, int equals x, then the reasoning is exactly the same, except that I have to take also into account the fact that the second argument of food doesn't just have an arbitrary type B, which is the most general thing that the system would assume otherwise, but it is in so we will have to also take into account that we
+
+55:49  
+is in. And if you then write out what comes you know what follows from these two equations, this one here?
+
+56:03  
+And
+
+56:06  
+sorry, direction, and this one here. Then, we just conclude that who in that case would be of the type? a? arrows in? Sorry?
+
+56:30  
+arrows? Yep.
+
+56:41  
+Okay, now, let's do something more interesting. But the principle sort of remains the same. So you can see a few things. So we make some basic agreements, about, you know, the whole setting, which is we say, well, to start with, we don't know any better than that there are some argument types and some return type. And then we start collecting equations. And essentially, we sort of solve equations, and we, we try to go to a closed form solution. So in this first case, sorry, this one here.
+
+57:17  
+We've,
+
+57:19  
+we've taken into account that A is the same as C. But since a and b are unconstrained, we leave them there type variables, right, of course. A equals C is a symmetric equation. So I could have just as well solved it in a different way, and said, the solution now is that for is of type C, arrows, B arrow C, it would just mean that I prefer it somehow C as an Unknown, Unknown name to a But otherwise, it's just the same solution.
+
+57:45  
+Okay,
+
+57:48  
+let's do a different one. Maybe still, you're still not yet the most complicated one.
+
+57:55  
+So we had one that looked like this. It said, Let fool x y, b, x applied to y, applied to y. Just to get started, let's say x has type A,
+
+58:23  
+y has type D. and the return type corresponding to the type on the right hand side is C. Who said this, then it's clear that at the end of the day, the type of food will be this, but maybe not for the original type variables, A, B, C, but we have to make these things a bit more precise. So this is kind of the first approximation, but the equations that we collect, when they when we solve them may force us to something more specific. Right. Let's see what else has to be there, we see this x here is actually applied to two arguments y and y to agree this, I agree with this. So therefore, this type A that we gave for x cannot quite be arbitrary. The state type A actually has to be something far more specific. It has to be perhaps of the form the arrows, he arose, f because Why? Well, because x is a two place function. So it takes at least one argument we can agree that this one we call D and it takes another
+
+59:58  
+comeback.
+
+1:00:05  
+Yes, it takes another argument, which is we can say as type E, and then the return type is F, actually is the return type f four, can we say something better from the very beginning? Well, x is applied to two arguments. But here we say the return type of this application is C. at the same point here we say, the return type of applying axes F. So really, we have already sort of introduced a bit too few too many names here. So one thing is for sure C is actually the same as F.
+
+1:00:54  
+Okay,
+
+1:00:57  
+maybe I should make a few more here. So yeah, okay. And then D and D cannot quite be arbitrary, either, because x here actually is applied to two very specific arguments, why and why. And we already agreed that the time for y was B, wasn't it. So really, D and D cannot be quite arbitrary.
+
+1:01:25  
+But actually, D is B. And he also has to be B. Maybe I could have written this one in a different order, it's the same thing that maybe it looks nicer,
+
+1:01:43  
+if has to be the same.
+
+1:01:46  
+So I'm sort of reducing newer introduced type variable names to the older ones that they already had. Is this good? So are we constrained in some further ways at all? Or maybe this is it?
+
+1:02:05  
+What do we think?
+
+1:02:13  
+Well, there doesn't seem to be a lot more happening because the right hand side is one single argument or two plays function to two arguments, or we could say it's your first x is a one place argument, which we applied to y. And then the result is a further on one place function, which we applied to y. But that's, that's just a different way of saying the same thing. So there is not more happening on the right hand side or on the right hand side. We've already taken all of this into account. So maybe we just find, let me just now sort of solve the equation system. So to say, well, these equations are very easy to solve this is just to say, don't use FDA e at all, just everywhere. Instead of f, write C instead of D, right? D is the V right? D.
+
+1:02:58  
+This one is a bit more specific here, we have to say, well, a, we can't just use like this, instead of a we have to write the more specific thing isn't.
+
+1:03:10  
+That is any. So instead of this age here, of course, I will have to write what it is. So it is D, but these just the arrows, he but he's also just be arrows f but f is just C. So actually, it's just this bit. And that is all. So there is really nothing else to say the type of food is B to B to C, to B to C. Yeah, I find with this. So I mean, I can also most properly write it out. But we already there.
+
+1:03:48  
+To B
+
+1:03:49  
+to C.
+
+1:03:57  
+To see.
+
+1:04:03  
+Okay.
+
+1:04:07  
+Is this reasonable? Oh? So happy enough?
+
+1:04:17  
+Oh, yes.
+
+1:04:18  
+When you write these equations, I mean, I like to do it formally and write an algorithm. But for now, I think it's important to get the idea. We just collect. I mean, the only things that really determine anything are whenever you apply a function, say of pipe A to B, then the argument has to be of type A and the result has to be of type B and we just write down these kind of agreement requirements as equations. And these state what are the sort of minimal requirements that I need to put on my types. And since we are after the most general type, we don't try to go more Question than just exactly those things. Okay, now then let's do the really complicated one, which I refuse to explain before. What was it like it was something like let
+
+1:05:14  
+fu
+
+1:05:15  
+x, y, Zed equals x applied to Zed, and the whole thing applied to y apply to that. It's much more difficult. But the principles aren't so different. Let's fix a few things. So let's say this one is x is of type A, y is of type B. Zed is of type C. And we also say we want the result, we insist that the result is of type D.
+
+1:06:04  
+Okay,
+
+1:06:06  
+and then the aim of the game, or the name of the game, which everyone in the end of the day should be a to b, to C to. Okay, what do we know? Let me go in small steps, we could actually go in bigger steps, you need to noticing that certain things are variable. But let me sort of go go in little steps. What is the right hand side like here? So let's concentrate on that one. Right hand side is this bit here? Well, it is a play an application of the function x to two arguments, Zed, and y apply to Zed. And the further inside, we also see an application of y to Zed. So there is two functions. At least going on here. Let's, let's state this somehow. So the type of x is a, so therefore, we learn that A is something more than just the primitive type. So it can't just be a type variable. We have to specialise it to some sort of a function space. And then let's give it names, or I can call it it takes two arguments, I can say it's E to F to G.
+
+1:07:41  
+And this is just to be methodical, because it is very easy to see that he for example, has to be the same thing as a, because he here sorry, he has to be the same thing as C, because he is really the type of the first argument of x, which is it, and we already agreed that the type of Zed is C, etc. But for the moment, let's say it is like this. And let's write down also,
+
+1:08:10  
+something about the other function y is a function here, isn't it? The type of y we said was B and y is the one place function. So I can say it is one from what are the next letters h
+
+1:08:37  
+to
+
+1:08:40  
+shall we say k.
+
+1:08:44  
+And now let's write down what else we know. Ah, is applied very x. The type of x we say is this. X is actually applied to Zed. We already know the type of Zed is C, therefore, he has to be the same as
+
+1:09:18  
+C really, isn't it? x is also applied to y apply to Zed. So here we say that this is what we call F. But at the same time we know we've assigned the type h to K to y. So therefore when we apply y to set the return type is k. So therefore, f has to be the same as K.
+
+1:10:05  
+And finally, this thing here, which is the type of x, right? When we've applied it to both arguments, the output type should be G. But at the same time, of course, it should be D from here. Yeah. So g should really be the same as D. So I introduced a lot of names. Actually, I could have not introduced them had I sort of looked ahead a bit. But I just wanted to do it very, very systematically. And so we collected lots of information from this one top level application of x two Zed, and why is that, which was this one here? All of this information is in
+
+1:10:56  
+here.
+
+1:10:58  
+Now let's work in the other application on the other application, which is why apply to set. So we are already saying here that the type of why is this guy.
+
+1:11:21  
+Okay, but then what we know why is actually applied to set here.
+
+1:11:34  
+The type of Zed is C. But here we talk about h as the first argument to y. So therefore, h is the same as C.
+
+1:11:48  
+And then also, what can we say about k? m, maybe you've already said what we needed to say about K. So K is what comes back when I've applied y to something. When I apply white to Zed, I get the second argument to x,
+
+1:12:09  
+which I've called F. So F equals k, I've already written down this one. So it looks like we're pretty much done here. We've collected everything
+
+1:12:18  
+we could possibly know, let's see if we can then spell out this thing in a bit more detail based on what we just learned. Okay, what is e? A is E to F to G, but he is actually c. and g is actually D. So maybe I just call it C to F to D. What is B, B is h 2k. But he actually has to be the same thing as C. So I always prefer these variable names that I introduced earlier. So I prefer C to H. So I will replace h with C, and k is the same as F. So the whole thing is C.
+
+1:13:30  
+And then the next argument is C, and then there is D. So if I write it out in full, I get full is of type C, to F to D, to C, two, f two, C, two. And when you go back to what happened in the F sharp window, F sharp concluded exactly the same type, except that the names were different. It used instead of C ZF. d, it used ABC. But otherwise, it was exactly this. And this was here a complicated inference, as you must agree. But in the end, there was very little information I used, I just only use that the right hand side has two applications, one to two arguments, one to one argument. And I just recorded that, well, the things that I apply, you have to be functions. And then I just made sure that the argument types and return types
+
+1:14:33  
+agree.
+
+1:14:37  
+And going in the direction of arguments, in the end, they have to agree with the variables that for which I've already declared types and the return types, yeah, this just has to do with with how the functions have been plugged into each other. So and that was it. Does this make sense? It's a, it's difficult to keep track of, obviously, but then it's something that you want to give to the machine. So the, the idea is more, you have to understand the principle, then, if you understand the principle, and if you think hard about it, you can write down an algorithm. And then you don't need to do any of these calculations by heart, obviously. And maybe a higher order function like who is a bit of the extreme of higher orders, typically, you don't combine high higher order stuff together. Yeah, in very intricate ways. Maybe I should, that's almost enough. But maybe I should just show you a few more things you can do. One thing I'd like to emphasise is a type inference avoids runtime errors of the sort that you get some sort of type misfit at one point, like you apply a function to an argument, the function has one expectation about the argument, but the argument has already been evaluated and is of a different type, and then you just can't apply. So these kinds of things are avoided by type inference, because you just refuse to run the programme that doesn't get a good, you know, that doesn't properly obtain a type in type inference. But there are things that type inference never can catch. So it's not the case that any type of runtime error
+
+1:16:32  
+would be,
+
+1:16:35  
+would be caught by by type inference. So some are kind of things that you don't want to do analyse too deeply, compile time and load time. So for example, if you happen to write division, x over y. And maybe you already found out that x and y are integers, and you're happy that the result is an integer, this is fine. But then perhaps it can turn out during the runtime that y can be zero, then everything is well timed. But you're trying to divide 17 by zero, and that will give you a runtime error anyway. Yeah, this is a type of thing that perhaps, would be nice to catch early. But type inference isn't really very suitable for this. Because that would mean that you have to track very precisely what kind of values everything can take when you do the actual evaluation. Yeah. And okay, if these are locally defined values, then you can sort of pre compute stuff. But maybe x and y are global. So Indian external environment tells you whether you know x is 17, or maybe it's 42 is dead. And it will tell you whether y is now zero or five. So there is no way that you can control the environment, the environment does what it does. Surely you don't want to reject a programme just doing harmless division, because someone might have the bad idea to give you zero as the value of y. So this type of error you won't catch. Another type of error are like meaningless recursions or recursions, that are clearly food type fuel type. So let me give you an example. I should say that this type inference thing that I showed to you perfectly well works in a kind of recursive setting. So if I've defined foo in terms of foo, then in the right hand side, I can already assume foo has the type that I've intended for it, and I can use it in my equations. Maybe I should show examples of this actually, let me do so here is the stupidest possible recursion that you can write. And it's accepted. Sorry, I'm just telling you let fu of x equal huvecs. This makes and then I could use it in somewhere like maybe I want to calculate who have a loan for example. That works, that makes perfect sense pipe wise. And it also has a clear operational behaviour but the operational behaviour is, is about so unfriendly, so when I call foo on Hello, this simplifies to what to calling foo on Hello. So I make a new recursive call. That in turn simplifies to Calling for one Hello again. And again, and again. And again, until I get a Stack Overflow. And of course, the fan of my computer will go at full speed before etc. So there is a clear operational behaviour. And in some sense everything is good with this programme I'll in a sec, I'll derive a type for you, it is perfect. But But you have to take this into account that these are types of errors. That
+
+1:20:32  
+type inference will not catch for you. From the point of view of types, everything is good. We can figure out the type. But maybe the programme is not the wisest. So let's do the type thing here. Because of course, we also have made more meaningful versions of the programme.
+
+1:20:50  
+So what can we say? Well, I can only assume that x is of type A. And then before x is of type B. So that would be a good reason to presume then that I can assign the pipe A to B to foo.
+
+1:21:22  
+And let's see if everything is well. So checking that everything is well means I need to see if I need to specialise my type variables further. Maybe because something is a function of space that I didn't see is that something is a function that I didn't initially think is a function. And we just also have to check that all the types fit. So the place where we need to do this is in the right hand side, which is this part here. So we have to make sure that this application of food to x is good. Let's see if it is good. So food is of type A to B, by what we just agreed what we will want.
+
+1:22:10  
+Here is an application of food to x. So then, the type of x has to agree with the input type of food, but the type of x
+
+1:22:21  
+is a and that is the input type of food great. And then I need to make sure that what comes back that the return type here, which is the type of the whole right hand side B agrees with the return type of food, but the return type of shoe is B so everything agrees, right, everything is perfect. You can type this thing in class shop, for example.
+
+1:22:50  
+And it will tell you who is of type A to B. It's nothing wrong about it. Here's a small variation of this, which is even crazier. But F sharp is still happy. So I could for example, say the following. Let full of x be the same as full applied to full of x.
+
+1:23:25  
+Let's check if this one is good. So I say okay, let's try x to be of type A. Let's try food to be of type B. So this is the old game as before, not not for Oh yeah, the food we have taught me, let's let's pretend that the the return type of whiskey. So the right hand side has to be of type B. That's what I wanted to say. Um, okay, if we do so, then the aim is we want to convince ourselves that we can type foo as a to be possibly specialising gay and be a bit. What does our naive algorithm tell us, we'll have to make sure everything is good here in the right hand side. That's now a bit more tricky than before. Because we don't have one function application. We have two function applications. We have the outer one, which is application of foo, foo of x, and we have the inner one, which is an application of foo to x. It doesn't really matter in which order we look at these things. Maybe let's look let's concentrate the outer fool first.
+
+1:24:48  
+The outer foo is a function from A to B by what we've said here, so therefore, when I apply it, the whole result Which is this thing here? That'll be of type B. But it is because who is of type A to B. So what comes back is B. Let's also check that the argument is of type A. So we have to insist that this part here is of type A,
+
+1:25:28  
+that is more difficult. Because what is this part here, it's actually applied to x listing. And who is a function which is which returns a, b, but now we say the result has to be a, this is only possible if A and B are equal. So from in this programme being this point, where on one hand, something comes out from foo, and the same thing goes into foo, I have to I will conclude that B and they have to be the same thing, because then it basically says the output type and the input type of foo have to agree, right? Let's check that everything else is fine. Still with the inner application of foo? Well, foo is a function from A to B the equals a, but anyway, the input has to be of type A, the input here is x, and about x, we have already agreed with ourselves that it is of type A, so everything is good, except that they have to make this one definition and are not sorry, definition, one equation. So we have to insist that B is a only then is for equals A to B. Okay? That just means this PSA. So really, the type of food is that way. And that is the final conclusion from the angle. And if you think about it, it makes sense. All it says is with a wave, you know, with plump this is this is some sort of plumping story with pipes. Yeah, we've put together some Yeah, we've done some clumping, we put some glue between things, everything agrees and fits. And we're not checking that operationally, we are basically going in an infinite recursion, if we actually ever tried to call foo on any anything particular.
+
+1:27:35  
+So, here, you saw lots of cases where the type inference with the equation collection related to
+
+1:27:52  
+making just sure that the argument types of functions, whether the input types of functions, agree with the actual arguments, and then also what returns for the function returns agrees with whatever the function call with a context where the function call is used. A bit more, of course, happens in connection to other language constructs. And the main one, and this is perhaps where I'd like to stop them is if the nails we used to announce is critical. So it's in general something of the form if I don't know he, then e prime l C double prime, everything is an expression when you type such a thing, what is happening
+
+1:28:50  
+double prime
+
+1:28:52  
+when the type checks such a thing, when you when you're when you infer types for such a thing, then there are certain requirements First of all, if only makes sense, if this expression here is bool. So, in general, when you do type inference, ie some complicated expression, but one of the equational constraints you get is that whatever way he is constructed, maybe some function call then the function call would have to agree with with with what he actually has to be namely Boolean and you get an extra equation from there. But then there are also the branches about the branches in general. We do not have any requirements, they can be of arbitrary type, but there is the requirement that they are of equal types. So these two will have to be of the same type. And then that is actually the type of the whole if then else isn't it and then that gives you Are there clues of further clues on how to type things? And maybe I should only do the simplest little example here as well to sort of convince you of this. So let's just make something up.
+
+1:30:21  
+Shall I say, let? What is the function called is usually called foo here. Let's have some arguments, maybe they are excellent. Why not?
+
+1:30:35  
+Let them the time the maybe even said that then the Type B, if something. I could say, x applied to y, then why else? Maybe this is not the most complicated one. But that's already quite interesting. Let's have this four of x y Zed is defined as if x applied to y
+
+1:31:20  
+poles. So if x applied to y is true, then what we return is y. Else, what we return is set of how to infer the most general possible type for it.
+
+1:31:35  
+That makes sure that nothing is that we never ever get any type, misfits. And also, whichever way I happen to go in the evaluation of if, depending on whether the condition turns out to be true or false, I still do get the value of the same definite type. It's as before, so x has to be of some type A, B has to be of some type B, that has to be of some type C. And then to start with, we don't really say anything else about or anything very specific about the return type, we just say this is some sort of D, and then we see if we can say anything more concrete. info is of this type A to B to
+
+1:32:30  
+C to
+
+1:32:31  
+D, isn't it?
+
+1:32:38  
+Okay, now the game is as before, so we have to analyse the right hand side and see what actually happens here. Let's see all the constraints that are imposed on us here. Well, we see one function application x is applied to y. This actually says that x is not of an arbitrary type A, but this type A has to be a function type, isn't it? So a actually has to be something of the form D to not be the role of us E to F. Because that's the type of Okay, let's see, what what kind of conditions do we have on this application of x to y. y, then is the argument, the argument type better agree with the input type of the function, the input type of the function is E, but the argument y itself has type B, so he has to be the same as B. And actually, f cannot be quite anything, either. F is what comes out when I apply X to something. So here apply x to y. And the result is F, but it can't be any f because look at what the context of x applied to y is. This is actually the guards of the if. So it has to be a Boolean. So F has to be born. very specifically. What else can we say? Now let's look at the rest of the if we've already looked at the application in here, and the application actually formed the guard, we looked at the guard, then then looks let's look at the rest of the, with the rest of these as we discussed before, what we have to make sure is that that two branches agreed by the type. So So here the branches are actually very simple. They're just variable used is y and Zed. So therefore y and Zed have to be the same type. But we had given them different types B and C. So that gives us actually that C must be B Or you may want to say the other way around, but that's the same thing that must hold. And finally, the type of the whole if then else also has to agree with the types of the branches, which we said were c alias B to D also has to be equal to both CMP.
+
+1:35:32  
+Okay? And then that is it, there is nothing, no no more information to collect, let's then write out what we have. So this age here is really eatwith is really bu is really b, f is bool. So this is beatable.
+
+1:35:56  
+What is b? Do we have any constraints about B? Well, yes, we have the C has to be B, and D has to be C. But these are sort of symmetric equational constraints just between two variables, let's say we prefer the variable name B, we keep B, then we only need to say C is the same as B. And similarly, we also have to say D is the same as B. And that is all we say. And the final summarise what I've learned all together is who has the type v to bool. to the to the to B, where B itself is unconstrained. It's just a type variable. Is this okay?
+
+1:36:56  
+I hope so.
+
+1:37:00  
+Let me see you. Do you think this is good? I can't hear you now anymore. No, I think it's okay. Um,
+
+1:37:25  
+yeah, I think it's just needs a little bit of time to think. And it's always thinking, as always, I tried to be sort of very slow and informal today, you might find that this was perhaps too slow. But the thing is, if you want if you want to put it down as an algorithm, this, there is lots of things to say. But I think the important thing is that you that you see what is going on, you should realise that the exact the same thing has happened when data types are around so so for example, pairs, or even things like lists or options. So, when you see for example, that the function list head is applied somewhere, you have to take into account that you know, the argument is a list or something, maybe list over code a and then the result must be of type code day. Yeah. Or maybe when you want to type cons, you have to take into account the actual type of cons that if you put together two things with cons, the first one has to be the element type, the second one has to be of the list type and the result is of the list type and you can't mix these two things. So for example, cons is different from a pen by type and the moment that you confuse you know, you just write cons where you should write the append, like you write double colon, where you should write the ampersand sign, the system will show that you that it actually has every right to do so, even if you feel this is a bit of an insult. This is just what what type checking and inference is for is I hope this is okay. If you have questions about this, you should ask now, you can also ask on Piazza these kinds of issues are everywhere. When you will play with your problems or assignments, practical session problems or assignments. But then on the other hand, the principle is general you have it in. In most functional languages. You have polymorphic or generic types in in many imperative languages like like Java or c++ but But often the mechanisms are slightly different than maybe you're required to put in more type annotations of your own. So languages of the ML family like F sharp, and Haskell, they go in this direction, which say, we'll give you the full freedom, but we'll check on you if you want to cooperate that. But that is some of the language design idea here. type inference is something that can be done by the system. So let it do it as a form of little AI, if you wish, I mean, there is some wisdom in the system. But you can also take control by giving fully your own limitations to show what your intent was.
+
+1:40:53  
+Okay?
+
+1:40:56  
+If there is no more questions than I may be leaving here, I'll try to copy these slides. Also to converse, five or six pages that we wrote here, and that will then be it for today. Next time, I'll continue with this, but then then we'll try to try to talk about the algorithm. Okay, so then, thank you today and I will stop here.
+
+Transcribed by https://otter.ai

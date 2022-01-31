@@ -1,0 +1,1702 @@
+3:46  
+Right So okay, I think we're good to go. Can you hear me?
+
+3:54  
+Yes. Very good is the sound at a reasonable level?
+
+4:02  
+Well I'm good. Yeah, thanks.
+
+4:05  
+Very good. So I'm sorry for for this little delay.
+
+4:10  
+First don't didn't want to record that all just hung trying to connect to the cloud server.
+
+4:18  
+But now it should be good.
+
+4:21  
+Another thing that is not perfectly good is that there is sun on my screen but I can't do much about it but I hopefully it will change in five or 10 minutes.
+
+4:31  
+Okay.
+
+4:34  
+So let's talk more about the imperative programming today I introduced this little c like language
+
+4:40  
+to illustrate programming, among other things with pointers, that is to say indirect Association and and also pointer arithmetic and the race. And this was to illustrate sort of typical things that you do in an imperative language you perhaps
+
+5:00  
+Want to have a better control over the memory? We're not that fully there will be on Thursday. And next week in one of the last lectures, you know, we'll also look at manual memory management like it happens in, in a language like C. But But first, we are in this micro c kind of language where there is no user location of memory or no no user the allocation of memory. So let me share a bit and I'll recap where we were, and what we will do.
+
+5:35  
+But the main thing today is I'll show you a little abstract stack machine
+
+5:41  
+into which you can compile C code. And then I'll tell you a few ideas about how these kind of stack machines are built.
+
+5:51  
+For
+
+5:52  
+for a non trivial imperative language, in particular, I'll tell you about this idea of frames on the stack. And then I'll show a bit of compilation. And we'll continue on Thursday, and look at more examples. But just to sort of get going and to get a feel for what this kind of machine could be like because it's not.
+
+6:18  
+It's not entirely simple at first. Okay, let me share my screen.
+
+6:24  
+I'll share this screen actually share.
+
+6:29  
+Yes, I want you small here in the corner.
+
+6:35  
+So we looked at this C like language before, where
+
+6:41  
+you could write simpler imperative programmes, things like these.
+
+6:49  
+Assignments assignment if,
+
+6:51  
+if then else's while loops, blocks, and also top level functions, no, no nested functions.
+
+7:00  
+But the particularity of this was that you had this idea of also pointers. So we could for example, say that I don't know that they want to assign
+
+7:12  
+star p where p was a pointer and star was dereference a pointer so a pointer
+
+7:20  
+primarily designates an address in the memory here stack. And under that address, you will find a value. So these addresses are also called l values. The actual data values of interest are called our values l for the left hand side of assignment are for right hand side.
+
+7:45  
+The point was that to the left of an assignment, you can't write anything. So of course, you can't write things like assign X to five, this just doesn't make sense. You can write assign five to x, this is good because x is an expression that among other things, also has an L value. So if x is declared as an integer, which means
+
+8:10  
+that it gets assigned to it an address or associated with an address.
+
+8:16  
+And when I write stuff like assign five to x, the idea is the value of five will be stored at this address. Yeah, whereas when I write things like five, five is just the numeral and there is no notion of like some set address where five would be stored. No, I mean, five need not be stored anywhere is just the numeral. So these kind of things are called general expressions, they have right values, data values, some expressions have left values, they can be understood as addresses, and only those can be used on the on the left, and then we said okay, a name can serve as an address, but also things like
+
+9:01  
+array access. So if a is an array declared as an array, then perhaps I can assign something to the fourth position of an Array.
+
+9:11  
+Likewise, if p is a pointer,
+
+9:15  
+so P is something that already denotes an address, I can say okay.
+
+9:25  
+To this place, I want to assign three. So the point is, P is a pointer. So to pee we have associated an address, but under this address, another address is stored.
+
+9:38  
+I could go there. I could pick up this address, and then I could store the value of three there. This is called pointer dereference. We talked about these things.
+
+9:48  
+And what was in this language.
+
+9:53  
+This was the full fee, the abstract syntax, we were able to write simple things such as you
+
+10:00  
+merles operations unary operations apply to an argument binary operations, specific lazy operations where they do not necessarily evaluate both arguments like and Endor. And then function calls.
+
+10:14  
+And
+
+10:16  
+they're especially kinds of expressions called accessors.
+
+10:20  
+Here, any accessor is an expression, but also the address of an accessor, denoted ampersand a was an expression. Also, you can write assignments, they are treated as expressions. The idea here is compute the R value of E, compute the L value of A, which is an address and put this value at this address. Now what we're accessors There are three types in this little language names.
+
+10:50  
+Start p, where p is an expression that
+
+10:58  
+that happens to serve the role of a pointer. So then you can dereference it a where a is an accessor. So in general, it could be
+
+11:08  
+for example, an array but could also be a pointer. And you can write this thing a E,
+
+11:15  
+which means
+
+11:19  
+evaluate IE, you will find an offset, you will find an integer value and then you just go to the right from the address of a
+
+11:27  
+Imani or evaluate many positions. So for example, if thing is if this thing here is something like
+
+11:37  
+a five,
+
+11:39  
+a denotes an address, but actually, we're not interested in that address, we're interested in the address that address plus five, because we want the fifth element in the array.
+
+11:52  
+See, doesn't really care. So you can actually write the same thing, for example, like this works just as well, because
+
+12:04  
+if a is being declared as an array,
+
+12:09  
+it is formulas, there's a pointer, so it points to an address. And you can you can look at the offset five, and the reference there gives you exactly the same thing as eight.
+
+12:23  
+Okay, and then what were the statements in this language, any expression was a statement, you're allowed to return from functions, if then else is a statement, while is a statement. And then we could form blocks.
+
+12:40  
+The blocks were all lists of statements of declarations. Normally, you first put the bunch of declarations like you say,
+
+12:48  
+I don't know, x is an integer, P is a pointer to an integer is an array. And then the whole sequence of statements, we saw examples of those that don't, yes, the declaration looks something like give a type Give a name, and declared the declaration brings the name into a scope and you treat it as a new entity. And this is the intended type that is not really checked here.
+
+13:17  
+Yeah, and another form of a statement, or a declaration is just an ordinary statement.
+
+13:22  
+And then finally, a complete programme was what
+
+13:29  
+this is here, the programme just is a list of top level declarations and you can declare two kinds of things on the top level, you can define a whole bunch of global variables. So these are these guys. And then in C you're also allowed to have top level functions. So a bunch of function declarations basically, you're introducing a whole bunch of names you say what the parameters are, these are your functions. You say what the type of the function is, if it is none, it means it's a void function. If you have a bunch of parameters, these have types
+
+14:03  
+there is a whole list of them and then there is a statement which is the functions body. So this is the abstract syntax, but really write something like this
+
+14:14  
+you're interested using a function of type T these are the formula parameters x one through XM are with types T one through the end and the body is just taken
+
+14:26  
+okay. And among them you expect there is something called main
+
+14:31  
+which has type void and that is normally and that is the function that you want to run. And then we looked at examples of those and I showed how this complicated game with ampersand for looking up an address of a thing or star which means you know, indirect other station dereference a pointer how these work.
+
+14:56  
+Today we are going to look into a machine
+
+15:01  
+Which is described in chapter eight, and illustrates how this type of languages are combined to a stack machine, rather than interpreted. And then
+
+15:13  
+running the stack machine
+
+15:16  
+is,
+
+15:18  
+if you do it well is far more efficient than just interpreting,
+
+15:23  
+especially if you also apply optimizations to the code.
+
+15:29  
+But even so,
+
+15:34  
+okay, so we will look at their little abstract machine that has a whole lot of commands, and I'll comment what those are.
+
+15:42  
+But they'll first tell you what this abstract machine works on.
+
+15:48  
+And it's the following thing.
+
+15:53  
+So this paragraph here is important. This is what the abstract machine works with.
+
+16:00  
+So already, when we looked at the expression language at the beginning of the course, we had a very simple machine. Now this one is going to be more complicated. That only worked with two things. It, it had a sequence of instructions, which were the instructions to execute, there was no notion of jumping in the code. So you basically consumed the instructions, one by one, the instruction sequence for the list. And the machine works by sort of executing instructions, one by one never going back. Here, we also have a list or an array of instructions, which is the programme is actually implemented really as an array of instructions, you can index into the array of instructions, I can ask what is my fifth instruction, or what is my seventh instruction just by re indexing
+
+16:54  
+in implementation,
+
+17:00  
+then,
+
+17:02  
+when you run your piece of code, then you're somewhere in the middle of the instructions. The idea is,
+
+17:11  
+a piece of code is a sequence of instructions, you start, of course with the first and you work your way down the list of or the array of instructions. But then there are a jump or go to commands in this list of instructions. So you actually have to keep track of where you are in this instruction is not the case that you just consume the instructions one by one, you can you can throw away the instructions, you voted the execute, it is no longer the case is here, you may need to jump back. So what we have is an array of instructions.
+
+17:40  
+And then we have
+
+17:43  
+an index a definite index into the array that we call the programme counter. This says where I am currently in my programme, PC is the name for it. There's a very standard sort of mnemonic PC for programme counter. And it says, which is the next instruction that I'm going to execute. Normally, when you run the programme, you just increment the PC by one or two, depending on if the instructions are one or two words. But if
+
+18:14  
+you jump, then of course, the next instruction can be anywhere in the array of instructions specified by the jump instruction.
+
+18:23  
+Then, what else do we have, like we had with this very simple naive
+
+18:29  
+stack machine before we have this stack itself, so to say.
+
+18:36  
+So you could implement it as a list. Here, it's implemented as an array.
+
+18:43  
+And you should really understand it as a tower of integers. So these are the sort of intermediate values that you work with, they are kept on the stack. Here also it will be addresses.
+
+18:57  
+But the whole thing is implemented via an array, I'll show you on the picture how. So actually, you should think that your stack is also an array.
+
+19:07  
+The stack bottom is at the very beginning of the array at position zero.
+
+19:13  
+And when you grow the stack, it means that more and more of the array is actually in use.
+
+19:20  
+You want to know where the top of the stack is. And for that you actually needed again, a designate index into the array that you call the stack pointer SP for stack pointer that points to the top of the stack.
+
+19:36  
+So if you actually pop something, or sorry, push something onto the stack.
+
+19:43  
+Then SP is incremented. And
+
+19:50  
+and
+
+19:52  
+you actually put the value at what was currently SP
+
+19:57  
+so SP always points to nothing.
+
+20:00  
+strictly to the top of the stack, but sort of to the element.
+
+20:07  
+Further up, I mean unused, or for the purpose of current computation, unused position in the array, I'll show you on the picture.
+
+20:17  
+And then there is a final element that is also important. That is called a base pointer.
+
+20:23  
+The idea is your stack will really not be sort of flat.
+
+20:29  
+But it consists of fragments that are called frames or records activation records.
+
+20:37  
+And the base pointer, then doesn't point to the top of the stack. But it's related to,
+
+20:46  
+to the place where the current current frame starts. And but but it's, but it's a bit more specific events. So so I'll really need to show you
+
+20:55  
+want a picture. But that's then the idea. And then the whole point is to translate your programme, written in micro C, into a programme for the state machine. So think like this, which is an array of instructions. So really, it could look something like this perhaps in the end.
+
+21:15  
+But that's not the level on which we want to work with this. So here first, actually, we produce a list of,
+
+21:23  
+of sort of
+
+21:25  
+human readable machine code, which maybe looks something like this.
+
+21:33  
+So this is a very
+
+21:37  
+basic
+
+21:42  
+piece of code, which says load the top level arguments, print
+
+21:48  
+what's on the top of the stack.
+
+21:52  
+One, ad go to one. So you keep printing an incrementing.
+
+21:59  
+And I'll, I'll illustrate this in quite some detail. But but that's sort of one the level of the idea, you should think we're producing lists like these from micro C code, this is the compiled code. And eventually, it actually just turns into a an array of numbers.
+
+22:23  
+Now, let me illustrate the bit. This sort of stack structure that we work with here.
+
+22:35  
+This is an important picture.
+
+22:53  
+So in general, when you compute with a stack, when the when the stack machine computes with the stack, the stack has no it's not a flat thing, it is represented as a flat thing, it is an array. But in this arrays, actually, you should think of it as consisting of chunks.
+
+23:15  
+So different things are stored in the stack. And let's think what they should be.
+
+23:22  
+So here, there are two pictures that are sort of useful to keep in mind this is like like a general scheme of how things might be. This is what might happen when you run a programme, or that programme written in micro c computing the factorial of a given number.
+
+23:43  
+So
+
+23:46  
+what does the compiled code do? It first
+
+23:51  
+pushes
+
+23:52  
+onto the stack your global variables?
+
+23:56  
+Why does it be pointing in the wrong place? That's very bad. Okay, I'll just use this, it pushes onto the stack your global variables, there will be a section of those, and then the rest of the very sorry, then the rest of the stack is always consists of frames. So there is a bunch of frames on the stack already. And then there is the current one that we're working with.
+
+24:20  
+And What's the idea? The idea is for example, that if you work with factorial, this is a recursive function. So, your main programme may be called factorial, but factorial calls itself.
+
+24:36  
+The
+
+24:38  
+recursive call also calls itself that one calls itself
+
+24:43  
+and there are then associated parameter values that are passed into the function plus local variables of the function corresponding to the function calls that need to be stored somewhere and these will be in
+
+25:00  
+These frames. So, the idea is when you call the factorial function,
+
+25:08  
+you will see this bit on the on the stack, which is corresponds to the,
+
+25:15  
+to the first frame, we are making a call to main domain.
+
+25:22  
+Yeah,
+
+25:24  
+with a certain address, sorry, with a certain command line argument I wanted to say here three.
+
+25:33  
+And,
+
+25:35  
+but, but then in main we have called factorial.
+
+25:41  
+And actually, when we call main with three factorial of three will be called,
+
+25:48  
+then what happens is, you will have to have a place in your stack where the actual argument is, so this is this end here, which is three, there will be a place where the result will go.
+
+26:01  
+And there is also a variable temp, which is a local
+
+26:06  
+local variable in the function. Imagine there could be many local variables of course, there could be multiple parameters as well here there are two
+
+26:14  
+and then maybe this one called factorial again, and maybe this call is made with with the
+
+26:21  
+with
+
+26:23  
+the arguments with the actual parameter two. So, these things all end up on a stack as well. So here are two, for example, you could see, and then maybe one then maybe zero.
+
+26:36  
+Now, how is the bookkeeping arranged between those I mean, why doesn't everything get mixed up completely arbitrarily, because things are organised
+
+26:48  
+in frames.
+
+26:50  
+And these are these sections here. So, corresponding to every function
+
+26:57  
+of your programme currently being called, we are in the middle of a whole lot of calls. So, here, at this point, when the stack looks like this, we're in the middle of altogether five calls the top level call
+
+27:11  
+the first call to fak, and then all the recursive calls.
+
+27:15  
+And then you have this picture
+
+27:19  
+that
+
+27:22  
+the boundaries between these frames are organised via what are called base pointers. So, in every frame there, apart from the
+
+27:36  
+parameter,
+
+27:39  
+I mean, apart from space for parameters and local variables, very specific addresses, one is for what is called here the old base pointer. So, this will always be a pointer, not to the very beginning, but sort of to the beginning plus two of the previous frame. So, for example, look here OBP is 16, this 16 is actually this place here. So we referring to the place
+
+28:08  
+in the previous frame, that corresponds to the first argument, and then all of the locals. And similarly here, just to the left with one position to the left, there is no a yet older base pointer, which corresponds sort of to the beginning of this frame, except it's not the beginning, but it's kind of beginning plus two again. So it's it says,
+
+28:31  
+so here, old base pointer says 11, so we're pointing to this place. Yeah. Which is corresponds to here the,
+
+28:42  
+the parameter, the first parameter of the factorial function that's similarly here. So the old base pointer is six points to this place, which is sort of the beginning plus two of this frame. And similarly here, the old base pointer, the one to the left is to point to this place, this is how things are organised.
+
+29:02  
+In terms of you know, where are the data of all the calls in the middle of which we are stored, they are all stored on stack here, we do not have any heap allocation, we'll get to this next week. For the moment, it's as simple as this.
+
+29:17  
+Now, there is something more here there are also all these positions called the red either that the even further to the left or toward the bottom, the bottom is here, the top is that the bottom is on the left here. The top is on the right here. There are these things called return address. What's this about?
+
+29:35  
+There are two kinds of jumps if you wish, in.
+
+29:40  
+In stack machine code, as you will see, there are jumps to a specific position in the
+
+29:50  
+stack machine code. They're like go to instructions, if you wish go to a certain
+
+29:56  
+label in the code, but then there are
+
+30:00  
+function calls.
+
+30:02  
+And the function can be called from many places. And the idea of a function call is, of course, when you're done with a function, you should return to from where the function was called.
+
+30:14  
+And this place is always different. I mean, assumption doesn't know for what it was called, unless this information is somehow passed
+
+30:25  
+around, so to say, or if it's passed to the function.
+
+30:29  
+And this is what these read addresses here are.
+
+30:35  
+So four apparently is the address to which we must return after we finished with me with a with a
+
+30:44  
+with a function main, which is the main function. And it's probably an address where we have the whole instruction or so in the code.
+
+30:54  
+But then there are
+
+30:57  
+all these other return addresses. So where does fac return, so that the first call to fact the main call to fact returns to address 1919 must be a place in the code for factorial, which corresponds to the next instruction after the call of the factorial. So we imagine main is some programme, somebody has a call to factorial and
+
+31:26  
+with return address corresponds to the position in that code just immediately after the call.
+
+31:33  
+So this much for the first call of factorial.
+
+31:37  
+What about all the other calls, while the other calls, they don't return to main their recursive calls, they return back to factorial
+
+31:45  
+when the factorial function has exactly one call back, and they must return to the line
+
+31:52  
+or to the instruction, if you wish, next after the call, and that would here be for example 79. So
+
+32:01  
+yeah.
+
+32:04  
+So the whole programme consists of the definition of Global's which here are none.
+
+32:10  
+And then
+
+32:12  
+I mean, global variables, but then there are the global functions which are main, in fact, and they are somehow laid out in the in the in the compiled code.
+
+32:24  
+And then these are the important addresses, they're in the compiled code for 19 and 17. So something like this is what it could be
+
+32:34  
+based much on the pictures, but now we have to talk a bit about what the stack machine code is like, or what are the instructions there, so that we can then make sense of, for example, what these programmes could mean when they are compiled.
+
+32:53  
+Okay.
+
+32:56  
+I want to show you a big table from the book, which I didn't want to copy myself.
+
+33:06  
+Yes.
+
+33:08  
+Okay. So in the first column here, it's more or less, I think it's the full instruction language actually, of this machine. So, these are all the different possible things that the machine can or instructions that the machine can handle at all.
+
+33:31  
+And they are here written in this mnemonic code, I mean instructions that we could read as humans, really they get translated to just bytes numbers,
+
+33:42  
+which are actually these numbers. So,
+
+33:45  
+for numerical
+
+33:47  
+for a numeral we actually get the instructions zero add this called one sub is called to stop is coded as 25
+
+33:56  
+as simple as this, and these are arbitrary numbers, if you get some some actual processor instruction set, these could of course be different.
+
+34:06  
+But then just to just to illustrate how working with a stack works
+
+34:12  
+with more or less seen this part
+
+34:16  
+from instructions, zero to 10, because these are very
+
+34:20  
+weird things very bad here. These are very similar to what we had in the
+
+34:26  
+in the stack machine for expressions.
+
+34:29  
+That the more interesting things are those ones that we will see here below
+
+34:36  
+which have to do with more complicated that their session mechanism but also control like jumping to a definite address or maybe making calls to functions and returning then from functions, etc.
+
+34:51  
+Okay, so let's think.
+
+34:55  
+So what is the notation here? So this is actually a very good summary table.
+
+35:00  
+What is happening? And then we can think whether it makes sense or how we could combine anything at all?
+
+35:11  
+Yes, these bits maybe don't require so much explanation. But anyway, they are given in the table. Also in words, what are the middle columns here, they are kind of, sort of on the fingers explanation of what happens if you execute such an instruction. So from a stack before, after executing your particular instruction, we get to a stack after. And the stack is written here,
+
+35:35  
+sort of as a sequence of things, you should think of it as a list. But as a list where the head is not on the left, but on the right, it's written in the same way as on the picture. So the things that the furthest to the right are the topmost things. And sec, like a meta variable for any any stack, so a whole bunch of numbers.
+
+35:56  
+When I, when you see things like si One, two, it means we've got a whole bunch of numbers on the stack. And then we've got a one and then on top of that we've got it and I took is it within the top notes thing in the stack.
+
+36:10  
+That's the way that you should read. So let's see if we can then make sense of the table. The top part should not contain much surprises, but interesting things should have been here in the lower part.
+
+36:21  
+So if you want to push a constant I then you're given a stack.
+
+36:27  
+And the new stack state is just the same except you've added one number on the very top, which is the given number I
+
+36:36  
+when you want to add two numbers,
+
+36:39  
+here with a stack machine, then you expect that the given numbers already on the top of the stack, I want it when they just add them and push the result back on the stack. So you've consumed two numbers, and you produce one new number, pop two numbers, push one number. And the same for every operation.
+
+36:58  
+Remember, we didn't have Booleans here, so Boolean are coded as integers. So any nonzero integer is concepts true, zero causes false.
+
+37:12  
+So all these are then clear, then there are some special ones hope for some reason is not here.
+
+37:20  
+So if you've got
+
+37:24  
+a stack as well, V on top, then you can vacate, which just means that the top
+
+37:31  
+is copied one more time on the top swap
+
+37:37  
+swaps around two topmost elements of the stack keeps the rest of the say.
+
+37:43  
+And now comes the interesting bits.
+
+37:50  
+The first one is load indirect.
+
+37:54  
+And
+
+37:56  
+the idea here is on the top of the stack, you've got an integer which this time you don't think of as the data value, but you think of it
+
+38:05  
+as an address into the very same stack.
+
+38:10  
+So for example, if I zero then you take the bottom most that corresponds to the bottommost element, the bottom element of the stack. And then what you do is you you pop this pop pop this value off from the top of the stack,
+
+38:26  
+and you replace it with the value that you have in the stack in this given position.
+
+38:31  
+So it's a combination, if you wish, of popping away this I
+
+38:37  
+and then kind of a deep duplication, because the value we after is already somewhere in the stack. We keep that copy there. But we we also pull it out and put it on top of the stack.
+
+38:54  
+Maybe I should illustrate it. What is my machine fine anyway.
+
+39:07  
+So here is the explanation of the machine. But maybe I can right here in the top. So you could imagine that, for example, I don't know if you do
+
+39:16  
+know the indirect and your stack looks like maybe 356 17 and two,
+
+39:25  
+then the point is,
+
+39:28  
+this is the given stack three at the bottom two at the top, and two here is an address into the very same stack. And these things are numbered zero was first second. So we're actually interested in in this element here number six. So in one step, then this transforms into
+
+39:49  
+this because six was in the second position and we kicked out this tool.
+
+39:55  
+So that's called load indirect because I'm not loading from the heap or from some different store
+
+40:00  
+But I'm loading from the same stack.
+
+40:04  
+And indirect because I'm given the address, right?
+
+40:12  
+There is a similar thing called store in direct. Haha. So this one, use these two elements on the top of the stack, the top thing you think of as a data value, although everything is integers here, this is just, you know, the tuition. And the next guy you think of as an address into the stack.
+
+40:33  
+And then what you do, you basically update the stack, such that at the if position, you put V,
+
+40:40  
+and then you return this thing.
+
+40:42  
+So the value is still on the top of the stack. It's not
+
+40:47  
+sort of completely popped off. But you've, you've thrown away this address from here.
+
+40:54  
+Yep.
+
+40:59  
+Now, every now and then you want to go back somewhere in the stack, but they don't know exactly where. So then you have to have these instructions called get BP and get SB.
+
+41:10  
+So these things, what do they do, they just take
+
+41:15  
+the base pointer of the old base pointer about the current base pointer, and they put them on top of the stack. So this is something that you need in a function call, when you create the new frame, and your current base pointer will be an old base pointer.
+
+41:31  
+Similarly, it's important to be able to load sometimes
+
+41:37  
+the stack pointer itself on top of the stack. So just to remember how high the stack was, at some point in computation, that's really what it does.
+
+41:54  
+Then there are these things called
+
+41:58  
+Oh, then is this thing sorry, called increment stack pointer.
+
+42:06  
+And where M is a given numeral integer
+
+42:11  
+can be positive or negative, and therefore there are two cases here.
+
+42:15  
+So corresponding to a non negative m, we grow stack or actually, if m is zero, nothing happens. And corresponding to negative m is shrink stack, what happens here,
+
+42:26  
+shrink stack is maybe kind of a natural thing. And actually shrinking by one is exactly pop, which was not explicitly here.
+
+42:35  
+So the idea is, you're given this stack that has a key m elements
+
+42:43  
+on top of the stack,
+
+42:49  
+and then these are kicked out.
+
+42:52  
+So you're popping MLM ants at once.
+
+42:59  
+Really, in the implementation, it means you don't do anything, I mean, your your your stack is in array, all you do is you actually literally, in this case, increment the stack pointer by a negative number, which really means decrement it. So just move the stack pointer to the left, which means these old values are even there, but they become garbage in the array in the sense that they are not thought of as part of the stack. But they're still there. Nobody bothers to write them with anything specific.
+
+43:33  
+Ink CSP is something that looks like a bit bogus. Because what are we doing? So, there is and there is a purpose for it as we will see that but for now. So we were given a stack, which really means there is this array corresponding to the stack, and that is a pointer to a place and then we move the pointer to the right, the stack pointer, thereby all of a sudden n new elements appear in the stack. And they are alleged to care they are just complete garbage. They are Whatever happened to be in the array in the array to the right of the stack pointer.
+
+44:11  
+But of course, if you've set up things properly, then you know what is there? I mean, it's not like random garbage.
+
+44:19  
+Okay, done with this. Is this
+
+44:23  
+reasonable? If there are questions, please do shout because I don't need to see this chat or I don't see your faces now. But that's maybe a place that is really complicated. These these from 11 to 15. The rest are
+
+44:38  
+in part, again, easier, at least 16 to 18.
+
+44:49  
+Okay, let me continue with this and then we can take a short break and then I'll show you more. So
+
+44:58  
+some more instructions.
+
+45:00  
+There are the jump instructions, they are either to a definite address or then they are related to functions, which means calling, which just means going to someplace in the code, but then you have to remember where you want to come back because the function itself knows nothing about it.
+
+45:15  
+And then the last ones are really simple. Okay?
+
+45:19  
+Go to a has to be a specific number, that here corresponds to a position in the code in the, you know, in the sequence of instructions.
+
+45:30  
+So, for example, when I say go to zero, it really means I'm going to the zeroeth instruction, remember, my piece of code is is an array of instructions literally Indian.
+
+45:40  
+So jumping really means that my PC, my programme counter is changes, but the in terms of the stack, nothing changes. So from the stack, I go to a new stack, but the PC
+
+45:53  
+differently from the usual situation here, which is that it typically increments by one, if there is an additional argument, this has to be somewhere in the instructions like this MRI here, then you it goes up by two here.
+
+46:08  
+I don't go to
+
+46:10  
+to the next instruction, which actually only stores the instruction position where I need to go.
+
+46:17  
+But we really go to the beginning of
+
+46:21  
+sorry, to the appropriate position in the, in the piece of code.
+
+46:27  
+If 01 if, if n zero are similar to go to accept, these are conditional jumps. So what happens is very some data value on top of the stack, and you just check if it's zero, or maybe if it's not zero.
+
+46:43  
+And if the instruction is if zero and the value is zero, then you do jump to position a
+
+46:53  
+among instructions, which means that the programme counter is
+
+46:59  
+is set to a for the next instruction. If the condition is not true, then the programme counter is simply here incremented by two
+
+47:08  
+to go to the next instruction, you'll see this in detail as well.
+
+47:13  
+If not zero is very similar then call and read and tail call we will ignore Until
+
+47:22  
+next week, I think
+
+47:26  
+call is a bit similar to go to but there is things to be done
+
+47:41  
+at a place when a function is called the idea is that the arguments have already been computed. I mean, this is how compilation is done.
+
+47:50  
+And if the
+
+47:54  
+n m here means that the function has m arguments actually.
+
+48:00  
+So at this place,
+
+48:02  
+you expect that there are n data values already prepared at the top of the stack, which are the values of the arguments they are readily available, they're
+
+48:12  
+a means that
+
+48:18  
+the function itself it's code in the compiled code,
+
+48:24  
+which is an array of instructions is in position a. So the function is at location A in the code.
+
+48:32  
+So what do we need to do then?
+
+48:37  
+Well, it's like a jump instruction. So, we really need to keep the arguments on top of the stack, there is no question about it, but we actually need to create
+
+48:48  
+a frame now
+
+48:53  
+because we will enter a new function.
+
+48:56  
+So then what we need to do
+
+49:00  
+what is currently the base pointer that knows who called us
+
+49:08  
+becomes an old base pointer for the function to know who called the function. So, we need to put the base pointer also in the stack.
+
+49:17  
+And then also we need to put the return address which is actually calculated in the course of the compilation
+
+49:28  
+into the stack. So, this is this art here
+
+49:33  
+are here should actually be what are should be
+
+49:38  
+the position of this instruction itself
+
+49:43  
+plus three,
+
+49:45  
+because if call is at some position in the code and m is in the next one is in the next one. So call itself has two arguments which altogether consumes three words. But then after that is the others are two code
+
+50:00  
+And that is the place where we should jump back after calling.
+
+50:08  
+So call really handles, maybe I should show the picture, again, handles handles this mechanism here. So we are, we are making a new call, this means.
+
+50:20  
+So maybe from here, we're making a new call to fac we currently have
+
+50:30  
+you know, the current base pointer, and we also know what is the next instruction or really strictly speaking next plus three. So, we put this the new instruction at risk here, we put the current PP here it becomes an old BP
+
+50:46  
+then we create place for the parameters. And a new BP is also produced. So after leaving propriate place for the local variables, and you'll see this in the compilation function how this works exactly.
+
+51:02  
+So, but but calling a function creates in your frame, now, when you return a function, then you're basically prepared the result from the function
+
+51:15  
+and the rest of the frame is is already used as you throw it away the only piece of info meishan that you need to know from there is
+
+51:26  
+is the is the return address
+
+51:31  
+and then the continued control continues from there. So I can also show this here. So, return
+
+51:41  
+what is that here
+
+51:43  
+rep M.
+
+51:48  
+Let us see.
+
+51:52  
+So, we are we are coming back from a function
+
+51:59  
+at this point, coming back from a function call. So we are in the middle of a function call, we are executing direct instruction. At this place, the stack should look like this. Since the return
+
+52:15  
+command in in micro C, it uses an expression as an argument, when you compile an expression, it produces a value on the top of the stack. So this really here in the given stack on the top is the function we want sorry, is the value that we want to return from the function. So that's an important piece to keep. What is the rest here in the stack state? Well, this is stack before we entered the call, or is the return address that's important. So this is where we should go after the call B is the
+
+52:52  
+old base pointer, so to say, which is sort of the next free thing.
+
+52:59  
+Or so it points to position after the top of the stack.
+
+53:05  
+The next three address so to say,
+
+53:08  
+and these buddies was the old base pointer here.
+
+53:12  
+And then there are the values of the the arguments with which the function call worked.
+
+53:19  
+So this is called by value, it was literally the the values that were passed
+
+53:25  
+or the adversities to them, if we had passed references,
+
+53:31  
+I mean, if we, if the types of
+
+53:36  
+parameters of the or the parameters of the function were
+
+53:42  
+were pointers.
+
+53:45  
+So all of this gets kicked out, we only keep this part of the stack. So all previous frames, plus the value produced, which is the only interesting thing that we want to know from the current column a function that we're finishing. But of course, there are other important things to do. So how do I use the return address, so after read control doesn't go to the next or the one after the next address because you know after read the results of this m which is a word, but actually control goes through our so the current PC now becomes our
+
+54:19  
+and then the new base pointer is
+
+54:25  
+B
+
+54:28  
+which is actually what so just just look what B is here. So b is the position right after the return address, the return address itself is replaced with V.
+
+54:42  
+So the BB points to sort of position that the next element would occupy if I was to push a further element on top of the stack and that's exactly the good value for for the current base pointer. Yeah.
+
+54:58  
+So the base point there always should point
+
+55:00  
+To the address in the array that corresponds to the position,
+
+55:03  
+you know, one up from the top of the stack.
+
+55:06  
+That's good.
+
+55:09  
+And then there is very little as to say, we've got, we've got an instruction for printing an integer, for printing a character, these assume that the value is already prepared on top of the stack, and that one is printed, either. So the integer is printed either as an integer or converted to a character and printed, the value is kept on top of the stack, there is a command lit arcs
+
+55:33  
+that gets the arguments for the function main from the command line. So these are the arguments for actually made.
+
+55:46  
+And then those are just put them on top of the stack. And then finally stop is it's just an instruction that signals the machine to stop.
+
+55:57  
+So whatever state stuck state you finish, then you can then discard because
+
+56:04  
+you fulfilled your mission unless Maine returns.
+
+56:09  
+Okay, so this is a big picture. And I've now spent quite a bit of time explaining this
+
+56:18  
+will now
+
+56:20  
+in the second half, discuss a bit of how you should, how you should organise compilation, what's your compilation amount, two, first four expressions, then four statements.
+
+56:33  
+And then a bit about the overall structure of the compiler. But the important bit is to to understand what these instructions are supposed to do. And then we can also play with with with examples
+
+56:49  
+about them.
+
+56:52  
+Okay,
+
+57:09  
+for sharing
+
+57:14  
+any questions about
+
+57:16  
+this part? Or
+
+57:22  
+not?
+
+57:28  
+If there are questions, please do jump. Otherwise, I would
+
+57:33  
+suggest the break
+
+57:36  
+maybe on 1017 to
+
+57:40  
+25. And then we can go for another half an hour. And I'll explain how this machine is supposed to
+
+57:51  
+work. Not so much how it's supposed to work, but how we're supposed to produce code for this machine from Microsoft and then later we'll see how also this machine interprets and we get the full cycle. So we instead of interpreting micro C we can compile to micro C and then interpreter. Sorry, instead of interpreting micro C, we can compile micro C to machine code and then run the machine rather.
+
+58:23  
+Okay, if there are no questions, then I'll suggest we just meet in
+
+58:28  
+intelligence in eight minutes. So 1525
+
+1:06:49  
+Okay, let's, let's continue.
+
+1:06:52  
+So I'll show you the machine. And I'll show you a bit of compilation. And we'll have to continue on Thursday looking at sort of deeper issues and also a whole bunch of examples because it's complicated thing. And it also illustrates a number of things at once that are sort of difficult to disentangle. But it's, it's inherent to the,
+
+1:07:15  
+the problem or to the situation.
+
+1:07:19  
+Let me share again.
+
+1:07:32  
+Okay.
+
+1:07:34  
+So first thing to explain that there is two ways
+
+1:07:38  
+in which I can talk about the machine code, right? So, so one is this a human readable mnemonic version, where you actually talk about
+
+1:07:49  
+jumping to a particular label.
+
+1:07:53  
+So what you can do is, is the following, so we can have a type of instructions. And the instructions are always things that you saw in the table, like all of those, but there is also like a pseudo instruction called label that actually takes one argument label, which is just a string.
+
+1:08:14  
+So this is for us to be able to jump not to some specific,
+
+1:08:20  
+you know, positioning an array, which is,
+
+1:08:25  
+which is the final list of instructions, but we could sort of manually indicate, you know, put cookies,
+
+1:08:33  
+somewhere in the code, these are the places that we want to jump to and give them names. And then later, we can get rid of these names. That is sort of the reasonable way to go about compilation, because if in compilation, you have to know ahead of time, at which place
+
+1:08:50  
+something will be in the final code in terms of an absolute address. This is kind of complicated, and also unnecessary. So we could agree that the instructions are these ones, like the real instructions, some of them take arguments, like Inc, SP x or Inc, SP Inc, stack pointer takes one integer argument, we saw others that take more
+
+1:09:13  
+like cold pigs to one for the number of arguments of the function and one for the return address,
+
+1:09:21  
+which is here formalised as a label.
+
+1:09:24  
+So these are all there. And then you could say that the piece of code is a list of these things.
+
+1:09:33  
+But an actual piece of code is really given in terms of of numbers only. And then we could say, okay, we code up all our instructions as numbers between zero and 25, like in this table.
+
+1:09:48  
+And then when I want to see some code
+
+1:09:51  
+as actually a sequence of numbers, then I need to get rid of these labels and replace them with actual
+
+1:09:59  
+positions.
+
+1:10:00  
+In the code, so let me let me illustrate this.
+
+1:10:09  
+So really, we want to convert a list of instructions into an array into an array.
+
+1:10:18  
+And the way that we do it is
+
+1:10:23  
+we,
+
+1:10:25  
+we produce what we hear call a label environment. So
+
+1:10:32  
+we remember which label was actually in which address
+
+1:10:37  
+in the instruction code. And then it works like this. So when you go through your, so this here is is like
+
+1:10:47  
+taking your machine code in this mnemonic form and change it into a byte code. So that is to say an array of numbers, it goes into policies. In the first one, we remember, for every label and integer address in this final version of the machine code, which is the bytecode.
+
+1:11:09  
+And we just do it by going through the list of instructions, and remembering at which address everything Finally, will be.
+
+1:11:20  
+So it's done like this.
+
+1:11:23  
+So we use this,
+
+1:11:26  
+this helper function make label and that fundamentally takes an instruction. And it also works with an accumulator. It knows which is the next free address. So an an instruction address to which we haven't yet associated an instruction, and then an environment of labels, so it knows which labels were mapped to which instruction addresses. And then it's used for walking through a list of instructions. And this function only deals with a single instruction is a helper function. And the global function will then take a whole list of instructions and use this helper in a big recursion.
+
+1:12:08  
+So when you go through a label instruction, this is a pewter instruction, it won't show up in the final pipe code. So we we don't change the accumulator for the next three instruction address. But we remember that the label is going to correspond to the next three instruction address.
+
+1:12:30  
+So we we we extend the label environment by this pair of label lab.
+
+1:12:37  
+And the current next three instruction address that for every other instruction that we go through, we just assign an instruction address. We don't modify the environment of labels at all, but we have to remember which is the next three instruction address and this depends on the nature of the instruction. So, if the instruction doesn't take any arguments, the next instruction goes into the next
+
+1:13:05  
+word or bytes in the bytecode.
+
+1:13:07  
+But if something takes an argument, the argument is the next word. So therefore, the next instruction is not that as your plus one is after plus two.
+
+1:13:17  
+Similarly, if something takes two arguments like call
+
+1:13:21  
+then at the next address goes the first argument then at yet the next one goes the next argument and the next instruction goes under the last three
+
+1:13:31  
+and that is all this function does. So,
+
+1:13:35  
+we we walk through a given list of instructions,
+
+1:13:41  
+we have a in a list of instructions and we tell kind of fix an absolute position which this instruction is going to take in the in the bicycle.
+
+1:13:55  
+Now here what is the actual
+
+1:14:03  
+actual bytecode emission?
+
+1:14:09  
+Let's jump over one function here.
+
+1:14:17  
+Okay, let's look at the
+
+1:14:22  
+sort of complete code here. So what comes in is a list of instructions. So, this is the minimalistic instructions and what what comes out is a bytecode is a list of integers the finally we will actually see as an array.
+
+1:14:37  
+And in the first pass, what we do is this very same helper, make label environment is called in on the given code
+
+1:14:48  
+and what he produces
+
+1:14:57  
+is
+
+1:15:02  
+is a label environment plus the next free label.
+
+1:15:08  
+So we go through the code and that every instruction is done by phone at every instruction, we, we apply one of these steps above here.
+
+1:15:17  
+And the base case is we start with the next three labels zero.
+
+1:15:23  
+And the the, the the label environment initially is empty. So we start with the next
+
+1:15:31  
+free labels zero, and the label environment empty and we gradually add stuff there based on this code above. In the end, we don't care which is the next final free label because we don't have any further labels. But we're interested in the final lab environment
+
+1:15:48  
+and then with another fold, we basically emit the byte code. So, this is now done with fallback.
+
+1:16:00  
+So, we use the original code again,
+
+1:16:03  
+we use the empty list as a seed value for this list of instructions that we produce.
+
+1:16:13  
+And
+
+1:16:15  
+the the function that we apply at every step of this fallback is this emit events that really use these get lab for
+
+1:16:26  
+looking up addresses at labels. So, basically, we go through
+
+1:16:35  
+our code
+
+1:16:39  
+all of the code has been remembered in some label environment,
+
+1:16:44  
+which is this lab end of here and all we need to do at this stage is basically
+
+1:16:50  
+replace them pneumonic
+
+1:16:54  
+addresses with with numeric addresses, so cspi for example, will get replaced by zero and then the argument and then these ins are
+
+1:17:09  
+are the given
+
+1:17:12  
+accumulator here
+
+1:17:14  
+and similarly for all other instructions, so, so, here for example, the ones that have two arguments, so call gets replaced by the code for call, which is 19
+
+1:17:25  
+and then the three arguments
+
+1:17:27  
+and then again, the list. So, this is how I mean, it is used by this list for back. So this may be written a tiny bit too, too, too concise to be sort of
+
+1:17:40  
+immediately graspable. So maybe I should rewrite it in smaller steps, but But anyway, this is what that or what happens. So do these two policies First you go over the code and you produce this
+
+1:17:53  
+label environment.
+
+1:17:56  
+And then in the second phase,
+
+1:17:59  
+you go on one hand over your label environment,
+
+1:18:03  
+which to get ins can do, but on the other hand, you go over your code, right, you extract instructions from there, and based on the get lab information, you can
+
+1:18:15  
+make the correct integers okay.
+
+1:18:21  
+So given given machine code, we can in mnemonic form, we can go to the real machine code, which is which is bytecode. But now about compilation itself, there is a difference. So, this was the file machine Fs, that introduces the machine instructions syntax introduces the code corresponding to these
+
+1:18:42  
+mnemonic instructions. And it has this function for going from a list of mnemonic instructions to, to to bytecode or, you know the actual code.
+
+1:18:55  
+There is a different find comp Fs that I attached to the scope,
+
+1:19:01  
+which is the actual compiler.
+
+1:19:04  
+It takes in
+
+1:19:07  
+a piece of micro C code. So, on the top level, it's the top level programme consisting of statements or declarations and then is able to handle both these top level statements and declarations and all the little things statements, expressions, etc.
+
+1:19:23  
+I can only do a little bit today and then I'll continue with examples and more
+
+1:19:30  
+on Thursday,
+
+1:19:32  
+let's deal with expressions and statements because they are the relatively easier
+
+1:19:40  
+cases.
+
+1:19:43  
+And they are also similar to what we saw before and then I can revisit and then we can read the rate and think again.
+
+1:19:56  
+Then we can revisit and and look at
+
+1:20:00  
+These things also an action on smaller pieces of code when we have everything ready.
+
+1:20:06  
+So what is this?
+
+1:20:10  
+So there is a whole bunch of simultaneously defined functions called things like c x square, C statement, C statement of declaration siac, for compiling expressions statements accessors, in particular.
+
+1:20:25  
+And then the more top level things, but all of them fundamentally try to do a similar thing. They try to take a micro c construct, so, in the case of expression is an expression and turn it into a list of instructions in this men monic form.
+
+1:20:44  
+And they follow a certain code of conduct, so to say, for a certain protocol. So, what do you expect, for example, from an expression is that whatever this instruction sequence that is produced has its task, take whatever stack is given and produce the expressions value as the new added top element on the stack.
+
+1:21:11  
+So, when the original piece of code is an expression and if interpreted, it gives you a value in the correct variable environment and function environment.
+
+1:21:22  
+With the compiled code does, it emits a piece of code, which if you were to run it, if you were to run it on this abstract machine, then whatever stack is given as the spec To start with, it does some work.
+
+1:21:39  
+And it leaves this stack untouched. I mean, it can consult it, but it doesn't destroy it in any way. But it adds to the top of the stack one extra elements, which is the value of the expression.
+
+1:21:54  
+This is done by this piece of code here that I can go through
+
+1:21:59  
+with you to the screen.
+
+1:22:01  
+And the easier parts are things like numerals and operations and and also the hardware parts are things like accesses address, which is the ampersand thing. And the assignments were actually something important or new happens compared to the little expression language that we already saw. So here are the things that maybe don't surprise you.
+
+1:22:24  
+So what is what is compiled code corresponding to an expression which is just the numeral?
+
+1:22:30  
+Well, my task is to write a piece of code that
+
+1:22:35  
+given the stack
+
+1:22:38  
+is able to
+
+1:22:41  
+do it so that the value of this expression appears on the top of the stack and the rest of the stack is unchanged. Well, what is this piece of code? Well, it suffices to just load the particular numeral on the stack and this is like a primitive instruction here. So the whole sequence of instructions that we get is just a singleton list low this numeral nothing else. And that is because it was a particularly simple
+
+1:23:09  
+instruction. Now unary and binary operations they are similar, like if you are to
+
+1:23:19  
+combine
+
+1:23:21  
+into machine code, this expression, a unary operation applied to an operand sorry,
+
+1:23:30  
+a unary operation applied to an operand D one
+
+1:23:34  
+then what happens we allow unary operations in this language are only indication printing an integer or printing a character.
+
+1:23:42  
+And the compilation scheme is the same. So you produce your code will be the following. So first, you need to produce the code by recursive call to the very same function c expert in the middle of which we are,
+
+1:23:55  
+that will actually translate each one into a piece of code that puts the value of each one on the top of the stack.
+
+1:24:04  
+And then, to this code, we have to append a further bit of code, which now depends on the operation.
+
+1:24:13  
+So if the operation is negation,
+
+1:24:16  
+then all I need to do is here's a piece of code, I just need to attend at its very end and not the instruction why because not is the perfect thing. I mean, given a value where we is on the top of the stack, I just got the negated value on the top of the stack. And the rest of the stack is not changed.
+
+1:24:35  
+Similar for print integer, a print character which are not supposed to remove the value from the stack, but just to print it. So I can just emit the corresponding command because that's the meaning of micro see print die, micro see print, it takes an expression, it prints the expressions value but it also returns the expressions very similar for print character,
+
+1:24:57  
+which is the same in all aspects except
+
+1:25:00  
+takes an integer, but it prints it out as if it were a character. Because here, on the level of pipes, we do have characters, but they are represented as integers. Everything internally is integers the moment that you need a character be converted back into work.
+
+1:25:19  
+And then absolutely the same happens with with binary operations. It's not complicated.
+
+1:25:26  
+So if I were to
+
+1:25:32  
+compile a piece of code, which is of this form, so some operation binary operation, and two operands, which are expressions, what do I need to do, I need to produce this piece of code. And it's very similar to what we had in the expression language, we had really, I mean, there's no difference,
+
+1:25:53  
+I first need to produce the code for the first expression, we know that this code when run will produce the value of the first instruction, or the value of the first expression on top of the stack.
+
+1:26:06  
+Then, we append to it the code
+
+1:26:10  
+for the second expression, the second operand. So when you run this piece of code, it takes whatever stack state and it adds the value of expression two on top of the stack. So now,
+
+1:26:22  
+this piece of code altogether is a piece of code that takes a stack and puts two values on top of the stack, the first value corresponding to the first expression, the second to the second expression.
+
+1:26:36  
+And then
+
+1:26:39  
+all of these
+
+1:26:42  
+operate operators here are implemented in terms of these
+
+1:26:47  
+machine code instructions. Some of them are not primitive for the machine, but we can implement them through a sequence of instructions like we've got here. EQ that compares for equality with we don't have negation of equality. But surely, you can just apply EQ, which takes the topmost element or, sorry, the two topmost elements of the stack, and returns a Boolean on the top of the stack, corresponding to whether the two things were equal. If you don't want equal, if you want not equal or unequal, you take this value from the top of the stack again, and you negate it. And this is the piece of code.
+
+1:27:22  
+So similarly, for example, for you can implement su less than, say, his private primitive here.
+
+1:27:30  
+Greater than isn't, but you can implement it in via swap, and less than or
+
+1:27:39  
+then there are other combinations, right?
+
+1:27:47  
+Okay. But now to the to the Okay, there were two more so. And also and orals are important.
+
+1:27:57  
+And also is important.
+
+1:28:00  
+And it's supposed to be
+
+1:28:04  
+lazy. So, if the first expression gives me two, I should already be happy with the result. And I shouldn't go and evaluate the second one. So we shouldn't do it by the same strategy. So the code here would be more complicated. So how do we do it?
+
+1:28:21  
+So we first generate two fresh labels,
+
+1:28:26  
+which are just some strings. The new label is a is a little function that whenever you call it gives you a new string.
+
+1:28:35  
+It uses a mutable, record the insider reference.
+
+1:28:39  
+Okay, then what should what should the code be that we generate the generated code is here.
+
+1:28:47  
+So what does it consist of?
+
+1:28:49  
+It says, Well, here's the code for each one, the first operand,
+
+1:28:56  
+which is a sequence of instructions, we don't know what it is recursion gives it to us. Then, after that, what we need to do? Well, we should check if the first
+
+1:29:07  
+argument is true or false.
+
+1:29:13  
+In particular, if it's false, false is represented with zeros, so we could say it is zero.
+
+1:29:18  
+Now the value of E one is on top of the stack, if it's zero. Let's pop it and let's go to the label lamp false. So this is here at the very end.
+
+1:29:30  
+If it's not false, we go to the next instructions which are here. And these are the ones that corresponds to evaluating the second
+
+1:29:45  
+operand the second argument.
+
+1:29:50  
+So this guy produces the value of the second argument the second conjunct on top of the stack. And if we're in the false case, then the value of the second argument decides the value of the whole conjunction
+
+1:30:00  
+Right, you agree. So the value of the whole conjunction here is just whatever value we produce here. So then it's good maybe to, to emit the instruction go to the label for the end,
+
+1:30:11  
+which we put here.
+
+1:30:14  
+But then in between, we put this label false, which we had generated. And then we say, okay, in case
+
+1:30:26  
+the first label was false,
+
+1:30:29  
+then we just return zero. Yeah, because we already have zero, but it was popped off the stack. But now we really want to return it, we have to load zero on the stack. Again, you can also write it differently with token swap. But we didn't do it here, or else is very similar.
+
+1:30:46  
+Now these are nice.
+
+1:30:48  
+I can do these, and I can do call. And then the rest we have to leave for Thursday.
+
+1:30:58  
+So what other things did we have,
+
+1:31:04  
+we had accesses any access counts as an expression. So for example, names and array indexing and pointer dereferences. But also any accessor when I put an ampersand in front of it also is a valid expression. assignments are valid expressions. And then finally, function calls are valid expressions. So these are the remaining cases, 234 accesses, I should tell you what the protocol about accesses so access is another see access is another function defined by mutual recursion here. And it is for compiling accesses to machine code.
+
+1:31:44  
+These compilation, things work exactly the same way as copulation of expressions, except it's not the data value of the expression, the right value that is returned on top of the stack. But it is
+
+1:31:58  
+an address, it's the left value of an accessor, that is returned on top of the stack. So So see, access produces you a piece of machine code that returns
+
+1:32:13  
+the address.
+
+1:32:21  
+Okay.
+
+1:32:23  
+If it if this is how CSS behaves, I can only promise now because I won't have time to show it today. then surely, ampersand act I mean, this, this clause here corresponds to this kind of syntax in in concrete syntax in Microsoft, Microsoft, right. So if we're just after the address, then the code produced by the for ACC, by C access is already the correct state machine code, there is nothing else to do.
+
+1:32:50  
+But if I don't actually mean the L value of address, if I mean the R value, or if I don't mean the L value of the accessor. Sorry, if I mean the R value,
+
+1:33:07  
+then the code is a bit different, I have to do the same as before As for other, so I have to compile the accessor as code for the left value of it, and B produces me, not the value, not the right value of the accessor. But the left value of the assessor, which is just an address for that value.
+
+1:33:28  
+But I don't want the address, I want the data value. So then to access that one, what I can use is my ldi. So ldi is the one that given an address is able to look up the value at that address in the stack.
+
+1:33:43  
+So we produce all this code, but the at the end, we put one extra injection, which is called ldi. And ldi does what it replaces I on the top of the stack with the action value that I
+
+1:33:58  
+as an address historie in the stack.
+
+1:34:02  
+Good. So when we understand that then assignment is not much more difficult. The sign takes two arguments accessor and an expression. So this is the concrete syntax, maybe I should just repeat again. So this is how it looks in in actual micro C and what was the idea? The idea was to on the level of interpretation, so what does an assignment mean?
+
+1:34:27  
+It means we have to find the value of the accessor the L value, which is some address, we have to find the R value of IE, an expression, which is some data value, and then we had to put the data value at that address. Okay, can we do this? Well, yes, because I can produce the following code and now see how things nicely line up. I produce the code corresponding to the accessor that only is the code for computing the L value for only computing the address.
+
+1:35:00  
+But not the value at that, at that address. So this thing by this code here is is produced on the top of the stack when you run this code. So after you run the CSS, you've got an address on top of the stack,
+
+1:35:17  
+then this code is appended together with the following piece of code, which is the compiled form on the right hand side of the assignment. So that one produces a data value and our value corresponding three on the top of the stack.
+
+1:35:34  
+So now I'm in a position where actually it would be a great idea to next just put the instruction STI for storing indirect because what the store in direct use, storing the direct takes a stack
+
+1:35:48  
+with lots of stuff, but on the top, I've got an instruction. And on top of that, I've got the data value, sorry, not an instruction and address. And on top of that, I've got a data value. And what storing direct does is it keeps the value on the top of the stack, which is exactly what we want. Because the sign itself is not only a statement, it's an expression, I mean, the value of it should not only be stored in it should also be returned to keeps me on the top of the stack. But now it goes deep inside the stack, and actually updates the stack. So that at position I in the stack, and position is the address that we produced here. Yeah, which one here
+
+1:36:30  
+is the correct value v. So this is exactly the right code for an assignment. And then finally, we have the function call.
+
+1:36:41  
+A function call is a specific thing.
+
+1:36:44  
+So function call is really further to a special function called fun, which produces code for the function. It needs the function name, it needs the parameter names, it needs the current
+
+1:37:03  
+local variable environment, and it needs the current function environment that they hadn't explained in detail what these are, I mean, they used all over the place here. They're just passed down in recursions. We never actually touched them properly yet.
+
+1:37:20  
+But maybe a more important thing is
+
+1:37:24  
+so call is implemented by call phone, and I can't explain it right now, this is complicated. But maybe I should explain the very first case of accessoire, because access is the one that produces code for accessors. And we just in all of these cases, we assumed that we knew what happened to accessor. So maybe we should at least maybe look at the very simplest case of the accessor, where the accessory is just the name, the name here can only be a local variable or a global variable.
+
+1:38:01  
+Okay.
+
+1:38:03  
+And what then happens is,
+
+1:38:06  
+the code corresponding to accessing a variable is done like this.
+
+1:38:13  
+So we look up x in the environment for variables, this one will know, in particular, whether the
+
+1:38:24  
+variable is a global variable at a certain address or a local variable at a certain address.
+
+1:38:31  
+And the second component is here, the next three others four variables, you don't need to care about that at this point. Now, if we need a global variable,
+
+1:38:41  
+then its address is obtained by
+
+1:38:46  
+putting this given address here at the top of the stack. So we just
+
+1:38:54  
+i is given to us from the environment, a compile time environment, we know what we were we allocated the global variable, it's somewhere towards the bottom of the stack, and we just load
+
+1:39:07  
+indirect from that address.
+
+1:39:14  
+Sorry, what did I say? We load from that address and we look we
+
+1:39:20  
+don't load that address, we just put that address on top of the stack.
+
+1:39:25  
+Load indirect comes when
+
+1:39:29  
+there was a
+
+1:39:36  
+load indirect comes when we actually want the right value. But if we just only want the address, we just put the address on top of the stack. That's what I wanted to say.
+
+1:39:47  
+If it's a local variable, it's more complicated because a local variable say we've got recursive functions like factorial. So the same variable name can come from, say multiple invocations
+
+1:40:00  
+The same function or of course, there can be, I can be in the middle of multiple function calls, and they all have their own parameters and local variables, then it goes differently. We actually know, in this particular case of a local variable, we know its relative address in any given frame for that particular function.
+
+1:40:24  
+And then what we need to do is we get the base pointer
+
+1:40:39  
+for which we have an instruction. And then we load the address corresponding to that variable. And then we add these together and we get the new address at the top of the stack, which is basically the absolute address made of
+
+1:40:56  
+the base pointer. And then the the sort of local offset within the frame added to the base pointer. And this gives us the absolute address that then we may interested in as such, if we're working with ampersand this accessor. Or if we don't have ampersand, if we have the, you know, the the real access, like, like maybe here,
+
+1:41:18  
+if we want the R value, then we then we then we can just load from that address. Okay, so this is sort of a peek into the,
+
+1:41:28  
+into the compilation thing here. I can't explain all functions. I'll explain a bit more next time. But I also want to show examples of compilation and example of what sort of what happens with with compiled code on small examples. Next time?
+
+1:41:46  
+How is this? Are there questions
+
+1:41:53  
+about this part?
+
+1:42:07  
+Okay, if there are none, there are none. So next time, I still continue in chapter eight, because it's,
+
+1:42:14  
+it is maybe the toughest of the chapters that we that we cover here.
+
+1:42:20  
+And we can't go deep into combination, but it's important to understand these ideas of like,
+
+1:42:27  
+you know, stack allocation of memory, and working with with these frames corresponding to different functions in which in the middle of which we are, you know, if you're inside a run of a programme execution of,
+
+1:42:41  
+of a high level programmer, also the compiled code, of course.
+
+1:42:46  
+And then this idea that you work with, on one hand, sort of absolute jumps, and then on the other hand, calls in low level, in which case you you have to remember the return address, which then becomes part of information on the free.
+
+1:43:08  
+Okay, so and then, in the last lectures, the last two, we'll also look at
+
+1:43:14  
+heap allocation and, and automatic, sorry, yeah, automatic and manual memory management.
+
+1:43:25  
+This is in the next week, and then the
+
+1:43:29  
+Yeah, and then there's these different. Okay.
+
+1:43:33  
+Then, I think I'll stop here.
+
+Transcribed by https://otter.ai

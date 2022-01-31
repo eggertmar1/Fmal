@@ -1,0 +1,310 @@
+4:15  
+Hello
+
+4:19  
+Hello, can you hear me
+
+4:23  
+I can only see three people around
+
+4:27  
+that is a bit
+
+4:30  
+interesting.
+
+4:36  
+Let's see how we go
+
+5:52  
+We have to readjust to thank you.
+
+6:57  
+I'm sorry,
+
+6:58  
+I have to change something in the setup my computer claims it's super busy, although it's doing nothing. Okay, let me check again Ken, can you still hear me?
+
+8:41  
+Yes, that's perfect. Okay.
+
+8:43  
+I don't know, then I think I'll just start I'm sorry for this delay, there is something really strange about the connection, my computer. Anyway,
+
+9:02  
+my plan today is to talk about lambda calculus. This is the last section of topics and functional programming before we go on to imperative programming. And lambda calculus is, if you wish, a tiny little formalism that in some sense is the core of all of functional programming. And it's a good vehicle to explain some of the subtleties that are going on on functional programming in a really minimum setting.
+
+9:41  
+What is it about? It is a formalism that was actually invented my good stay in the late 30s or the fall. northeast of last century
+
+10:04  
+by two logicians, whose name were Alonzo church, and Haskell curry. And it comes in two basic versions that correspond to sort of untyped and type functional programming. In untyped, lambda calculus, this is really a very, very minimalistic kind of formal calculus. One can write terms, lambda terms, also called expressions. And the basic feature is that these can be simplified or that they compute according to certain rules. And really, these rules capture the essence of, of what we've seen so far in functional programming. There is a different version that is called typed lambda calculus there. In addition to expressions, you also have types of types or types like we've seen before. Most importantly, you can take two types and form a new type of out of them that you call a function type. And this is the mechanism of producing interesting types in lambda calculus. And then terms that in some sense are good or satisfactory, they can be assigned types. And then there are other terms that you can write in the syntax of, of lambda calculus, that are less we help what less well behaved in essence, they can't be typed. So types are a way to classify terms into sort of meaningful or nice or good, and other terms that are a bit more problematic or ill behaved. And the idea then is to to capture the essence of what it is really to compute with functions. We saw in in all these functional programming exercises, that what you do in functional programming is you make functions you define functions, and then you apply functions. And at the end of the day, pretty much everything is either a simple value, or a function. So some of the functions we may write in a different notation, like maybe plus and times, we don't think of them so much as functions, we think of them kind of as binary operators. Where in the notation you put the operator sign between the two arguments rather than in front, etc. But really, they are also just just functions. We have these data types with like, like lists, for example, where you have data constructors, nil and cons. They are a special case of functions, but in the end, they are again just also functions. So lambda calculus is there to sort of state in a very minimal setting, what a computation with functions.
+
+13:14  
+Do what is it about? Okay, let's actually see. So yeah, what does this say say? Almost what they already said, We split lambda calculus into two flavours on pipe pipe. And if untyped you can write meaningless terms. So one kind of
+
+13:41  
+meaninglessness that is treated in lambda calculus is the idea that you apply a function to an argument that doesn't really fit. This is eliminated in typed lambda calculus untyped lambda calculus allows you to write these things. Then actual FP languages, they actually use variants are extensions of this on typed and typed lambda calculus. So they do a bit more. So what is what is the central idea? We saw it in F sharp in this phone notation of writing anonymous functions. So a central idea of lambda calculus is to work with the function to define it to apply it to pass it as an argument to another function, you really don't if you don't want to give it a name. So a function can be anonymous or nameless. So when For example, want to define a simple function like multiplying with a constant or adding a constant. This is a very familiar way of writing this, like I could say that function f takes a parameter x. And what it returns is expressed in terms of the parameter in this way, instead of it, and instead of explicitly working with his name F, we could also and that is what is done in lambda calculus, right? Fun x arrows 17 times x in any language, like F sharp. And in lambda calculus, the corresponding notation is this. So that's actually for where the name lambda comes in lambda calculus, which is the Greek letter lambda. And what we have in this notation is the following thing. So we have the function body, this bit here, 17 times x, coming with a certain prefix, and the prefix, the main thing here is lambda, it says, Look, here we are forming a function. And what is that function? It is this expression 17 times x, which we see as Perryman parameterised in x. So we say, No longer do I think of this thing as 17 times some fixed x, where I'm not told here, what the axes but some environment will tell me, that's not the way of thinking. Rather, we say this is a function that whatever x is given returns 17 times that x. And this then is an expression for exactly the same function. Of course, there are practical reasons to give functions names, namely, I may want to use the same function in many places of my code, so it would be a bit silly, if I have to write the function definition, this one here, all over the place many times. So that is somehow passed, beside the point of working with functions. But actually, the rest of the lambda calculus mechanics allows you to do this. So although at the moment, when you define a function, you don't have to give it a name, you still have a possibility to morally give things names and just work with these names. That's done with a combination of these this construct of anonymous functions that are also called lambda instructions. And then function simple function application. So we'll see this in action. shortly. Yes, okay. So we go to untyped, lambda calculus untyped, lambda calculus can be defined literally on one slide on the level of syntax. So there is exactly one syntactic category of things that we could write. And
+
+18:35  
+these are called terms. But it can also talk about expressions, it's, it's really the same thing. And then, terms are built from variables, which are just assumed to be some given set of names, that that they're readily made for you a supply of variables that you can work over or identify with, you might call and then there is exactly three forms of terms that you can write it all and the other following you can write variables which are treated as terms. You can write lambda abstractions, and you can write applications. So what are those, a variable as a term is literally written as just a variable. So if x is a variable, you can also think of x as a programming terms it corresponds to the use of a variable, then, abstraction is the thing that I already showed from distance. So given the term, I can prefix it with any variable and the lambda and this talk is just some sort of a standard punctuation mark conference here. So these formal things are called lambda abstractions and they are there for defining functions without giving them A specific name. And then the third form is we're allowed to write applications. So a term and another term written next to each other. Maybe we'll put parentheses around so that we can clearly see the two parts of an application. D is the function that I'm applying you is the argument I'm applying to, you think of it as a function application or function call, as we also talked about. And that's literally all the reason. We can't write anything, anything gets beyond that.
+
+21:12  
+Okay.
+
+21:14  
+And then you can combine these things in any way you please. Let me change the sharing so that I can give some examples. Okay. So, you can combine these things in any ways that you please. So for example, the following would be
+
+21:56  
+terms.
+
+21:58  
+I can write variables. And they are terms. So things like X or Y, or Zed are terms on their own. But then I can start putting together more complicated things out of those. So I can, for example, write x applies to y. Or I can write things like maybe x apply to y. Apply to Zed. Yeah, looks like a formula game. So I mean, who says here that these things are functions or so. But somehow they should be else could How could they apply here, we should be able to think of at least in this expression, x applied to y apply to Zed, I should be able to think of x as a as a function, then we can write more complicated things, then we can make things functions really, because for example, say I want to abstract set out of the thing I just wrote.
+
+23:07  
+That's another term. And then I can abstract yet further things out. Or maybe before I apply, for example, to this, I apply lambda said x, y, two W. And then maybe in the end, I abstract something else. So all of these would be lambda terms. If you write them down like this, he'll quickly drown in a sea of parentheses. So one must seek for ways of minimising their amounts. So let's, let's make some conventions about those. So, one of the typical things that you do is, you agree that application associated to the left. So we when we write such a thing, like the apply to you apply to be in principle, one could think of two places where to place the parentheses here, but we mean this one that we should explain. So to apply to you apply to be looks ambiguous. So of course, we could think that it means this but alternatively, we could think that it means this.
+
+24:33  
+Now which one is correct? trouble here is I tend to press the wrong button.
+
+25:23  
+So we had just a stick. So we could ask which one of these is correct?
+
+26:24  
+And the answer is, in this case, we always say, parentheses to the right to the left is the morally correct way 3d? There is a similar question about lambda. So we don't want to write too many parentheses for lambda. So then what could we do? And typically convention is we say that lambda extends to the closest closing parentheses. So when we written something like lambda x to you,
+
+27:02  
+a priori it could mean two different things. It could mean this or this. And again, we have to ask which one of them is correct.
+
+27:20  
+And here, the correct one is the second one. So and the reason is, we say lambda extends as far to the right as possible until the closes closing parentheses. So here, there are no parentheses at all. So the scope of this lambda is to the very end of the expression. So therefore, the idea is the body of the lambda is the whole thing here. So we already wrote lots of terms where we are this question about perhaps what what do they need? So it is okay here to write all sorts of things that typing discipline would not allow. So one of the things for example, that you could like, write would be something like x applied to x. Now reasonably, that should not be possible. Or maybe it's possible with polymorphic types, but at least with simply simple types is not possible. Because I mean, if x is of some type A to be some fixed types, how is it possible, then that I could apply it to itself because it would require an argument of type A, but the argument is also of type eight, and eight doesn't equal eight. And that is literally it. I mean, it looks like a very poor language, what can you write it all, you can only write function abstractions, is defined functions, you can write applications, you can write variables, it looks like you can't write anything, you cannot even write addition or multiplication or anything. In fact, you can, you can code up all these things, but that's somehow not the point. It is also okay to just throw in some, some constants, like maybe plus some times or or numerals into lambda calculus. And this just gives a lambda calculus with some constants. these constants may be assigned specific, meaning that you can work with them like this, and people often do. Now, in a real functional programming language, we had these leps, which were very useful because they allow us to write local definitions and nothing like this seems to be possible here. So how about them? Well, it turns out that they are really not strictly necessary. At least not until we start to make some finer things distinctions about how exactly should computation or simplification of expressions go when there are multiple choices here. So how should that Write down such a lead in lambda calculus. Well, one way to do it would be to think like this. So what is the idea here? Anyway, the idea here is that u is an expression in which I can use a local variable x. and morally, the value of x is t. So one way to express it would be to say, Well, let's think of u as a function in the parameter x. So we abstract out x from you, and we think, now you doesn't have an independent, meaning he has a meaning when we provide the x. And then then we just provide the x. So we make a function, we say, here is a function you've seen as parameterised in x. And then what is the actual value of x? Well, this has been specified here. Let's say this is then lambda x you apply to t. Well, I've written that the two things are exactly the same. In some approaches, they aren't actually exactly the same. And that has to do with with, with the extra strategy of simplifying expressions. But in ideal lambda calculus, these things should be pretty much the same. So we also have function, let's say we had these kind of definitions of the formula, f of y equals t in U. How about those? Well, they're just a special case. Because when I make the definition f of y equals T, what I really mean is, I am giving a name F to this function, lambda y t that I could write even without giving it the name, right, because here the point is, we see t as a function in y, and then we name it as F. So So this thing here is really an abbreviation for this thing. And for let we already know what it is. So the whole thing could be understood this as think u
+
+32:06  
+is a function in a parameter F, the actual value that we want to give to this parameter in a specific call of this function, is lambda y of t. So both both the symbol x and function let's can actually be expressed in the lambda calculus, since it's one of the sort of purposes of lambda calculus is to have a minimal core in which you can explain everything about functional computing, then you can treat that as a syntactic sugar which is not part of the core. Okay, now, I will soon get to explaining how computation happens in lambda calculus. For that, we have to introduce some terminology, conventions, and then we can write down how computation goes. So the first important bit of terminology is bind versus bound versus free variables. So for every expression, it's important to understand
+
+33:29  
+if
+
+33:32  
+sort of the meaning of a variable used in this expression is supposed to come from outside or it's already fixed in the inside, so to say. So, when we have a lambda abstraction like lambda x dot t, we say this binds the occurrences of x in T. So, in such an expression, all the axes that you can see in T refer back to this x, because any other axes are not visible. So, this is captured in this terminology, this lambda abstraction binds the occurrences of x and t. Now, if you've got any term given, then you can talk about the variables in it and you can ask which lambda is the one that binds the variable or maybe the variable is not
+
+34:27  
+bound at all it is free. So if we for example, look at this example that I wrote down here. So this is the big lambda term. certain variables occur bound here. So for example, y is used here. And it's part of this expression. And it is bound here. Yeah. Similar said the curse here. And it's called the small aids folder this place. But x and w are not bound anywhere in this term. So they are free on the top level.
+
+35:22  
+So this is the terminology bind bound variables free variables, then there is the important principle, the terms that differ only by the names of bound variables. They can be considered equal, they're sort of notational variants of each other. These terms were that only differ by names of both variables, they also called alpha convertible. So, let me give you some examples. So, I can perhaps write the term like this. And this is a perfectly good term, we're actually every variable use is bound. But we want to consider it to be the same as these, because all I've done is I've replaced one local variable name with another systematically. So, why was introduced here, so, this occurrence is bound by that lambda y. So, if I make a different choice here, so I say I want to write lambdas. And if I systematically replace every free occurrence in the body of the lambda of y with Zed, I don't get an equal turn, we can do a similar thing tu tu tu tu x and for example, I can write the whole thing is also the same as this. That's a well understood principle also from from programming languages, right? So, local variables can be renamed if this is done systematically and carefully. So, I should also emphasise something. So, for example, let's start here in the top line again. It's not okay to arbitrarily rename variables. For example, The following is not the same, I cannot just take y
+
+37:55  
+and rename it into x and get this term. Why? Because this contradicts an important restriction on renaming variables, which is called avoiding capture. What is capture is the following principle. So suppose I'm given this lambda term, and I want to rename x into something.
+
+38:41  
+Now, I'm free to use anything instead of x. As long as it's not something that is already free in. If this is the case, this is capture and must be avoided. So here is a simple example of this. This little lambda term, it's okay to replace x with Zed. Because that doesn't occur here in the body of the lambda. So by renaming X to Zed, I'm not mixing up the bound variable x with anything that was free in the whole term. But for example, the following is not okay. So if we start with the same term, I cannot choose to rename x into y, y, because y is already free here Actually, it's free also here. Yeah. So why is a free variable. And if I rename it, if I rename X to Y, I'm mixing up font and free variables.
+
+40:02  
+So similar in my example, here was the situation I'm talking about renaming y. So we're interested in this part of the term, which is the body of the lambda obstruction, lambda y, y, x.
+
+40:24  
+If you look here,
+
+40:26  
+this part has x free, x is bound somewhere, but that's further outside. In this part, x is free. So therefore, it's not okay to rename y
+
+40:39  
+into x.
+
+40:41  
+But some other renaming are okay. So let me give you some more examples to make the distinction. So suppose we have something like,
+
+41:01  
+suppose we have a term like this. I could ask, can I rename this why, with a corresponding uses a wine the body of the lambda? He does that he has that seems to be used around. So it looks like a bit dangerous. But actually, it's not. Because all I need to check is that I don't have that free here. And here, it's not free, it's not used
+
+41:35  
+to so
+
+41:37  
+therefore, I can rewrite this, as Linda said, setbacks apply to lenders. And this is okay. This looks perhaps more complicated, because it's a programme or an expression that has two parts that both use a local variable set. But it's okay. Since these are independent uses, there is there is no confusion about scope, the scope of this lambda binding is, is all of this part, the scope of this finding is all this part
+
+42:18  
+and the to
+
+42:19  
+never mix up in any way. So for example, it's okay now to do some further renaming, if I want to like I could say that that's the same as this. And when I rename this set here, into W, it doesn't mean that I thereby also need to rename this set into W, because they are different. bindings, and they have different scopes. To talk to some of this part, we have to make difference. So for every variable use, one of two things happens, it's either bound by some lambda in the global expression. Or it's simply free, sort of it's a top level free variable. Terms differing only by the vowel by the name by the names of bound variables are considering are considered equal subject to this condition that you can't do this kind of renaming. So that you get variable capture. A free variable shouldn't be captured by lambda. Incidentally,
+
+43:42  
+this okay. So here is more examples of exactly the same. For example, here we've taken a term and chosen for example, to rename x into x prime. This is perfectly okay, because x prime is not mentioned here. Here, again, x is renamed into x prime, which is okay, because it's not mentioned here.
+
+44:09  
+Here.
+
+44:14  
+I'm replacing x with x prime. And now it's important to remember how the scoping around lambda goes or when do we have to read the parentheses? So we have this lambda here, the body of this lambda is not only this part, it's the whole of this. So morally, there are parentheses around what I've just painted orange. So therefore, when you do renaming, x becomes x prime, all throughout this point. And here's yet another example. Now, how does computation happen in lambda calculus, computation amounts to simplifying term in small steps. And or historically, these things have sort of anachronistic names, we said that renaming of old variables was called alpha convertibility. I think it's called that only because alpha is the first letter of the Greek alphabet. Now in computation, you don't use alpha, only use B, which is the second letter. Anyway, so you go in these small steps that are called beta reduction steps. And the idea is at every stage, or at every step, we try to make one of these simplification steps. And you repeat this process until you reach the term where you cannot do anything anymore. None of the simplification steps or rules applies. The terms that you reach there by they're called Peter on the whole process of computation or simplification, in sort of official jargon is called normalisation. You want to normalise it. So here, for example, is an application of this, I'm not yet justifying that what happens at these simple steps are simple steps are indicated by this arrow here. But anyway, things like this actually turns out to simplify in one step to raise what really happens is this guy here is a function in x. And what the simplifications that does is that it puts the argument in place of the parameters. So the parameters x, and v is the actual argument of the call, and X has been replaced with V. And the whole thing here, this part, simplified into this. Here's the next step. I later give you the formal rules, what happens, but informally, what happens is exactly the same type of thing as before. So here is an expression that is a lambda abstraction is a function, we say, we have the expression y plus V, which we see as parameterised in y. And then we actually call this function with this argument, which means this parameter is passed the argument this w v, is passed to y, or is passed to the whole function as the value of the parameter y. So therefore, the Y gets replaced by the whole thing. And that complete final result of this, this is called the normal form. Why? Because it turns out that now no further simplification rules apply the rules that they haven't shown yet. They're also they haven't shown yet turned out to be non deterministic in the sense that it's often the case that you have a term, but there are several possible simplifications to apply first. In a real language, you actually restrict this and you say, if there is multiple simplifications to do, then one of them has a preference and that one will be applied. So, there is a particular evaluation or reduction strategy. I should also say that there is a bit of difference between sort of idealised normalisation in lambda calculus and the one that is used in actual functional programming languages. The first difference comes from the fact that in an actual language in addition to where variables applications and abstractions, you also have constants as we already discussed, like rate plus and times. So, there will also be simplification rules for those in addition to the rules of lambda calculus, also, when often adapt to a more narrow notion of reduction. So, first of all reduction is made deterministic,
+
+49:22  
+but some of the reduction steps perhaps are not also applied in a real FP language. So for example, you do not necessarily apply reduction steps inside abstraction. So under lambda you refuse to simplify. This is a very typical thing to do. But we're not yet there. Let me first tell you what beta reduction does. One way to explain what what beta reduction does is to give it by a system of kind of productive rules. Now, you may or may not have seen such a thing before, let me try to explain. So this is like laying down the rules of the game, formally. So I'm about to define when does one term reduce to another, t reducing to you is written t aeroseal. And here I'm telling what are all the possible cases where this happens, here is the main principle case, which says, whenever you have a term like this, you can, in one step, reduce it to the following thing, you just keep T. And here is some formal notation, you replace every free occurrence of x in T by you.
+
+50:59  
+So this
+
+51:00  
+replacement thing, he is officially called substitution. And we'll actually discuss it in quite some detail. So that's where you start. So if your term is of this form, then you can replace it with a substituted form of t, for substitution instance of t, where x has been replaced with you everywhere where x is two. That's not the only thing you can do. Namely, it's not necessarily the case that your top level term is of this form. But it's possible that this form occurs somewhere deeper in the term. So for example, it can well be that your term is actually a lambda abstraction. Now then, if the body t reduces to t prime, then the whole lambda x of t reduces to lambda x of t prime. So what is this horizontal line doing here, these kind of things are called rules. A rule says, a certain reduction is possible if some other reduction is possible. So I'm concluding the possibility of this simplification step from the fact that I already knew from somewhere else that this one was possible. Okay. It's also possible that the top level term is d applied you for some T and Q, then I can do one of the two things one is captured here in this rule, the other one is captured here in this I can perhaps, in one step, reduce D to D prime, then it's also true that this whole application in one step reduces to P prime, you know, similar, maybe I can't reduce D, maybe I can reduce you in one step to your prime, then it's okay to say to you reduce this to to pry. So what is the overall effect of this thing? This is one possible style of writing what happens but at least what happens is fairly simple. given some top level term, you just look for occurrences of sub terms of this form, some left lambda abstraction applied to something else. And these are what you can simplify, they can either occur on the top level, so your given term is already in this form, and it simplifies. Or it's not the case. But your toddler term which is of one of these forms. It contains inside it some sub term
+
+53:50  
+that simplifies like this. So these rules in the second line here, they just allow you to go deeper in a given term,
+
+53:58  
+and find the sub term of this form and then eventually simplify that. Okay, substitution, I have to tell you more carefully what it is. In most cases, it's easy to understand what it does. But again, there is this danger of variable capture that also occurs here and capture needs to be avoided. These terms that directly reduce baby certainly fighting, they are called bheatha, red X's. And then all of the beta reductions that really do is that it finds the subject of this form in a given term and it replaces it with something of this form. So a bita reduction step simplifies one of the possible beat directives occurring somewhere in it. Now, when are you in a position that you cannot apply this rule anymore? Well, that happens if you no longer have any bita red axes. So this thing is called the single step data reduction of single step bigger reduction. multiples that data reduction is just applying 01 or multiple single step, pizza reductions. Okay, so let's maybe go and justify this thing that we saw here.
+
+55:52  
+So here, these two cases where simplification is used. And this happens like this. So first, we want to apply simplification to this guy. And we want to know, what can we simplify to? On the top level, this is not of the form some lambda apply to something. Because what is happening here is we do indeed have some lambda is applied to something, but the result is further applied to something else. So not that's not of the form to apply beta reduction directly on the top level. But what I can do is I can go inside this term. And I can ask, maybe I can simplify
+
+57:09  
+the argument?
+
+57:22  
+I guess, no, we can, because this is exactly of the form a lambda apply to something else. And then we have a rule that says, in this case, I'm allowed to replace the bound variable x with the actual argument, or the uses of the bound variable x with the actual argument and we get rid of the lambda. So lambda x is come and I go get lambda y, y applied to B. So this happened by this fall here. That's what I've done. But now, what is my overall picture, I have this big thing. Which is actually applied to something else. And they know how to simplify this part. Well, if I know how to simplify the function, then I know how to simplify the function application. That's exactly the case. So if t simplifies to t prime, then t apply to you up simplifies to T climate. So the result here is lambda y by V, apply to that. So that's the justification of the first simplification step here. Now, let's do the second one. Okay. The second one, I have to work with lambda Why
+
+59:11  
+Why me?
+
+59:14  
+W v, I need to simplify to something that is already on the top level of the form lambda applied to something. So therefore, I can use my simplification rule
+
+59:29  
+immediately.
+
+59:31  
+Yeah, and what as you can see, we have to take the parameter, which is why and replace it with w v. So the result is w v. applied to V. Four for why I put this web and I got rid of this and why at the beginning Now my parentheses rules are such that we always when we feed C to applications in a row, then we don't need to use parentheses. So it's okay actually not to drop them.
+
+1:00:19  
+That is the result. Okay. So far, so good. And it shouldn't be much more complicated than so but actually it is a bit. So we have to be maybe careful about how does substitution go. So I said there is this thing, which we formally wrote like this, we take a turn T, and I want to replace every free occurrence of x with. So how should this be defined, maybe we should look at all possible cases where p can be, it would be kind of a recursive definition. So if t is itself x, then of course, when I replace x with B, it's just me. If t is some other variable, and I want to replace x in it with V, while y is not x, so therefore there is nothing to replace Y remains y,
+
+1:01:20  
+then
+
+1:01:23  
+variable application is a nice case. So I've got an application to apply to you. And I want to replace all three occurrences of x will be that simple. There's really something very bad with the, with my laptop, so when I lean, then it starts sending signals, I need to recursively replace x with V in T and recursively. replace x with V in you, and then just apply the results. That difficulty and and situations that require care occur in the case when this term is actually a lambda abstraction itself. So we have this form lambda x dot t, when I use the same variable name for lambda binding, as is the variable that actually want to replace the view occurrences off. Or it's a different variable. This case here actually is pretty nice. So because we are saying we want to replace three occurrences of x with V. But the occurrences that X can have in T are not free, they are bound by x. But the idea of substitution is to replace the three axes, the X is that the outside world so to say can say there are none of those in here, so that the term just remains.
+
+1:03:05  
+But how about extra variable here is different. The same thing is the variable here is different. So I've got the lambda y, the T, I need to replace free access with the What can I do? Well, I should say this is a lambda abstraction again, and I should simply just go inside it and replace all variables, all occurrences of x with V, because V, that's almost right, except for the annoying subtlety v can contain in general, why freely and if I now put v on there, why then y becomes bound. So this is again capture that we already talked about before. So that needs to be avoided. So we have to put here a site condition that y should not be free. Then what does it mean? Of course, one can be free in vi so what to do that? Well, then we have to do a trick. So if this force equation doesn't apply out right, then we actually need to go to alpha convertible form of this term, T. So rename y to some very bold, that is not free indeed. But it's also different from x because if we remove or rename anything to x, then
+
+1:04:43  
+we
+
+1:04:45  
+will modify the problem. Let me give you some examples of this. So this is a very subtle case. So here are the first ones are all Some easy and good cases of substitution where there's nothing to worry about. So, but then the further and more complicated examples will come. So if I've got a term like this, and my task is to replace all three occurrences of y with that W, then that's okay. Because
+
+1:05:25  
+Zed w doesn't contain x friendly. Therefore, it's okay just to go here and sign y and swap the Y for Zed W. Here, there is a more complicated one, but nothing much different happens. So I've got this term. And we have to replace three occurrences of x by this piece here.
+
+1:06:02  
+Well, there is exactly one occurrence of x. And I've replaced it by this.
+
+1:06:12  
+And this time, we are not substituting under lambda. So the problem of will capture or the possible problem capture can also be right. Here, there is a different one. lambda x dot x, y. And we want to replace y with this thing. So here Everything looks a bit dangerous, because it's the same x's and y's as if throughout. So is there a possibility for capture now? Actually, there isn't. So I have to check these things, this term here to see if it contains text this one freely, it doesn't. So therefore, it's okay. To put the whole thing here instead of why here has why here are having sex the same thing, but instead of why I have this here. Notice that this one contains x, sorry, complete x, but not free. And here, there is no collusion. In the result, there is two different bindings of x. But they don't mix up
+
+1:07:39  
+in a bad way.
+
+1:07:45  
+How about this, I'm replacing y with Zed in this term. And that's okay. That doesn't mention x. This happens.
+
+1:08:04  
+Here,
+
+1:08:06  
+we also want to replace something with Zed but not y with that, but x with a Zed and the result is nothing changes. Why is that? Because the whole thing here is lambda x. So x is a bound variable. And substitution only works for free variables, we don't have any free occurrence of x seen from outside in this term, so therefore, there is nothing to change. So what happened in this particular cases, we applied this rule, which says this case, don't do anything. What happens here, this is now the risky case. Now, another, all of these are variants on the same right now, lambda x x, y, but I want to replace y with x. That is the dangerous case, the easily you will think I take the y and replace it with x and get this thing as a result. But that's not the right thing to do, because here are binding x in this term. The X that I want to substitute for Y is a different x is a free x. So, if I did the substitution naively, I would bind the free variable by accident or by this bad thing called capture. So that is not allowed. So if we need to do is before I even go to substituting, I replace this thing with an alpha convertible equivalent, so I choose instead of x any variable set that is not free here. And well, but any variable that is not free in here, and that is one such, so I get this result. And now I'm in a better situation, I'm set in this thing to change y for x. And the result is this. And you can really see that they are morally different things because this guy has all occurrences of x bound, whereas this one contains a free x, which was exactly what the intent was here. So whenever capture is about to arise, we need to rename all variables. So here, the fourth rule doesn't always apply, it doesn't apply when y is not free and V and V in this situation, the variable y needs to be re named into something that is not free in in this minute here, and that is also different from next.
+
+1:11:08  
+Okay.
+
+1:11:18  
+Yes. Okay.
+
+1:11:20  
+I don't have so much else to say maybe, like 10 minutes worth, so maybe it's okay to go without the break with I think I have something like maybe five more slides.
+
+1:11:36  
+Yeah, that's okay. Just continue, that's okay. Okay.
+
+1:11:39  
+Okay. Now, this is the this is the formalism, it takes some effort to get used to. And it may look a bit far from functional programming, but when you think of it, it really isn't, it is it is all about making functions, applying functions. And sort of in a hidden way, it is about these laps as well. And sort of hygiene that you have to keep thinking of local variables not mixing up with with globally free variables. So, what I what I now want to still show is is a discussion of some properties that that this calculus has and significance of these things for for actual functional problems. So I said very something maybe a bit worrying a term can easily have multiple redirects use and then multiple simplifications applies what could be an example of this maybe something like
+
+1:13:23  
+if you look at the term like this, this has multiple beta redexes, multiple places where I see a lambda abstraction followed by an application. And then there are two ways to to start with a reduction to start simplification. So So hearing this term, what we see is, we see a nice thing in two places. So one is this when the whole term, because it is a lambda applied to something. Yeah. So that is what people call a beta redx. One could apply simplification directly to these guys.
+
+1:14:02  
+But then
+
+1:14:05  
+I also have another occurrence of the same thing because look here. So here, I also have a lambda followed by something. Maybe this is a lambda, and that's what it's applied to. And when I start simplifying this thing, it looks like I could potentially get two different normal forms. Let's see Is it really the case. So if I started simplifying on the top level, what I would need to do is to replace any free occurrence of x in y any free occurrence of x in y with The occurrence of x in y with this big thing.
+
+1:15:11  
+And that could give me something right? Well, there are no x's and y's. So therefore, if I do the substitution, just only wise. So this is one of the things I could do. And it finishes in one step just here. But there is the other thing that I could do, right? The other thing would be temporarily not to work in the function part at all. So this is lambda x dot y. But to do the simplification in this part, what I can also do it, namely, replace every occurrence of W in here, with V. And that would give me these letters now looks like the computation to computations go in a different direction. But actually, it's not. Because if I simplify this one further, now it only contains exactly one red X, which is this one, this lambda like this argument. As a result, I get why. And here I also got here, I also got why. So it looks like two different ways about going. And two different ways to go about things. So here I started on the outside, I took the outermost be threaded simplified it got why, in the other approach, I got the innermost Well, there is only two but in general, you could start with the innermost work with the innermost ones until there are no left. And you think you could get a different result, but you don't hear within. So a formal property that you can show is untyped lambda calculus is confluent in the sense that if you can reduce the multiple steps to you, and you can also reduce the multiple steps, this aerostat means multiple steps to V, then actually doesn't matter that you arrive the different results, because you can always find a further turn w such that you reduce this to W and V also reduces to W. So intuitively, this means if a term has a normal form, so a form from which you cannot go on, then whichever way you reduce things, you will eventually get there. Maybe I should draw a picture about this one is so
+
+1:17:41  
+incredible.
+
+1:17:49  
+So I've got the 30s, we could imagine that we do multiple simplification steps and maybe arrive at you. This is what I said. Maybe doing some other simplification steps I can somewhat arrive at To me, this looks like potentially dangerous. But what this conference says is, you can always find a way to continue simplification is such a way that in the end you receive arrive at the same thing
+
+1:18:27  
+like this.
+
+1:18:36  
+That's called Confluence. Confluence means things. So that's from Latin, right? It should be should mean that we've got a property that everything somehow flows together or flows into the same place. And yeah, pictorially This is exactly this. So no, it's not possible that you somehow have a term with two different normal forms to have a term with two different normal forms would mean that you start with the start applying the simplification steps you arrive at you, and then you cannot continue for some reason. And at the same time, there is also some other v that you can also reach for where you also cannot continue. Now, if that were the case, then both u and v would be normal forms of P with conferences, this is not possible. however far you have gone with reduction in different ways. And you can always arrive at the kind of an agreed result stem from wherever you already went. And this, this already happened to us here, right? It looked like we went two different ways. But in the end, we got exactly the same thing. So like this says it's pure untyped lambda calculus, really reduction order doesn't matter. Maybe you make more steps with a particular reduction order like here we make two versus one But the end result cannot depend on. As I already mentioned, this has an immediate consequence of the uniqueness of normal forms. So it's not possible that there can be two different
+
+1:20:19  
+two different normal forms that you arrive at. Because that directly contradicts Confluence. However, what is possible is that you have a term that you can just keep reducing,
+
+1:20:43  
+and you'll never get stuck. So that you have an unfinished reduction sequence. So that is somehow different. The uniqueness of normal forms doesn't say that there has to exist a normal form, it says, It can't be that there are two different models. So that's the disclaimer here. Although we say there cannot be two different normal forms, it may be that there is no normal format. Now, this is a very good news. And this is exploited a lot in functional programming languages in exactly by making evaluation strategy deterministic because since you cannot possibly arrive at different results, then in some sense, any reduction strategy should be good, because it's guaranteed to give the same result, then you should maybe choose the reduction strategy based on some criteria of of like performance optimality, rather than have that it gives or doesn't give different results. However, this is not the full truth. The full truth is that in a real functional programming language, you have the effects like maybe printing and then different evaluation strategies give different effects, and also different normal forms for the same term. Maybe the simplest example of this would be something like you have a language with printing, and you can maybe do stuff like I want to add together, print five, followed by he did want to do the following, I want to print hello followed by five and add these together with print
+
+1:22:47  
+weld
+
+1:22:50  
+17.
+
+1:22:53  
+Now,
+
+1:22:54  
+this is a programme that should give me as a result 22 but the reduction order matters. So surely, I cannot add any numerical value expressions together before I have evaluated them. But here there is two to evaluate the first one of them gives five the other one gives 70. The first one first prints Hello with the second one first prints
+
+1:23:21  
+world.
+
+1:23:22  
+So if I started evaluation here, this would print hello, and return five. And if I then went on here, world would be printed and 17 would be returned. And then we were able to add five and 17 together The result is 22. But on the screen you see hello world. However, if you started on the right, that's also possible then you would get well printed on the screen 17 returned you will go here you will get Hello printed on the screen five return venue at five and 17 is still in that order, get 22 but on the screen you see two different things. So as soon as your FB language has effects, maybe printing but maybe even simpler things such as exceptions. And different evaluation strategies can give different effects and also a different normal form for the centre. So then it's no longer true that you will have Confluence and uniqueness of normal forms are made you have Confluence to the degree that the final returns results are the same, but the effects produced during the computation are different.
+
+1:24:47  
+Then, I should say that I already gave the warning that not every computation needs to terminate even in such a simple language and So therefore you cannot assume or think it would be easy to show that every time has a normal form. It's simply not true. Not everything has a normal form. And here is an example. It's usually called omega capital a Greek letter omega term is here. This is without a normal form. Why? Well, first of all, it's not itself a normal form because it is of the form a lambda applied to something. So it's clear that I can apply a simplification step right? Then let's try to apply the simplifications that if I apply the simplification step here, what does it say? It says, I have to take the three occurrences of x in here of which there are two, this and this and this. And I have to replace both of them with the actual argument provided to the function in the core. So here, here is the parameter using two places. And I have to pass in the actual argument. But the result, when I replace both of the axes with the same thing, is again, the same thing. So I made a simplification step, but accidentally arrived at the same result. But now, of course, I'm in a loop, because to this guy, I can, again, apply the very same simplification step. So at any stage, exactly one thing I can do, but this is still a thing I can do, and it takes me back to the same, so I can never finish. So the computation can always go on, nothing is a normal form. Okay, this is the simplest example of this kind of computation. And it's maybe a bit futile because nothing changes, you can also write terms that don't have normal forms, but where at every stage of simplification, something new happens. So this shows that this test of power, okay. And now, what is also important to realise is that if a term has a normal form, it doesn't mean that every evaluation strategy will find it, I can also have a term that has a normal form, but some evaluation strategies, that is to say reduction orders find it, and others don't.
+
+1:27:29  
+We could think of this term for example. Yeah, this one contains two beet red X's one is inside omega. And that's the one we wanted to see. So this omega is like this. And it clearly contains a lambda apply to something, a lambda is here.
+
+1:27:53  
+But then there is another one, which is the top level thing. So here, there's also a lambda applied to something which is omega. Now, if I were to first deal with the top level, the outermost red X, then it will replace every occurrence of x, y O, which there are none with omega. So therefore, the result is simply y, similarly to actually what I showed here, and the path, and that's clearly a normal form, and I'm done in one step. But if instead, I chose to apply the simplification instead of omega, then of course, I know that omega in one step goes back to omega. And I haven't changed anything. And now I can work with all my data again, and I can go on and on and on. And this one will simply not finish or not terminate at all. So there are two maybe canonical evaluation strategies. There are all sorts of intermediate ones as well, but these are sort of the two extremes, one is often called normal. This means given a lambda turn when you want to simplify it always take the outermost leftmost red X first. So you prefer big red X's to small ones or you prefer red X's closer to the top level of the term as compared to going deep inside the term. And if there are several that are not contained one in each other, then you take the left that the one that is more to the left, the left most of them so that's called normal evaluation strategy. There is also the applicative evaluation strategy which says, when there are multiple radix is always take the one that is that is inner innermost. And if there are multiple sites, then again, the leftmost one of them so in our most red X is one that doesn't itself contain any further red X's and if there are multiple such pick the left most one of them And then this is something that you can find out when you think about it for any term that has the normal format or the normal That is to say the left most popular most devaluation strategy will always find it. So, here Actually, we had a normal form, which is why and if we started on the outside the leftmost outermost actually find the payments that the applicative one is actually very important in actually functional programming, especially in the context of effects you may want to prefer it. But this may generally fail to terminate, because it's very eager. So, when there is a function of like an argument before it starts evaluating the function application, it wants to fully evaluate the argument, but here the argument sort of goes in an infinite loop and this goes on forever, but if actually you worked with to look closer at what the function application is, you see that the argument is never needed. So, why then work on it and this is what the normal evaluation strategy finds out? It tries not to even look into the argument before it puts the argument in place of of parameters. If the argument is not used, then you will never go and evaluate the argument if the argument is there not the point thrown away as happens here.
+
+1:31:32  
+Okay,
+
+1:31:33  
+and that maybe is it for today. So, what did I say? So, there is this little formalism called lambda calculus with only three constructs, variables, applications abstractions, that captures a lot about functional computation. So we define what terms are, then there is the notion of equal terms given by alpha convertibility, which sort of formalises the idea that local variable names don't matter. But Aleutian confusing then there is computation which goes by normalisation trying to make a term normal by applying the simplification steps called data reduction steps. And then I said, pure lambda calculus is conflict reduction order doesn't matter. As long as you just want to ask which normal forms there are, there can never be more than one normal form. However, a caveat is there are terms without normal form. And there are also terms for which some strategy finds a normal form. So they do have a normal form, but some strategies to find it and other strategies don't find it. The most successful in terms of finding the normal form is the leftmost outermost evaluation strategy that will always find them all for me. And that maybe should be about
+
+1:33:17  
+questions.
+
+1:33:22  
+I think it's quite clear. I don't have any question I think. I'm afraid I have to talk to you a bit more with his former staff by showing next time how types go. And the main message there will be the types will remove as long as we don't do polymorphic types will remove the possibility of non termination. And they also sort of the more intuitively nonsensical terms. So there is a bit more to say, but it is more or less. on the same level, I don't go deep. I'll just show you the typing rules. And I comment on a few properties that the type system has.
+
+1:34:09  
+Okay.
+
+1:34:13  
+If there aren't any questions, maybe we
+
+1:34:17  
+are recording here.
+
+Transcribed by https://otter.ai

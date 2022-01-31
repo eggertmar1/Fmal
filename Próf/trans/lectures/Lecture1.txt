@@ -1,0 +1,2128 @@
+4:05  
+Hello
+
+4:08  
+let us check if this works
+
+4:11  
+Can you hear me someone else Yes sir yes very
+
+4:18  
+so we can get started
+
+4:21  
+my name is thermal. I'm going to be your lecturer this term in the programming languages course
+
+4:31  
+This lecture will be recorded is live
+
+4:36  
+some of the next times I will have to use pre recorded lectures in combination with live we'll see as we go and the same for for exercises
+
+4:47  
+for today, how should we go
+
+4:51  
+I will do a short introduction to the course.
+
+4:56  
+Then I will use slides
+
+5:00  
+And I will see my zoom window on the side. And they will notice when you raise your hand, or so so if you've got the question, please, please do raise your hand, when we actually get to the technical part, I will today start telling you about the F sharp language, then I have to share my whole screen because I want to show multiple windows at once,
+
+5:19  
+then it's not so easy for me to see raised hands, then just speak up if you want to
+
+5:25  
+ask something Is this okay?
+
+5:31  
+Let me see if this machinery works.
+
+5:47  
+Can you see my slides?
+
+5:50  
+Yes, very
+
+5:54  
+bad thing is I can't see the zoom window in the way I want. Still, but I hope I'll see raised hands.
+
+6:02  
+So, let me start. So this is a programming languages course you might be interested in the question which programming language is it
+
+6:12  
+and in some sense, it's supposed to be all of them at once. So, it's supposed to be a general programming languages concept
+
+6:20  
+or programming languages concept course, the idea being that once you already know one or two or three languages, then to learn the next 12 you should just be it should just be sufficient for you to know you know what is different. And there are so many commonalities between different programming languages,
+
+6:42  
+where the differences only show maybe in some concrete syntactic detail, but but the idea is a similar There are also languages from different languages, families, that are quite different in the very basic setup, and then of course, the distance between languages is bigger. And to be able to pick up different languages, it may be good to know You know, one or two specimen from each big family, so to say. And that exactly is the is the is the idea of the course. So
+
+7:15  
+we will look at one language in quite some detail, which is called F sharp, which is a functional language. But this is only so that we could also use it as a vehicle for demonstrating features of other languages
+
+7:32  
+of two broad language classes. imperative, which is languages like C, or Java or Python that you've already seen.
+
+7:41  
+And then functional is the is the other big family of languages, there are more but these are the two that we will touch upon.
+
+7:51  
+But before I get there, let me let me start from some very basic. So what is the setup of this course, since it has to be run online because of the size, at least
+
+8:02  
+for the first weeks of the course, but possibly for the home course.
+
+8:07  
+Some details are not fixed, but I hope we will shape them as we go. Seeing what works best.
+
+8:15  
+I'll do the lectures My name is thermo here is my email address.
+
+8:20  
+For practicals, you're splitting to six or maybe seven groups including HMV.
+
+8:28  
+And a number of ta is will will take care of you and try to help you with with problems so that you
+
+8:38  
+learn the concepts I'm trying to explain here in in practice.
+
+8:45  
+The lectures, I must say also going to be pretty hands on in the sense that I'm going to show you a lot of code. And I'll do a fair amount of live coding and this will start today actually. So there will be very few sets of slides.
+
+9:00  
+But quite a few
+
+9:04  
+files, pieces of code that you have to work with that I try to annotate with comments, explaining everything as we go.
+
+9:14  
+So there is two pairs of lectures a week Tuesdays Thursdays,
+
+9:20  
+everything online live or pre recorded or combination
+
+9:24  
+practicals we will really see how to organise them and what we could to use. We will not have an official practical session official practical sessions tomorrow at all.
+
+9:37  
+But I'll give you work to do that.
+
+9:41  
+That will prepare you for the next week and from the next week. We'll start properly
+
+9:48  
+as it's common at this university attendance, and the school in particular attendance is not mandatory.
+
+9:54  
+But I really really, really really really I cannot say this many times enough I
+
+10:00  
+I advise you, that you, you actually follow the lectures.
+
+10:07  
+Because I'll tell you quite a few things. I'll try to tell you
+
+10:11  
+things maybe in different words, hopefully simpler than then they are in the book. And I cannot answer any infinite amount of questions on Piazza. So it's,
+
+10:23  
+it's good, if you if you, if you if you ask during the lecture and also during the practicals. So just for your own benefit, I really do recommend that whatever is live, it's try to try to attend.
+
+10:38  
+Now for questions, there are various channels, and I will not be or we will not be able to follow them all. So I really like that question off lecture practical time. But the main channel would be Piazza
+
+10:55  
+now
+
+10:57  
+be able to change their business model and
+
+11:02  
+university visit courses using good capital pay. So these licensee licences are being set up. So this is a bit delayed for this course. But I hope this will work. I'd much prefer that questions arrive on Piazza because it's easier to keep track of which ones are answered which one are not. Email is the next one that you can consider. But I prefer pizza and teams is the last one.
+
+11:30  
+Don't
+
+11:32  
+try to follow it. But I really prefer that we concentrate on on Piazza.
+
+11:43  
+Always assessment.
+
+11:45  
+In this course, it will consist of assignments to be done individually or in teams of utmost to people.
+
+11:54  
+And then a final exam
+
+12:00  
+where all four assignments count towards the final assignment score, which then will be weighed together somehow with the final exam. Now, this course used to have the final exam 50% and the assignments 50. This will not be the case this year. We haven't quite finalised the weights of the assignments versus the final exam in this course yet. But we'll do this in this week or so when those who publish the assignment schedule, trying to synchronise it a bit with other courses or the bigger courses.
+
+12:35  
+But the indication is, of course, that the final exam now will be less than 50%, maybe significantly less something like 30 or 20%. And then the assignments and then accordingly less serious.
+
+12:48  
+Whereas the assignments will then go a bit deeper.
+
+12:54  
+Yes.
+
+12:59  
+Is this fine?
+
+13:02  
+Now the practicals are meant mostly to be for you to prepare for the assignments.
+
+13:11  
+I prepared exercises for each Wednesday. The idea is that you work on them, they are not directly the assignment problems, but they are the sort of simpler, smaller things that should help you to deal with the actual assignment problems. Of course, you can also ask the TA for hints about how to do the you know the compulsory assignments. But mostly they are there to help you with the with the with the problems of a particular Wednesday.
+
+13:42  
+But but these are designed so that once once you're able to do those, they're all very small things that will help you also with the problems in the assignments.
+
+13:56  
+Finally, there is a book.
+
+13:59  
+So I've on the on the canvas main page. And I think some other pages I've already indicated this way, there is mostly one textbook that I will actually follow quite closely.
+
+14:11  
+So, you should be able to do the exam also by more or less reading the book
+
+14:17  
+and not attending anything provided that you work on your book properly on your own and deeply. So it is it is by a Danish Professor better system called programming language concepts.
+
+14:32  
+And then the idea is the one that I explained, teach general concepts
+
+14:37  
+characteristic to the whole, whole families of programming languages.
+
+14:44  
+The way that the book is organised is that it's quite hands on. So it's not just some English language waffle that things were crafted like this, but actually, I think that is explained is also implemented as kind of a prototype if you wish.
+
+14:59  
+So
+
+15:00  
+It uses one particular language F sharp, that is new to you, to most of you, at least, I guess, which is a functional language.
+
+15:09  
+So learning this is kind of good on its own right, because it's a, it's an example of a well designed functional language.
+
+15:19  
+quite different in spirit from C, Java or Python.
+
+15:25  
+Because it's functional, not imperative. But then this language is used,
+
+15:31  
+actually, to me to to explain other languages. So this is not the compiler course. So we'll we will not write full fledged compilers for other languages or interpreters. But we'll go a bit in this direction. So language features of functional languages like ml, and imperative languages, like C are then explained and sort of quickly, hastily, implemented, often also directly in this F sharp to just get a feel for how these language features actually work.
+
+16:06  
+So the book goes some way towards
+
+16:10  
+implementing the language that they call micro ml, which is just a small core of ml, a standard functional programming language or classic functional programming language. And then similarly, something that they call micro C, which is then a small subset of C.
+
+16:29  
+There are actually many other textbooks that one could use to be slightly different emphasis and coverage.
+
+16:38  
+Another one that is sort of short, the nice and also implementation century are kind of hands on is the one by country called foundations for programming languages.
+
+16:51  
+And it essentially takes the same, the same approach, but the language is dealt with are different.
+
+17:01  
+So it uses c++ to implement one toy imperative language that is called Coco in that book,
+
+17:10  
+and ml and prologue, prologue is a logic programming language yet a different kind of language to implement the toy functional language that they were called small. So it's, it's a similar approach, but using
+
+17:23  
+and
+
+17:25  
+use using a different kind of vehicle language and also demonstrating other aspects of other languages.
+
+17:43  
+Any
+
+17:45  
+any, any questions this far about the setup, just
+
+17:52  
+feel free to make
+
+17:54  
+make noise? There are some questions in the chat. There are some questions in the chat. Now I really have to see
+
+18:02  
+how I can see them.
+
+18:06  
+You want us to just ask you questions like this. So do you want us to use the chat more?
+
+18:11  
+You can Well, I can also stop sharing for the time being and then I can see the chat directly. And quickly look up.
+
+18:28  
+Would be nice if the lectures are recorded, they will be
+
+18:32  
+What is the reason for change of the final exam percentage. That is indeed, it's an instruction from the school that says we should we should
+
+18:43  
+give away less than 50% of the final exam, which, which is motivated by so many things. First, we don't know how the pandemic goes although with vaccinations, there is hope but but it's really difficult to organise an exam online in a way where you can
+
+19:06  
+test your knowledge in any in any depth really. So that's one and also Yeah, if the circumstances complicate, then an exam is a stressful thing. And these assignments they are like spread out over the term, which is perhaps better.
+
+19:23  
+No midterm indeed.
+
+19:26  
+Just for assignments before the final exam, when will the assignment list be available in Canvas
+
+19:38  
+as we go but the first assignment soon in in like a week or two. And the idea is that each time you do get a new assignment, you will have like two or three weeks to complete them.
+
+19:58  
+If you still have
+
+20:00  
+The exam to pass the exam, right? I think yes, this is my understanding at least.
+
+20:14  
+And there is the question, what was the great for the final exam? Just missed the number this one?
+
+20:21  
+I don't know the context of the question anymore.
+
+20:27  
+Yeah, for the exam 20 to 30%, likely, at most 14, but I would say 30s is quite likely
+
+20:38  
+percent of the weight of the final exam out of the total grade. So these things, some of these things are not up to me or any teachers, some of them are decided, centrally, but by the university, and I'll just follow
+
+20:55  
+up
+
+20:57  
+something else. So for
+
+21:01  
+that, just also feel free to speak up I think right now.
+
+21:05  
+There is no issue with this.
+
+21:11  
+Happy unhappy?
+
+21:16  
+shorts, pretty good. Okay, good. Yeah, sounds good.
+
+21:21  
+So I also listed another book. So this is, this helps for for F sharp, I will spend four, or if time runs out five lectures on F sharp as an introduction, you know, I'll still show small language features as we go during the rest of the course. But just to get you started. So there is a whole book on F sharp is not mandatory. But if, if you're interested in this, that's one reason to, to consider buying or renting the book. Another is
+
+21:52  
+if the opposite if you're not quite interested, but but but but it seems very difficult. So in this case, it's also good to get the book because it really goes slow and gives a lot of examples. And it's a well written book.
+
+22:04  
+So the F sharp book is a much gentler book than the programming language concept book that we will use as the main textbook. But then on the other hand, F sharp is not the main focus of the of the course.
+
+22:19  
+So he gives
+
+22:23  
+gives these ebooks
+
+22:26  
+to you not away but for a special price, or at least according to them. So I've provided the links on the course course page.
+
+22:35  
+ciabatta book, you mentioned that the sheep plus plus talk, is that just an optional extra? Or Yeah, this is this I just mentioned as a kind of a period if this is like an optional, optional extra I will I will not go into that direction at all. It was just to point out that, you know, in the past these programming language courses, they used to be fairly theoretical. Well, they still are, because I mean, there is some some hard technical stuff here. But there has been like a general shift of trying to mix them up with
+
+23:04  
+with some sort of more hands on activity. So they become a bit more like, going a tiny bit towards towards the real compiler course, which often is a separate course anyway, but
+
+23:18  
+you posted some videos on modules for the F sharp programming language. Is that just for our knowledge? Or do we have to watch them all or? So I put a whole lot of links having to do with F sharp that you may need, right there is the language referencing style guide. So these are simply good links, if you need to look up something. Or, or if you're not sure how to how to, you know what, what is considered the right way? I don't know.
+
+23:48  
+Yeah, doing the layout of your code, for example.
+
+23:53  
+But what I put on the lecture one and two are actually the real code from these two lectures, I will go through these
+
+24:00  
+line by line more or less, so to say,
+
+24:03  
+there are some videos that I posted, which are
+
+24:07  
+some of the more popular ones on YouTube, I don't particularly endorse them. But suppose something goes wrong with with one of my recordings in the sense that it just fades or so
+
+24:18  
+these are alternatives, right?
+
+24:21  
+So in particular, that there is one five part series where each part is like 20 minutes or so. And there is another one, which is a longer video, but which does a whole tour.
+
+24:35  
+Yeah, overall of overall of the most important aspects of F sharp that you can use as alternatives. But the main ones are the ones that I put on the lecture one and two were lecture one is today, lecture two is for Thursday. So that's actually called on I'm going to walk you through and explain things as I go.
+
+24:55  
+Yep,
+
+25:00  
+But the links on the top part of the page there like there for the background, on the bottom of the page, we put a small instruction on how to instal the system. But if you run into trouble you can you can well, you can ask us but maybe in the first place especially if these are sort of very, very simple hindrances, you should simply look up the official instructions from say Microsoft or the F sharp foundation where where they give like a more detailed download and instal and usage
+
+25:32  
+instructions.
+
+25:35  
+Right.
+
+25:39  
+Okay.
+
+25:42  
+Can I activate? Yes, sir. Yes, this is not entirely up to me. But as soon as everything is in order,
+
+25:49  
+with with the licence, I will, I hope really one of these days this week.
+
+25:57  
+Okay, so let me share my slides. Again, I'll give you a brief intro to to F sharp and then we can actually get going.
+
+26:14  
+Someone has a contract on Thursday lectures, the recordings will hopefully be regular Yes, you will get something for every for every Tuesday or Thursday.
+
+26:28  
+Either a whole live lecture or something pre recorded complemented with a shorter live session during the timeslot.
+
+26:37  
+Okay.
+
+26:39  
+But all disclaimers for zoom failing or something else failing with the recordings, it's always possible that
+
+26:47  
+that you use one or two recordings I've taught at this university. This is my fourth year. I think I've lost one and a half lecture
+
+26:55  
+just because something failed in the recording.
+
+27:04  
+Right, let me share again.
+
+27:17  
+Can you hear this right?
+
+27:19  
+Can you see this?
+
+27:21  
+Yes, yeah.
+
+27:24  
+So
+
+27:27  
+a short intro then to the to the to the course who wants more and under sharp.
+
+27:35  
+So why this why this course I already briefly said it's, it's like a fairly standard course that you get in pretty much any university on the planet in computer science. on there, these are some very similar name. And the idea is that once you have your first or the first two programming languages, then you can't have courses for for another 12. Rather, you will have like a general Of course, which is supposed to help you for when you learn any language.
+
+28:06  
+So
+
+28:09  
+we're after both general principles
+
+28:13  
+for the design of a programming language, but also a bit about how they look inside like not from the programmers point of view. But But what's in the machine like what's in a typical language processor, which is what is in an interpreter, or, or in a compiler or in an optimising compiler.
+
+28:30  
+And another is to peek beyond imperative. And also object oriented languages, right, c++ and Java are object oriented, are on top of being imperative, which means that they are based on commands, or statements, look at other types of programming languages, and here the main sort of competitor family or functional languages. So here are some names you might have heard of like scheme, or Oh, camel or F sharp, or Haskell.
+
+28:56  
+There are more these days, Scala and closure and what they are the functional approach.
+
+29:07  
+So, this is the kind of brief overview of the course which more or less agrees with the order of chapters in the book.
+
+29:16  
+Except that the book is not dedicated on F sharp, it gives you a crash course in the appendix of the book. And this is where we start, we start at the very end of the book, look at the crash course. And then go to the material proper,
+
+29:30  
+which is like some of the things you might know very well, some might be completely
+
+29:38  
+a completely new world for you. That's fair. So we look at first some very basic distinctions like interpretation of a programme versus compilation of it.
+
+29:50  
+What are intermediate languages, what are virtual machines? What is what is the idea of a stack of languages from highest level to lower level the distinction
+
+30:00  
+Between syntax and semantics and how to get from one to the other, a bit about surface level syntax of programmes, like how do you get an abstract syntax tree out of code as just written in a file by lexing and parsing, that these are, these are touched upon, on a very light level. And the idea is you either learn these things in a compiler course rather or another door during your health study.
+
+30:29  
+But then we go to the, to the real matter. So both functional languages and imperative languages, they work a lot with expression that is block structure, the idea of local names in blocks, there is the idea of Type C, in particular, higher types. For functional languages, we play a lot with the abstractions that are there. The main most important things are data types in functional languages, as well as higher order and polymorphic functions.
+
+31:01  
+So
+
+31:03  
+I'll explain what these mean in different languages. And
+
+31:08  
+you know, what were some design choices when when people first came up with these things, and what kinds of variations are there and what sort of trade offs are there, you know, and which,
+
+31:17  
+for imperative languages, where the aspects are different imperative languages are based on commands,
+
+31:24  
+and manipulation of memory or store. So here, we talk quite a bit about programming with pointers.
+
+31:34  
+So the heap
+
+31:36  
+then something about real world virtual machines, like the Java Virtual Machine, and Microsoft's common language interface,
+
+31:45  
+garbage collection for for languages, where memory
+
+31:52  
+management is not explicit, but a lot of it is handled by by the computation platform. And then finally continuations as another programming paradigm, and also a language implementation technique.
+
+32:07  
+But not very sure how far we will reach to the to last bullet, bullet items, but we should get there.
+
+32:14  
+Right. So some things are not covered at all, like object orientation. I don't add anything to it beyond to what you know, this is the whole big world on its own. And there is quite a bit to explain that if one were to go there in some depth, parallel or concurrent programming is also outside the scope. And again, very, very technical, very interesting.
+
+32:37  
+And then all sort of
+
+32:40  
+what should I say?
+
+32:43  
+things on the things on the edges, things on the side, like scripting languages, specifically?
+
+32:49  
+Or domain specific languages or web languages? They're also not like specially covered here.
+
+33:02  
+Yes, that's what the course is. No, I got the question. It's more questions.
+
+33:23  
+Could I tell you a bit about myself? What do you want to know?
+
+33:30  
+So I'm a professor at Reykjavik University. I'm
+
+33:35  
+originally from Estonia, I've been working in Reykjavik for four years.
+
+33:42  
+I find it a very nice place
+
+33:45  
+with very nice colleagues.
+
+33:49  
+I'm generally interested in programming languages myself sort of on the research side, especially functional and dependently type languages. So, so in some sense, this this material is my favourite part of this material at least.
+
+34:06  
+I also do things that have to do with programme analysis and verification.
+
+34:13  
+Also a bit with automatic theorem proving
+
+34:17  
+which are all related subjects, because if we are if you are to, like prove properties about programmes
+
+34:25  
+formally, then this gets such a big work that it's not feasible to do by hand. So you want these automatic theorem provers for example, which are programmes in their own right processing other programmes.
+
+34:40  
+Yes.
+
+34:45  
+PSR versus slack teams are three units on this court. So I have a meeting with with all the TA this week and we will decide about the exact best media for for labs and then also
+
+35:00  
+You know, what is your best way to access the TA?
+
+35:04  
+If you want to set up a channel for yourself like, which is not
+
+35:12  
+under our control, so to say her own to run, then of course, you're most welcome.
+
+35:18  
+For everything he said,
+
+35:20  
+copying assignment solutions, obviously.
+
+35:24  
+So
+
+35:26  
+if you've got good, good suggestions actually,
+
+35:37  
+regarding best platforms, for different purposes, then get in touch with us, we are actually quite, quite open at the moment.
+
+35:48  
+There is more questions and I cannot answer them all I need to tell you my own thing, Estonia that's where the streets are named based on Icelandic street names.
+
+35:59  
+I know exactly one,
+
+36:01  
+which is actually called the
+
+36:06  
+base that is the one street name that I do know, which is called the square of Iceland,
+
+36:12  
+which is actually named in honour of Iceland for the reason that
+
+36:17  
+Iceland was the first country in the world that recognised Estonia as an independent country after the
+
+36:26  
+the coup d'etat in Soviet Union against Gorbachev in 1991. So
+
+36:36  
+so there is a small square
+
+36:40  
+in front of the Foreign Minister building,
+
+36:44  
+which I think used before to be the Communist Party headquarters. And this square is now called the square of Iceland.
+
+36:51  
+Iceland square.
+
+36:57  
+Okay.
+
+37:02  
+Now, I'd like to take you to
+
+37:09  
+thank you to F sharp, in small steps. So we will have four lectures for this. Today, this Thursday, next Tuesday, next Thursday.
+
+37:21  
+Today, I'll show you some very basics, and maybe it's not terribly impressive, because we won't really get very far today. But at least so you have a basic idea.
+
+37:31  
+How do you get around in the interpreter, and we'll give you more technology to work with this
+
+37:38  
+later.
+
+37:39  
+Next time, we'll be about lists and recursion and then we go to data types.
+
+37:45  
+User Defined data types, I mean, and,
+
+37:48  
+and exceptions and programming with references among other things.
+
+37:53  
+But But this time, it is really the basics and
+
+38:07  
+very little beyond that, I have to stop sharing these slides. Instead I'll go to my other windows.
+
+38:26  
+It will now be a bit more interesting in the sense that since I have to share to Windows I really cannot follow
+
+38:33  
+the chat at all. So if you want to raise questions, which will be wise to the one that on the fly, then just just make noise. discreetly ask a question.
+
+38:46  
+Okay.
+
+39:29  
+Okay, I'll show you a text buffer in where I work with the F sharp interpreter and they'll tell you
+
+39:36  
+things
+
+39:41  
+on the site.
+
+39:54  
+What is F sharp, F sharp is a relatively new language from 2005. I think or so.
+
+40:00  
+Which is endorsed by Microsoft and,
+
+40:03  
+and, and the F sharp foundation by Microsoft as part of dotnet. framework. People call it functional first,
+
+40:15  
+which is some sort of mild learning of saying that it's functional because it tries to be functional, but it also incorporates other features. So it's primarily functional.
+
+40:26  
+In particular, it is strongly typed strict and has type inference. And I'll have to explain you what these words mean.
+
+40:34  
+That also what functional first actually means.
+
+40:37  
+But it will be good for you to know that it's
+
+40:42  
+it's the third the development of,
+
+40:46  
+of a language that was first called ml.
+
+40:51  
+And who sort of significant aircraft incarnations are sgml camel, and oh, camel, the old letter was last year.
+
+40:59  
+What is functional first mean?
+
+41:01  
+It means that you programme first of all with expressions.
+
+41:07  
+So, if you think of a language like, like Java, you write expressions like x plus y, but then you write instructions like assign y to x. Now in a functional first language, you don't see so many instructions or commands, you move primarily see expressions. And expressions are something that just denote values, like x plus y might be 17.
+
+41:30  
+Which means they don't produce side effects like manipulating memory or performing input, there is no idea like that there are some memory cells around and derived values there and read them off there, or that you print to the screen or read from the keyboard. Although, of course, you need to support those. But but but you strike after expressions that denote pure values, and then you sneak in side effects somehow, hopefully, in some principled way.
+
+41:59  
+And when everything is an expression, computation goes by simple simplification of expressions. Like, when you want to know what x plus y is,
+
+42:10  
+then your idea is
+
+42:15  
+you
+
+42:17  
+want to retrieve how you defined x, maybe X was four, you want to retrieve how you defined why maybe y was five, then x plus 5x plus y is four plus five is nine. Yeah. And this should somehow be the idea that of the expression is simplified.
+
+42:35  
+And the idea should be that as far as possible computation should be just this simplification of expressions pretty much the same way that you did in high school in in algebra, or I don't know, trigonometry, you got these complicated expressions involving,
+
+42:52  
+I don't know,
+
+42:54  
+powers, multiplication, maybe trigonometric functions. And then you were asked, you know, can you simplify those by opening parentheses and using some known simplifications.
+
+43:09  
+It's the same here strongly statically typed means that for your code to be valid, it must be well typed, which means that
+
+43:19  
+for every piece of code, you should really know what kind of value it is whether the whole code means an integer or it means a float. Or it may be means a function that takes an integer and gives an integer or it may be means a function that takes a string string and gives you a Boolean.
+
+43:38  
+Any sub expression of your code must obtain a definite type.
+
+43:42  
+And that is what it is.
+
+43:44  
+So F sharp is like this is strongly typed, everything must have a definite type the types you must get to know before you even run your code way before. So when your combined types are checked or inferred.
+
+44:00  
+When you want to run your code in an interpreter before it tries to run it, it first checks types,
+
+44:07  
+I'll be more precise about checking an inference. In a short while.
+
+44:15  
+Then there was the statement that F sharp is strict. People also say eager
+
+44:20  
+or keen. So this means that when a function call, that is to say an application or a function, or an argument is evaluated, then the function and argument are evaluated first.
+
+44:32  
+And only then the application.
+
+44:36  
+This may sound a bit mysterious,
+
+44:40  
+but I'll explain it already today.
+
+44:44  
+So there are no strict functional languages as well or people also call them lazy. And the prototypical example of those is Haskell. And that's a very popular functional language of a totally different kind than than the F sharp and the programming.
+
+45:01  
+Technology is also a bit different.
+
+45:04  
+Then I said the third feature was F sharp has type inference. What does that mean?
+
+45:12  
+Although all valid code must be well typed, so you must know what kind of values it transforms to other kinds of values.
+
+45:21  
+The programmer doesn't need to tell the language processor all these type annotations, when not all types need to written need to be written down in the code. So you can write quite concise and short code. And it's the task of the language processor to check validity. In particular, the language processor, like interpreter compiler can infer by which we simply mean figure out types. If the code is well typed at all, and if it's impossible to type properly, then then the language processor will complain loudly.
+
+45:57  
+And you will have to correct something in your code.
+
+46:02  
+So let's play a bit with this. I'll just start with a very basic features of the language, the interpreter is called F sharp pi
+
+46:12  
+i for interactive or interpreter.
+
+46:16  
+And this is one way to work with the language, you just write simple things at the prompt. Of course, you should be able to load files and work with those which will happen from the next time on. But they are basically work with one liners, so we don't even need this.
+
+46:32  
+So what do I mean by an expression, I really mean things like I already said, like four plus five is a perfect expression.
+
+46:40  
+And
+
+46:42  
+I can use F sharp to find out its value, which by the way is nine.
+
+46:49  
+But I get to know a bit more. Namely that nine is an integer. This was the reason why F sharp agreed to find out the value in the first place it first figure out that this expression is well typed I'm, I'm really adding up to integers in order to get the third it's not like I'm adding an apple to an orange and expect an integer. So
+
+47:15  
+Moreover, it gave it invented a name for this expression just for my convenience, even if I didn't try to give it the name.
+
+47:26  
+And the name is
+
+47:28  
+it like the English pronoun.
+
+47:30  
+So for example, I can now ask what the value of it is.
+
+47:35  
+And it is nine.
+
+47:38  
+Yeah.
+
+47:41  
+That's not the only possible expression, I may ask the value all.
+
+47:46  
+I may also be interested in other things.
+
+47:49  
+Maybe like this.
+
+47:53  
+Yeah.
+
+47:56  
+And the usual things are there. I mean, there is the precedents, obviously. So you can drop parentheses where it's clear where they should be. You'd expect here multiplication happens before addition and it is the case you get 19 etc.
+
+48:12  
+But yeah.
+
+48:16  
+So, we do arithmetic expressions F F sharp makes sure
+
+48:21  
+that your arithmetic expression is well typed attempting to infer its types then it evaluates it for you.
+
+48:28  
+And this is the paradigm of of doing things here. And if I try to do something wrong, like I want to add together for an Hello
+
+48:40  
+the thing like hello here in quotes is a string for F sharp, then it will complain loudly
+
+48:50  
+by saying that Hello is not an integer, which is very true. So therefore addition cannot be carried out and the whole thing is nonsense.
+
+49:00  
+Is this fine? So we speak about expressions, expressions take values, which are kind of
+
+49:06  
+in some sense, expressions that cannot be simplified any further like four plus five is a complicated expression nine is value.
+
+49:14  
+Everything is supposed to have pipes. So for example, four is an integer. Five is an integer plus is a function that takes two integers to an integer. The whole thing is a function application. Therefore the result is an integer again.
+
+49:33  
+Is this reasonable?
+
+49:36  
+Somebody say this is reasonable.
+
+49:39  
+perfectly reasonable. reasonable, yeah. Also too simple. So now let's do first thing we can give names to two expressions. So we can define the name via an expression by writing a thing like let x equal e.
+
+49:56  
+in the code, you don't have to put a semicolon here. But that's it.
+
+50:00  
+interpret that whenever you want to, like enter something and want that processor to process it, you have to finish it with a double semicolon. Now, don't ask me who invented this I personally find it's very silly and one semicolon to two, but
+
+50:15  
+take it as the peculiarity of the language. Anyway. So for example, for this three plus four, say, I can say,
+
+50:24  
+maybe I want to give this thing a name.
+
+50:29  
+And now more things happen. At this point,
+
+50:36  
+the value is found. And
+
+50:40  
+your name rest is defined to have this value. And it's it's, it's the name of type integer. I'll speak interchangeably about values and variables, these two are are synonyms in this language.
+
+50:53  
+And the first shock to you should be,
+
+50:57  
+unless you've seen functional languages, before, I'm sure some of you or maybe quite a few of you have is that
+
+51:04  
+you're not allowed to vary the values of your variables. So when rest is seven, then it is seven. And that's it.
+
+51:14  
+There is nothing like increment rest by one, you can't do this in this language.
+
+51:21  
+or in any functional language for that matter.
+
+51:25  
+Now, this may be a bit of a shock, because then if you cannot do assignments, how can you do anything at all, but you'll see that you can do everything you want, actually, and the fact that you've been so useful, so used to writing assignments, like x equals x plus one in some other languages,
+
+51:42  
+is just an artefact that you were first taught that way, this is not the most natural thing at all.
+
+51:51  
+I mean, there is this, there is nothing there that should be this way, necessarily.
+
+51:56  
+Anyway, now rest is a name and it has a particular value. So I can work with the rest. I can, for example, ask what is rest times, let's put something simple, so that we can still verify press times two. And the thing will know that this is 14. And since I didn't give it the name, it's it again.
+
+52:16  
+Now, you should complain at this point. Because I just said that a names value can never change. But you see, here it was nine. Here it was 27. Here it was 19. Here it was 14.
+
+52:35  
+So it is as if it changes all the time. Right.
+
+52:42  
+But that's not true. I mean, it's just appear. So fact these, these are all different. It's they're just named the same.
+
+52:52  
+This may sound silly, but I really want to insist on that this is so the idea is that here we work with kind of nested scopes.
+
+53:03  
+First I was top level and I said
+
+53:06  
+there was the kind of globally to that was nine, then
+
+53:12  
+I actually entered the next level in the block structure. And here I have a local it which is 27. But since the other it was in the outer scope, and had the same name, I can't use its value anymore. So the alternate is still nine and the inner it is 27. But the alternate is shadowed out and I can't use it anymore.
+
+53:38  
+Moreover, here there is a next step,
+
+53:41  
+which is like yet further insight deeper into my code. It's like these Russian dolls that you put inside each other, right. So every doll can have its own namespace. And if names are reused, so it's always the same names that they used, then the inner guys do not see the names of the altar guys, that's it.
+
+54:01  
+So the
+
+54:03  
+ritual
+
+54:05  
+here really not. So this is this is a particularly stupid case where there are basically not reachable and could be discarded, like garbage collected away. But But of course, with proper block structures, you you you can have these nasty names reachable. I mean, this is the whole idea. But we live in a kind of
+
+54:24  
+environmentalist age where it's important not to waste any resources. Clearly names are a valuable resource. So, you should be able to use the same name for multiple purposes. And then the idea is to work with scopes properly right. So you maybe are in some outer scope, you enter an inner scope value, reuse some name, the moment you leave the inner scope under vacuum, the outer scope,
+
+54:53  
+the names of the outer scope are visible to you again. So here in this interaction for it, it was not possible to
+
+55:00  
+Because we just go deeper and deeper or inward and inward. But if you write proper lead expressions that we will see or blocks that you will see further on today, then this will be possible for sure.
+
+55:14  
+Okay, let's try to do something else that much about names will come back to this.
+
+55:21  
+There are also other numerical types, of course. So the basic alternative one is called float.
+
+55:27  
+So I can, for example, calculate stuff like square root
+
+55:33  
+of two,
+
+55:35  
+the system will complain about it, because square root is.
+
+55:41  
+square root is only defined on floats. And if I write 2.0, since square root is a function that takes floats to float, it's happy. 2.0 is a float. This is signified by me not writing just two, but 2.0.
+
+55:56  
+And I get an answer. Yep.
+
+56:02  
+Now I cannot apply square root two in this is a very important, very important thing.
+
+56:09  
+Here.
+
+56:11  
+So what's my possibility, then 442 is okay, because I just manually write 2.0. But suppose I had done something like let x equal to
+
+56:25  
+somewhere before in my code, and then I may be interested in calculating the square root of x, Surely it's wrong. because x is of type integer, we need the float.
+
+56:36  
+Now, I cannot write x point zero, that doesn't make any sense. What I need is, is an explicit cursor or a cost.
+
+56:46  
+Here, it's called float. Float takes integers, two floats. And other numeric types, two floats, actually.
+
+56:53  
+And, sorry.
+
+56:55  
+And that's gonna be okay. So I can apply to say, float x or float to,
+
+57:01  
+yeah, what happens is, x was to its first
+
+57:05  
+transformed into 2.0. That's what float does. And then further square root is taking is this clear.
+
+57:12  
+So that's part of strong typing, you could try to reconcile strong typing with subtyping. So saying that every integer is also at the same time a float, that's possible.
+
+57:24  
+But that's not
+
+57:27  
+although it poses problems for for type inference on various levels. But this is not the kind of design choice that was done in in F sharp, it's really kind of super strongly typed in that respect, that you're not allowed to silently coerce a value from one type to another, even if they look like compatible types.
+
+57:47  
+This said,
+
+57:49  
+there is some function overloading,
+
+57:53  
+which doesn't work by coercion, it just works by overloading. So plus, for example, is defined for both integers
+
+58:00  
+and floats.
+
+58:06  
+But I cannot use it in a mixed way.
+
+58:10  
+I have one question. Sure.
+
+58:13  
+What defines a scope in F sharp
+
+58:18  
+so it is lead blocks, which I will get
+
+58:23  
+here. So far, you've only seen a subtle with because I'm saying let x equal two.
+
+58:30  
+And then then I put the double semicolon, which basically means everything further below is in the block structure that I just started, where I introduced the local variable x.
+
+58:41  
+But But proper block structure is introduced by construction called lead in where to write the lead, then you define some variables, then there is the body. But then also the lead construct finishes and there can be other things outside of it, following it. And then you get the proper nesting, which is not only like you know, you are in a block and you enter a deeper block, and then you eat the yet deeper block, but you can also exit those blocks usefully.
+
+59:12  
+Does this answer your question for now, you will see actually see these LEDs very soon. Yes, thank you.
+
+59:22  
+Right, so we've got here.
+
+59:24  
+I should also tell you that since F sharp is part of this dotnet
+
+59:30  
+framework of
+
+59:32  
+of Microsoft on top of it, on top of which they have their other languages like Visual Basic or whatever, then you can
+
+59:43  
+you can actually use the dotnet libraries, the class library, and it becomes available to you via a module called system.
+
+59:54  
+And that is an occasion for me to also demonstrate to you some other features. So I could for example,
+
+1:00:00  
+choose not to use the square root of F sharp, but I could use the square root from dotnet, which is called square root with capitalists. One way to do that would be to write something like system dot math dot square root 2.0.
+
+1:00:17  
+And what happens here is that there is this hierarchical structure of modules. So there is a module system, which contains the module mathematics. And in there there is this functions square root, so I can use this, these dots
+
+1:00:34  
+as kind of qualified full names in this, you know, to,
+
+1:00:40  
+to navigate in this namespace. Does this make sense?
+
+1:00:44  
+So, square root with little S is something that is available for me on the top level anyway, I don't need to prefix it with anything, but this other square root is somewhere deep in the module.
+
+1:00:55  
+But I can bring names from a module into my scope by just opening the module.
+
+1:01:01  
+So, in particular, I could say something like, okay, so if I just wrote square root 2.0, here, it's not well defined.
+
+1:01:09  
+Because the name is unknown, but I could write something like open system.
+
+1:01:16  
+And now at this point, I can already write math square root.
+
+1:01:21  
+Because anything that is in system has been brought to the top level.
+
+1:01:29  
+Yeah, and if I further open square root, sorry, if I further open math,
+
+1:01:42  
+system,
+
+1:01:47  
+namespace is not defined.
+
+1:01:50  
+Okay, so maybe the system thing is structured differently. But but that is basically the idea of the of the hierarchical modules within the language that that you can use this dot notation to go deeper.
+
+1:02:04  
+Anyway.
+
+1:02:08  
+There are other types. An important one is Boolean. So I can do usual things. I can compare stuff like I can ask, is 10 smaller than eight?
+
+1:02:19  
+The result is a Boolean, which is false. Yeah, that makes sense. Well, false, itself is a is a perfectly good value.
+
+1:02:28  
+True is a value. These are the, the I mean, the type to bool is made of these two values, every other expression of type bool must simplify to one of them.
+
+1:02:42  
+And there are the usual comparison things here. Like I can ask,
+
+1:02:50  
+if it's the case that three is smaller than four, and maybe five is smaller than six.
+
+1:03:01  
+That is great. Yeah.
+
+1:03:04  
+And there is a place where
+
+1:03:10  
+smaller, why can't you? Or is it some back home.
+
+1:03:15  
+There is a place now where F sharp is strict. Strict should mean that before you calculate the conjunction here, you'll figure out both whether three is smaller than four, which happens to be the case name is true. And you also figure out whether five is smaller than six which is true when only then you say okay, two and two is true, therefore, two,
+
+1:03:35  
+but
+
+1:03:37  
+conjunct conjunction is actually lazy in the second argument.
+
+1:03:43  
+Which means that if the first argument is already false, so, three, for example, three greater than four is false.
+
+1:03:53  
+In this situation, the,
+
+1:03:57  
+the second argument is not evaluated. I can, for example, demonstrate it by writing something like zero times zero divided by zero, or maybe one divided by zero
+
+1:04:11  
+is greater than five here. Now, one divided by zero should give you an error, right? Because you can't divide by zero. But now hopefully, since you know the conjunction is false already by the first conjunct being false, you don't even get this far.
+
+1:04:28  
+And that is the answer. Right.
+
+1:04:31  
+Of course, if I if I was to do the conjunction the other way around.
+
+1:04:36  
+Then, sorry.
+
+1:04:39  
+We cannot see your last lunch.
+
+1:04:42  
+Oh, since when never, you could never see them or
+
+1:04:46  
+just the last lunch.
+
+1:04:50  
+I get there now.
+
+1:04:53  
+Before
+
+1:04:56  
+it's more, a little bit more
+
+1:05:01  
+Is this true?
+
+1:05:03  
+No, it's good. Now I can see all the lights.
+
+1:05:07  
+Just something about his screen. Yeah, I could see them too.
+
+1:05:11  
+Yeah, it's okay. But I can leave some safe at the
+
+1:05:15  
+other day something about your screen to 50%.
+
+1:05:24  
+Okay.
+
+1:05:27  
+But now I'm worried. So can you confirm, confirm that the majority of you could could see everything I wrote all the time? Or? or none of you could see anything any of the time. I saw
+
+1:05:39  
+all of it all the time. All the time. Okay. No problem here, see the bottom line?
+
+1:05:46  
+Okay, I can leave some safety room here. But
+
+1:05:51  
+you hear that couldn't see it, you can maybe then later checking the video, but because I hope it was really recorded all of it. Anyway, so So here you can see I just rewrote the same conjunction. But But conjunction really is evaluated like this first, the first argument.
+
+1:06:09  
+And here, of course, since you cannot divide one by zero, it's well typed, but, but during the runtime, it gives you an error. The whole thing gives you an error, and you get some long complaint. But basically it says error.
+
+1:06:22  
+Yep.
+
+1:06:25  
+Now one important thing here to realise is
+
+1:06:30  
+equality test is written with the same sign that definitions of names. So when I write something like
+
+1:06:36  
+five equals 17, this is a comparison. Which by the way is false. Yeah,
+
+1:06:42  
+you see this,
+
+1:06:44  
+that can be a bit confusing when you have names. So for example, I can say let x be eight.
+
+1:06:53  
+This one makes defines x to be a, right. And now I can ask x equals eight.
+
+1:07:02  
+This doesn't do any definition anymore. It's just that check whether x equals eight. Yeah, which I can also use in further comparisons, like
+
+1:07:15  
+combined with for example,
+
+1:07:19  
+whether x is greater than five.
+
+1:07:23  
+Anyway, so this is important. In many languages assignment, there is a single equal sign or maybe colon equals or something and comparison is double equals here everything is equals in that respect.
+
+1:07:39  
+equals is also overloaded, I should say. So equals you don't only use with integers, you can use it with other types. Now let's do something more interesting. Very quickly.
+
+1:07:52  
+Just look here, there is also strings. So when you do something like prof
+
+1:08:01  
+that's a string.
+
+1:08:03  
+And then I can of course, say
+
+1:08:06  
+I can write some spam email by saying let title be prof let name be.
+
+1:08:13  
+Laursen, I suppose not very good at Danish
+
+1:08:19  
+then I can say, you know, this guy prefers the lowest than one one, so many dollars from somewhere in Nigeria.
+
+1:08:28  
+And that's possible. So I've just built the stream.
+
+1:08:32  
+So I did very little here, I just defined this this string junk, I mean the this junk email as a concatenation of a bunch of strings. And here you see another instance of plus being overloaded. I can use plus not only to take two integers into an integer or two floats into a float, but also two strings into a string.
+
+1:08:55  
+Good, then an important idea is functions.
+
+1:09:00  
+They can be defined in many ways. And we'll know quickly look at this. The main one looks like this you write let f which is a name, and x, which is a name equals E, which is an expression. It's almost like an order a definition of a name, except that there is this x here, which you just think of as an argument to a function.
+
+1:09:23  
+Yeah.
+
+1:09:25  
+Let me do the first example of this in the night explain a little more. So, suppose I want to write the function for calculating the area of a circle, which for mathematics, you know is pi times r squared.
+
+1:09:39  
+So circular area, you define it like this and then I combined comment on the rest we say, we we introduce a function name, R is a parameter.
+
+1:09:52  
+Sometimes you also say formal parameter to to stress that it doesn't have any any real definite value is
+
+1:10:00  
+There's like a placeholder for any value that might come in.
+
+1:10:04  
+And here's the right hand side, which is just an expression, which says pi for mathematics times r times r, pi times r squared.
+
+1:10:14  
+So this pi is a constant three, point, 14, etc. So is there no type checking in the parameters? state again? So is there no type checking in the parameters of any functions? They're
+
+1:10:29  
+very good. So
+
+1:10:32  
+F sharp will try to make sense out of it.
+
+1:10:37  
+Which is called inference.
+
+1:10:42  
+And that's what it will tell you, it will tell the circled area is a function. This is signified by this arrow here.
+
+1:10:50  
+That takes float to float. So to the left of the arrow, you'll put the argument type to the right of the arrow, you put the return type, this little r here, what is this? This is just some additional information. It says,
+
+1:11:05  
+No, no, I've called the parameter R. But it doesn't have any any meaning beyond that, because of course, I could have also written the very same function by for example, writing smallest instead of smaller everywhere here, it would have also worked, it's the usual thing, right? Local names don't matter parameter is a local to a function. You can call them whatever you want. Of course, it's reasonable to stay in a mnemonic. I mean, our sounds like radio. So therefore, art is a good name. But in principle, could have been anything else.
+
+1:11:35  
+Now you ask, Do I need to give types here? I don't.
+
+1:11:40  
+But I might want to.
+
+1:11:43  
+So
+
+1:11:46  
+I might, for example, want to say that art is a float?
+
+1:11:50  
+Yeah, I can do this.
+
+1:11:53  
+Can you see what I'm writing.
+
+1:11:55  
+So now I put the I put the parameter now in parentheses, in general, you don't have to do it in F sharp. So I have to tell you, this is what so this is a sports among functional programmers. never write the parentheses if you can avoid it, like the one that writes the least amount of parentheses is the toughest, toughest girl or guy.
+
+1:12:17  
+Huh? But here, you really have to otherwise it's not well parsed. I mean,
+
+1:12:24  
+so I can say, I insist that the parameter is float.
+
+1:12:28  
+And
+
+1:12:30  
+this thing is still happy. Yeah.
+
+1:12:35  
+I can also say I want that the result is a float, which I will have to put here.
+
+1:12:40  
+Now this is what comes back, when I apply circle area two are the result is float. In some other languages, you would perhaps write this float here at this point, before the function name here. No.
+
+1:12:51  
+And that is also fine.
+
+1:12:55  
+I may have my own ideas about pipes, which are not correct.
+
+1:13:01  
+Like something like this.
+
+1:13:05  
+And the thing will complain.
+
+1:13:09  
+Why did they complain here? And why at this point? Well, because I'm trying to multiply together three things by and r&r.
+
+1:13:18  
+And it just goes from the left to the right here. I think it knows pi is a float, that times is overloaded, you can use it to either multiply together to insert two floats. But the first guy was a float. And the next guy has also to be float to be a float. But I've said it's an int. And that's an inconsistency.
+
+1:13:35  
+Yeah.
+
+1:13:38  
+Does this make sense? Now I can fix it by putting some courses somewhere if I want.
+
+1:13:49  
+I should emphasise some other points. So I've taught functional programming before and I know that the major hurdle
+
+1:13:56  
+you guys may have at the very beginning is where's the return keyword right the function should return something you know, I should do a number of steps maybe execute some some commands. And then finally, I figured out some interesting value to return then there should be the command return that thing not the case here. So the idea is that the whole right hand side here, which I think of as the function body is the expression whose value is the value of the function
+
+1:14:27  
+for the given, you know for the value of this parameter, so if r is three, then math pi times three times three, well it has to be 3.0. Of course, is that is the right thing.
+
+1:14:42  
+Is that okay?
+
+1:14:45  
+Because he mistakes here in the test.
+
+1:14:56  
+Okay, so how do I use my function now?
+
+1:15:00  
+What is the main function Anyway, let's go back to the original one, this one, I just applied to a number.
+
+1:15:07  
+And again, I don't need parentheses, like maybe in some other languages, right circle area parentheses, 10.0, just write 10.0, I can also put the parentheses.
+
+1:15:16  
+This is always Okay, you can use parentheses to make sure to indicate your preference. In a complicated expression, that's the same thing. But then why write one parentheses you can write three.
+
+1:15:28  
+And that's also the same thing.
+
+1:15:35  
+Yes,
+
+1:15:37  
+a function can also have several parameters, and then you just put them in a row like this here, you know, make a junk email out of someone's title and someone's surname.
+
+1:15:47  
+So this is a Danish joke. They actually at the it university, I think they had Vice Chancellor Mustapha. So I can make a function like this.
+
+1:16:01  
+And then I can apply it
+
+1:16:04  
+to myself.
+
+1:16:11  
+And I have a string.
+
+1:16:19  
+This is a
+
+1:16:23  
+few more things
+
+1:16:26  
+you can do.
+
+1:16:29  
+You can you can define a function also, without giving it the name. Now, this is very unusual in many languages.
+
+1:16:41  
+Because you would think, huh,
+
+1:16:45  
+what's the point of making a function and not giving it the name? Because then how do I call this function?
+
+1:16:52  
+Normally, a function call looks something like the function name and then the arguments which may be complicated expressions. But the function should be a name, not the case here.
+
+1:17:07  
+function
+
+1:17:09  
+does not need to be given a name, especially if you need it only once.
+
+1:17:17  
+Now this parentheses thing, especially if you only needed once may also sound strange, because I mean, why would you ever make anything a function if you only needed once?
+
+1:17:29  
+With your programming experience this far,
+
+1:17:33  
+if you need to think once, then you just write it. And you don't abstract any parameters out of it. Because, you know, if you only need a circle area for 5.0, why write the function circle area and then apply to 5.0, of course, you just write pi times five times five.
+
+1:17:51  
+Once and for all, you don't need the name circle area for that. But But this is also different in a functional language, because you have this thing called the height or the functions, namely functions that take other functions as arguments.
+
+1:18:08  
+And then
+
+1:18:11  
+there it makes perfect sense to,
+
+1:18:15  
+for these function arguments to other functions. It makes perfect sense not to give to them, Ernie.
+
+1:18:22  
+Anyway, here is, here's the discussion of this thing. So I could define a function, call it model three, for multiplying a given number two by three, or maybe 3.0.
+
+1:18:38  
+Sorry, let's first week, according to the recipe I first gave you,
+
+1:18:43  
+I told you, you define functions with a given name, by just writing let you know your chosen function name, some name for the parameter, and then the body which just uses this parameter, like for example, this. That's the perfect function. And I can use it by for example, multiplying four by three.
+
+1:19:02  
+Everything here is float. So it will be 4.01. The result is 4.0. That works. But I can also define it differently.
+
+1:19:13  
+Module Three
+
+1:19:16  
+is the function name, but the function name is just an ordinary name. So I should also be able to write this definition by just putting down three to the left of an equal sign, because this is how you define things. I mean, name equals whatever is the meaning of the name. Right, this is the general page up here for less. And what we just saw before here, this looks more like a kind of an exception of syntax, which doesn't agree with a main setup.
+
+1:19:44  
+You can write model three in this form, then you have to do the following thing.
+
+1:19:49  
+Then I write
+
+1:19:52  
+Moultrie is a function that takes in whatever
+
+1:19:56  
+which I call x, and then the result is t times zero times
+
+1:20:00  
+specs.
+
+1:20:04  
+And that achieves exactly the same thing. So now if I apply Mazda mod three to 4.0, remember, it's another mod three, my morphine, my inner scope.
+
+1:20:15  
+This is still 12.
+
+1:20:18  
+And then you see well, but why did I even need to introduce the name all free in the first place, I could have written from x arrows 3.0 times x, and have applied to 4.0 directly.
+
+1:20:31  
+And that's possible.
+
+1:20:34  
+So these kinds of things are called abstractions, because what I've done is I've taken an expression,
+
+1:20:41  
+I've chosen a name from that expression. And I said, Look, I want to see this expression as a function in that name, as a function, you know, in that name as a parameter.
+
+1:20:53  
+And you can do it, and then this is the thing. And then I may give this thing a name, C mon three and apply to 4.0. But I can also just use it directly, or any such thing directly.
+
+1:21:08  
+Okay, some more things.
+
+1:21:12  
+Interesting functions use
+
+1:21:17  
+themselves. So here is them.
+
+1:21:22  
+Here is a typical one for calculating the factorial of a number, you know what this is like? Five times four times three times 2.1 is the number that is called the factorial of five. And this is what you need, when you want to calculate how many ways you can reorder
+
+1:21:45  
+five different things.
+
+1:21:47  
+Yeah.
+
+1:21:50  
+You know, for the first thing you've got,
+
+1:21:54  
+you just make your order of five things. For the first element, you've got five choices. For the next one, since you've already used the first thing, you only get four items left. For the third, you only have three items left for the fourth year, we have two items that for the fifth, you're determined it's going to be the only last remaining item that you have.
+
+1:22:13  
+So how do you calculate this function? Well, of course, you can just calculate it in this particular case. But in general, you define this function
+
+1:22:25  
+like this, what it says is, if n is zero, then one, otherwise the value of factorial at n is n times the factorial of n minus one.
+
+1:22:40  
+So the effect is that, when I do like factorial of three,
+
+1:22:46  
+this reduces to three times factorial four simplifies to three times factorial of two, which in its own
+
+1:22:55  
+different
+
+1:23:02  
+This in turn reduces to
+
+1:23:08  
+three times two times factorial of one, which will reduce to three times two times one times factorial of zero.
+
+1:23:25  
+And finally, I get one,
+
+1:23:35  
+one times one,
+
+1:23:38  
+then you can calculate
+
+1:23:41  
+in several steps. This is six, right?
+
+1:23:46  
+That's the programme. But on the syntactic level, you should notice that I wrote rec here.
+
+1:23:53  
+This is to indicate that I'm in the unusual situation where I'm defining a name. But I'm also kind of using that the name is already defined. So I'm, I'm like a cat chasing its own tail. Yeah, that's called recursion.
+
+1:24:12  
+There is a joke about this. So So don't have noticed this famous book about algorithms.
+
+1:24:18  
+multivolume tome, and there is this index for different terms used in the book and one of them is recursion.
+
+1:24:28  
+So there it actually says recursion. See recursion. So to find the definition of the word recursion, you have to look back at recursion and that's maybe the only way to explain.
+
+1:24:39  
+Anyway, whenever you have a recursive definition, you can't just write let function name function argument.
+
+1:24:46  
+But you have to write rec, if you don't,
+
+1:24:50  
+that will also be valid syntax, but it will do something else. So I can for example, do this thing. I could say let factorial of any number
+
+1:25:00  
+Is 17.
+
+1:25:04  
+And then following that, I could say, let factorial of n be this thing.
+
+1:25:12  
+Without wreck,
+
+1:25:16  
+then guess what happens now.
+
+1:25:21  
+Here there is an older factorial, which, which is a function that is constantly 17. Here, there is an inner factorial, which in its body uses factorial, which is defined somewhere else somewhere, well has to be either in the local scope, or if not there, then somewhere outside in the local scope, I have not yet defined it, I'm just about to define it. So it must come from somewhere outside. So this pack will actually use
+
+1:25:48  
+that other fact, here. So, now, when I apply factorial to,
+
+1:25:54  
+say five, I'm ever afraid the result will be five times 17, not five times four times three times blah, blah.
+
+1:26:04  
+And that's what it is five times 17 is 85. Whereas if I had properly used lead track,
+
+1:26:10  
+it means
+
+1:26:12  
+I'm defining fak. But then at the same time, I pretend that I already know what the definition of factories. And then when I simplify, I just go in in the circle with the same definition.
+
+1:26:26  
+And now everything is good if I try to calculate factorial five, because it's going to be one point like it should be.
+
+1:26:34  
+Okay?
+
+1:26:39  
+Um, there is not, oh, there is quite a bit to say,
+
+1:26:44  
+yes.
+
+1:26:46  
+Let me do a few more things.
+
+1:26:50  
+So, you see that whatever you use has to be defined before either in the same scope or in an outer scope. Of course, sometimes it doesn't work. Sometimes you want to, for example, define two functions, mutually recursively. So that's one function uses another, and the other uses the first,
+
+1:27:13  
+then in this case, you have to insist that two definitions are simultaneous. So here I'm saying that's a recursive definition. And not just a one thing, but of two things which is signified by this. And here. So what's this thing here doing is defining a function that takes a number.
+
+1:27:33  
+A function even that takes a number. If the number is even, it is true. And if it's odd, then it's false. And odd is a similar function, except that it's true.
+
+1:27:45  
+When the number is odd, and even when it's false, I mean, you can define these function in multiple ways. But here they are defined, mutually recursively.
+
+1:27:55  
+So a number is even when is it even? Well,
+
+1:28:01  
+it goes by basically counting down, right. So for number zero, you just stay the state right away that zero is even for any other number you say it is even if the number one smaller is
+
+1:28:16  
+the fraud you say the opposite thing, you know, zero is not odd.
+
+1:28:21  
+But a nonzero number is odd. If the number one less is he is even. Yeah, and then say if you want to check that five is even which will be false. It goes like is five even is for all is three even is two odd is one even is 00. No, it's not. Yeah, and therefore the result is false. You see, so this is an
+
+1:28:47  
+and you can actually use and not even only with recursive functions, you can also just use it when you want to define two simple names. I mean, two names of of some simple types.
+
+1:29:00  
+Simultaneously, that's also possible.
+
+1:29:05  
+I already told you that you can indicate your own types if you want. So here is an example.
+
+1:29:11  
+So F sharp tries to infer types. But if you suggest sometimes it checks that your suggestions agree with what it can infer. They tries to find a consistent typing, right? And if you can't, then it complains.
+
+1:29:30  
+Now this is about local scopes. That's really interesting. And important, and that's what one of you asked about.
+
+1:29:43  
+Let's do something.
+
+1:29:45  
+So let's say x is 42. Now we have an x in scope that is 42.
+
+1:29:53  
+Now
+
+1:30:07  
+I wonder what is going on?
+
+1:30:10  
+Mr. Why are you doing here? Now? Okay. Anyway, this is more complicated than necessary. I think I modified this last time when I gave a lecture that I forgot to rework. So here is here is an example of the lead instance.
+
+1:30:25  
+I'm saying, Let me define a local x
+
+1:30:29  
+here as nine plus 16, which by the way is 23.
+
+1:30:35  
+This definition of x will only be good actually in this part.
+
+1:30:43  
+So this is a lead in expression, where I first have some definitions, and then I have the body of the lead, which happens to be a further lead, where there is a further local thing introduced, namely y, and then I do x times y.
+
+1:30:59  
+Is this good?
+
+1:31:01  
+Now, this is maybe a bit silly.
+
+1:31:07  
+X is 2525. Inner x is 25. So the result should be
+
+1:31:13  
+What is it? 625? Note?
+
+1:31:20  
+Yes. So we use this local x. But now let's check what x is.
+
+1:31:27  
+x is still 42. Do you see this?
+
+1:31:33  
+So the alter X has prevailed or hasn't sold value,
+
+1:31:39  
+let me make a different modification of the same. So we could, for example, say.
+
+1:32:00  
+So we've got this outer x that is 42.
+
+1:32:15  
+I wanted to
+
+1:32:16  
+skip over this all together, this plays no role. But I can, for example, do this thing.
+
+1:32:29  
+My alter x is 42, isn't it?
+
+1:32:33  
+So
+
+1:32:35  
+at this place, I'm introducing local x, and I'm not doing it recursively. So the x used in the definition of the local x is the altar x, which is 42. So 42 plus nine is 51.
+
+1:32:50  
+The value of the whole expression is 51 squared, which is
+
+1:32:55  
+2060 601. But when I asked what X is,
+
+1:33:01  
+it's not that
+
+1:33:03  
+it's neither 51, which was the interacts, this is no longer visible, I've left the scope, it's still 42.
+
+1:33:11  
+So it's really important to understand that the names in F sharp are what is called immutable. You can't assign new values to names variables don't really vary at all. You can do mutable data structures, but that's done with references, otherwise, also known as pointers.
+
+1:33:28  
+And maybe that should, then maybe I should just show this during the last minute, and then I dropped them
+
+1:33:34  
+the rest for the or keep the rest of the next time. So pattern matching is one last aspect I wrote factorial
+
+1:33:43  
+with,
+
+1:33:49  
+with anything else here,
+
+1:33:52  
+whenever it was here,
+
+1:33:56  
+but there is also another possible syntax that functional programmers like a lot, which is, which is case distinction by patterns. So I'm in particular allowed to write this thing, which is a substitute. I say, I'm defining fac M for modified, I suppose or fact with pattern matching match.
+
+1:34:17  
+I say it's still recursive. I'm saying the argument is sorry, the parameter is n.
+
+1:34:22  
+But what's the body, the body says, I'm supposed to match n.
+
+1:34:28  
+And now there are two cases. Either n is zero, in which case I want to return one,
+
+1:34:35  
+or
+
+1:34:36  
+it's just any n. And maybe for clarity, I should put n prime here, because it's really,
+
+1:34:44  
+in some sense, a different thing.
+
+1:34:48  
+And I say whatever it is just take it and multiply it with a factorial on one smaller number.
+
+1:34:56  
+And that is a perfect definition. So here, we're talking
+
+1:35:00  
+He sees
+
+1:35:01  
+the first case is kind of a serious filter because not every number is zero. But the second case is here, like a default case, every number matches with some variable, right? There's no problem.
+
+1:35:13  
+How about scopes? So here I introduced the parameter n.
+
+1:35:18  
+This is of course that and that was introduced here. So that's, that's, that's that n.
+
+1:35:24  
+When you do a pattern match against
+
+1:35:31  
+when you do better match of a value.
+
+1:35:34  
+This goes with a pattern here, zero is a pattern, the variable can also be a pattern. If a variable is a pattern, it's a local variable. So here, in principle, it's okay to use the same letter N here.
+
+1:35:47  
+And actually, it will have the same value because I'm matching n with n. But in general, this needn't be the case, right. So if we do something more complicated, you're allowed to reuse values in patents, you'll see more examples of this.
+
+1:35:59  
+But that's a possible definition.
+
+1:36:04  
+Then, of course,
+
+1:36:06  
+I don't necessarily need me to give a parameter to a function, as I already told you, because we can do this thing that we just say we define fac m, and the right hand side is then an abstraction where we say it's a function taking any end and doing something.
+
+1:36:21  
+And now there is a further shortcut, which says,
+
+1:36:24  
+If you abstract the variable, and then direct you match on it, there is no not even a need to introduce this name. And at all, I could just directly say a function that has two cases. And the parameter is in both cases, just replaced with a with a patent directly. So function applied on a pattern zero is one. And the function applied on a generic pattern n which matches against anything, is he's done this, assuming the patent was
+
+1:36:54  
+right.
+
+1:36:56  
+I think here Bye.
+
+1:36:59  
+Bye. ran out of my time, there was a little more stuff I wanted to cover today. But we can just as well leave it
+
+1:37:07  
+for Thursday. So what did you get to know there are types everything has to have a type you saw four basic types, integers, floats, Boolean strings, you saw that we can make function types, which are something of the form t arrows t prime, where t is the argument type and t prime is the return value pipe. And you saw a few ways of defining functions, you'll learn a bit about scope into which we have to go deeper, we'll revisit it again and you'll get used to it but the main principle is
+
+1:37:40  
+each time you write left
+
+1:37:43  
+and a bunch of simultaneous definitions then they are local to that to the body of that lead. Once you've left the lead, they are gone.
+
+1:37:53  
+And if you're at the top level of the interpreter, these letters that you write there these are kind of letters that you never leave and you don't write the in the simplest
+
+1:38:06  
+questions
+
+1:38:10  
+about this?
+
+1:38:15  
+Are there any
+
+1:38:17  
+sheep let's check the chat.
+
+1:38:20  
+But
+
+1:38:22  
+just feel free to speak up Really?
+
+1:38:32  
+I cannot see so many
+
+1:38:36  
+so many questions in the chat but if there is something that you'd like to ask right now online, I'd be very happy
+
+1:38:45  
+could you move your camera better? Sure.
+
+1:38:50  
+just happened while I was sharing
+
+1:38:53  
+the screen
+
+1:39:05  
+Why don't we use functional programming languages like what's the main purpose and gain
+
+1:39:11  
+functional programming languages they tend to go in the direction of maximum like modularity and
+
+1:39:19  
+and abstraction which is all sort of turned
+
+1:39:23  
+gear towards reuse. So, the idea is
+
+1:39:27  
+whenever there is a repeated pattern is something that you programme, then this becomes a kind of programming concept on its own, when functions are the kind of simplest thing that you know from every programming language or or methods or procedures, right. So, if you see that, the same kind of thing is often applied to to some sort of values, then you then you write the function or or or a
+
+1:39:53  
+or a procedure or method,
+
+1:39:55  
+but then functional programming does this thing to so many other things. So there is
+
+1:40:00  
+There is usually a very, very strong module system
+
+1:40:04  
+in functional programming there is this thing called polymorphism that has now entered also many other languages like in Java and C plus plus it would go on to the name of generics, like the idea that you try to define functions that operate on many types at once and this kind of facility is made available to the programmer not only you know, for predefined functions
+
+1:40:30  
+by the system, then there is this facility of higher order functions, which allows you to, which is a different way of encapsulating a common pattern.
+
+1:40:41  
+Nobody asked where it is mostly used,
+
+1:40:45  
+I think out there in the industry, strangely enough, the the one place where it is clearly used most is actually banks,
+
+1:40:55  
+specifically like in in,
+
+1:40:59  
+in, in trading systems and also in insurance. So, somehow it has, it has happened so that, that across the world, they tend to employ,
+
+1:41:10  
+you know, overqualified physicists that don't have a don't find a job in their specialisation. But then they can learn a functional language and they really good at mathematical modelling on one hand, and they also pick up these abstractions and they they can write sort of high assurance code,
+
+1:41:29  
+which on one hand requires mathematical wickedness on on the other hand, you know, has to be
+
+1:41:36  
+reasonably safely correct in the sense that the house will always win.
+
+1:41:44  
+As always, with the banks or stock exchange or whatever.
+
+1:41:49  
+So that's one of the places sort of in more classical areas whenever you
+
+1:41:56  
+you do something where you need data types all over the place, what one very typical one is language processing itself within computer science, it's very easy to cook up data types in a functional language, whereas in an imperative language, it often boils down to how do i do my memory layout? And how do I keep track of offsets in my heap in functional programming provided that you can write your algorithms efficiently enough without worrying too much about memory layout, this is this is a way to to do things very prototype things very, very quickly.
+
+1:42:38  
+It also goes in the direction of like,
+
+1:42:43  
+scripting verb, there are domain specific languages like
+
+1:42:49  
+Ericsson sorry,
+
+1:42:51  
+the Swedish Ericsson, now, Sony Ericsson started the Erlang language,
+
+1:42:57  
+where concurrency was
+
+1:43:00  
+was was one of the main things they had to address. So, there are a few places but but I will say you know, if you just need to compute something or if you need to do like, high precision scientific computing, this is not needed. If you want to do
+
+1:43:18  
+if your concentration is on on communication in some distributed system, this is also maybe not the place
+
+1:43:27  
+but if it's interesting algorithmics if it's complicated code like conceptually complicated code, then the kind of safety mechanisms that you have in functional languages make it
+
+1:43:41  
+make it attractive.
+
+1:43:44  
+Yes, someone says Python is also a functional language, I mean, many are to some degree. And
+
+1:43:52  
+so, there are many sort of idioms of functional programming that have been taken over in so many other languages like the very same concept of anonymous functions that I showed in some other language contexts, they say these are your lambdas, you programme with lambdas and pipes are so
+
+1:44:10  
+these these ideas are in many places, why not? necessarily so many languages are completely purely functional.
+
+1:44:22  
+functional languages are especially good for language processing. As I said, in particular, if you want to implement another language, quickly, you will always do it in a functional language. Because
+
+1:44:33  
+in an imperative language, you just get stuck at setting up your infrastructure and you never get to the meat of the thing. Whereas in a functional language, you can cook up a first interpreter or compiler, like a piece of cake and then you start adding bells and whistles.
+
+1:44:49  
+show two, I have like, a private question for you, is it should I use email or teams
+
+1:45:00  
+I said it before I really prefer email
+
+1:45:06  
+in this case, but I hope we can set up pizza soon. And then you can, then that's my preferred option, either pizza private or to the whole class.
+
+1:45:16  
+Okay, thank you.
+
+1:45:22  
+So for tomorrow, as I said, there will not be an organised class, but try to set up the system, I also give you the problems that you can start tinkering with. But then next Wednesday, the gas' will help you and we'll, we'll set up a system so that each of these slots during each of these slots, there is some channel where you can interact or possibly combined with zoom, we'll see how to break this.
+
+1:45:48  
+Okay.
+
+1:45:52  
+Anything
+
+1:45:54  
+else?
+
+1:45:58  
+I have one question regarding the recursive functions you showed us earlier.
+
+1:46:03  
+Why?
+
+1:46:05  
+Why was the the return value at five instead of
+
+1:46:11  
+the
+
+1:46:14  
+the 120 or something that was supposed to be here?
+
+1:46:19  
+Sorry, what was it here? Yes, exactly.
+
+1:46:23  
+Yeah, yeah, we I can't.
+
+1:46:26  
+I'm not showing the screen. Let me fix it.
+
+1:46:31  
+Sorry, too bad. The button. Just quickly, tomorrow, the practical session is on for set up and something like that, or the practical session tomorrow is not on. Because the the TA is are not really prepared and organised. But but but try to set up things for yourself. Okay. And if it fails, then we can we can start helping you so to say, especially if I managed to get the pizza to run by tomorrow, then you can start asking questions. Now let me share the screen quickly.
+
+1:47:05  
+Do you see now?
+
+1:47:07  
+Yes, yes. Yes. So the relevant part was let me colour it white for the time being. So this is the part that you're asking about? Exactly. So here, what happens is
+
+1:47:21  
+that, the main thing is that you can see three prompts here, right, the first one says lead back end is 17, then there is another one longer than the respective five, right? So the middle one is not the lead track, it's a lead.
+
+1:47:37  
+So in the case of lead, you assume that everything that is on the right hand side must have been defined before.
+
+1:47:45  
+Now.
+
+1:47:47  
+So in particular, the fact that you see on the right hand side and then to the right hand side, I don't want to touch any anything here because then the colour highlighting goes away, but I'll hover with my mouse, right? Anything to the right of this equals must have been defined before.
+
+1:48:02  
+Variable but this fact comes from outside. Yeah, I see.
+
+1:48:07  
+a factor of five reduces to the other factor applied to four. But the other factor absolutely doesn't care about for anything. It's just there's 17 constantly. And then you multiply five by 17.
+
+1:48:18  
+Yes, thank you.
+
+1:48:31  
+Okay. So, if, if this is all for now, then let me finish here. Let me stop the recording.
+
+1:48:42  
+Don't bombard me with 100 emails. If you do not get the F sharp two installed on your computer, we'll try to help you in some organised way. But but try to follow the instructions. I'll also put some problems there and we'll try to set up Piazza and you'll get the proper lab class on Wednesday. But I will continue the day after tomorrow. Thursday, right.
+
+1:49:07  
+Okay,
+
+Transcribed by https://otter.ai

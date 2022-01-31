@@ -1,0 +1,1528 @@
+2:38  
+Hello
+
+2:41  
+Let me check if we have sound can? Can you hear me? Yes sir. And I can get you as well, which is great.
+
+2:51  
+Very good.
+
+2:53  
+So, we will go to a new topic today, which is following the book by better this stuff about programming language concepts. We'll first spend a bit of time on something that is common to every type of programming language, namely expressions.
+
+3:15  
+And I'll talk about expressions names, local scope, sort of general principles,
+
+3:23  
+sort of on the intuitive level, but also what they really mean and what are some important corner cases to understand how they work. And then how could you possibly implement such a thing if you were to write your own little language.
+
+3:39  
+And then we'll get closer to things like lexing and parsing as well in which we don't go very deep. But this is the question of, if a programme is written down as a file or as a string, how do you read the abstract syntax tree out of it, which is on the level
+
+3:57  
+on which we actually want to work with programmes. So let's do like this that
+
+4:04  
+if you have questions, please just shout because I'll start sharing my screen and I hope I will really hear you like it. He's a case now.
+
+4:16  
+share my screen.
+
+4:25  
+Yes.
+
+4:27  
+Very good.
+
+4:34  
+make this
+
+4:35  
+even better.
+
+4:37  
+Okay.
+
+4:39  
+I want to talk about expressions.
+
+4:43  
+To start with, in a very simple programming language. I'd like to write stuff like numerical expressions of the sort 17 or 42, or maybe one plus one
+
+4:58  
+or maybe two
+
+5:00  
+Two times three, or maybe
+
+5:05  
+two times three, plus one
+
+5:10  
+to start with, and then a little later today, I'd like also to introduce maybe names, perhaps be able to write things like two times x plus one, rather than just two times three plus one.
+
+5:27  
+And I'd like to emphasise sort of different phenomena that can occur here. so we can write down expressions as strings, which is what they are here.
+
+5:38  
+This is not the format in which you really want to process them. So abstractly, when we write down an expression, we mean something else. Like for this expression here,
+
+5:49  
+when we've seen maths long enough, we know that this is kind of a three immorally, where at the root, you have plus and plus has two arguments, which are these are these. And this little thing, also, internally, we should think of our This is something that has multiplication as its main symbol. And perhaps these two things, as some smaller sub expressions. So on one hand expressions are strings. But that's not how we want to process them. If we work with a programming language, we want something sort of more structured.
+
+6:27  
+And then of course, one must be able to convert between these very flat string are five representation. And this more structured representation, which we will see here, and which is often called asds, or abstract syntax tree.
+
+7:01  
+ust stands for abstract syntax tree.
+
+7:06  
+I'll start right away and showing how this works in in F sharp if you were to implement a small language, and then we discussed what we can do with it. So naively, of course, you write expressions in order to, to express some computation you have in mind, like here is an expression, perhaps it should some value, perhaps you to the Indian end of the day, the 17. This is the case when x is eight, right? But there is some computation behind. So if you see such an expression, you don't know what X is, perhaps you need to look up x somewhere, then maybe x is eight, then maybe you need to multiply two by eight, you perhaps get 16, then you want to add one, then you get 17. So this is the computation, that an expression as a programme leads to and in the end, you get a value. This is where you write down expression. So one of the games that we will play is given an expression, find its value. For these very simple arithmetic expressions that do not contain any variables or names, it looks straightforward, okay? In some sense, you have to process the string or abstract syntax tree, but it's pretty obvious what you need to do. When you add names, it gets a bit more complicated.
+
+8:18  
+It gets even more complicated when you have local names and scopes, which is what we will see very late today, but more likely on Thursday.
+
+8:28  
+Okay.
+
+8:31  
+So but let's first deal with a simpler situation where we have expressions like this, so no
+
+8:39  
+names, no scoping, just flat expressions, in the sense of scope.
+
+8:46  
+But of course, non flat in the sense that we can have multiple operations here and
+
+8:52  
+some operations need to be done before the others.
+
+8:58  
+What do we want to allow to be? To begin with, I'd like to allow these things. So let's agree that we can write down integers.
+
+9:07  
+So an expression can be an integer.
+
+9:10  
+And on this level, we don't really care how the integer was written. So 42, could be written as 42. It could also be written as Oh 42, it doesn't matter. Maybe for some really big numbers, you can use the exponent notation.
+
+9:25  
+So all we care about is that an expression can possibly a numeral which is always an integer, then on this level, and then there is only one other type of expressions for the time being operations that look like
+
+9:40  
+some operations symbol, combined with two expressions.
+
+9:45  
+And on this level, we pretend that we don't actually know ahead of time, which are all of the possible operation, symbols that that come into play. So we just represent operation symbols as strings. So plus,
+
+9:58  
+could be one of these as
+
+10:00  
+A string of times could be another, maybe we'll allow minus four for subtraction.
+
+10:07  
+Okay, let's play this game.
+
+10:24  
+This
+
+10:33  
+I can now write down simple expressions like 17 could be written down as an expression.
+
+10:42  
+And F sharp agrees, because this is how I define my data type, I can also write slightly more complicated things. So here's another one,
+
+10:50  
+three minus four. On this level,
+
+10:54  
+you have to represent it like this, right? It's, so what is this expression, it is an operator application expression, the operator itself is minus. And there are these two expressions as arguments, both of which are numerals one is three, the other one is four, I can make a more complicated expression. Now,
+
+11:13  
+I can make the multiply the whole thing with two, I can perhaps
+
+11:18  
+want to represent it like this then.
+
+11:26  
+And this is another legal another legal expression.
+
+11:33  
+Notice that, in these abstract syntax trees, I don't need to worry about precedents, because I, myself expressing the expression already on the level of a tree, not not as a flat string. So So here, for example, I indicated that this minus binds three and four tighter, so three minus four is this part, and only then two times is applied to it. So if you were to write this thing down in concrete syntax, you have to worry about parentheses, because justice is not okay.
+
+12:09  
+You need to write like this. But then this three notation, this is already present, right.
+
+12:16  
+So the way to think of it, let me stress once again, this is
+
+12:22  
+expressions here are a data type. But really, there is two forms to two form values here. One is kind of leaves numerals that are labelled with integers, or Num, num nodes labelled with an integer. And the other ones are internal nodes, which are always of the form some label which is a string.
+
+12:43  
+And then two sub trees, which are recursively expressions in their own tour.
+
+12:50  
+So far, so good, but I haven't done anything, I've just given some way to define a syntax, there is no way to compute here yet. There is no way to see these expressions in a nice form. This is a pretty unreadable format, although it's very nice to process for the language. Also, there is no way to write expressions in this customary syntax like this. And,
+
+13:13  
+and, and have the system understand them. So we'll have to get to all of these. For the moment, the only thing we have is expressions as a data type of abstract syntax.
+
+13:32  
+This makes sense. Shout if something is
+
+13:36  
+not good.
+
+13:44  
+Let me introduce some, some some important terminology before we go on and do something more interesting.
+
+13:54  
+pretty often in this kind of an exercise that we are engaging in, you're talking about an object language, and a meta language. So these are nice words to know.
+
+14:04  
+An object language is the word for the language that you're currently studying. So we're looking at the language of expressions.
+
+14:13  
+And you maybe conduct this study in some other language, that would then be called a meta language. So, here F sharp is a meta language in which I write I write expressions or I work with expressions as an object language. Meta is the kind of thing above you for which object is the is the thing under scrutiny.
+
+14:37  
+I already said this, but let me still repeat. So expressions as we today handle them are abstract syntax, also called Abstract Syntax trees are asds. A programme normally works with concrete syntax. You don't want to ever write anything like this. You want to write things like this, this or maybe this.
+
+14:59  
+So expressions
+
+15:00  
+in concrete syntax, they are strings. But of course, not every string is a valid expression. So expressions are some particular subclass of, of strings. That might make sense. Yeah. And then there are some processes associated
+
+15:17  
+with concrete and abstract syntax. So you write concrete syntax. The machine likes to work with abstract syntax. So going from concrete to abstract is called parsing.
+
+15:30  
+So you're given a string and you try to make sense out of it. As a programme, you hope the string is a valid programme, maybe in particular, and expression.
+
+15:40  
+parsing actually goes in several phases. But but but often you give the name parsing to the whole process. You could say parsing perhaps consists of lexing and parsing proper, we'll get there. But for today, this is just parsing.
+
+15:54  
+There, sometimes you need to go the other way, right? You're seeing these humongous things, they look big. And this is a little tree, and they've already looked B, you just want to see them in, in. In customary user friendly concrete syntax, if you want to go from this to this. This move is called predict predict.
+
+16:18  
+So that's going from abstract syntax to concrete.
+
+16:24  
+Yeah, this fine by
+
+16:27  
+for the time being. So forgot, we're looking at two things, we're looking at strings, which are concrete syntax trees, which are abstract syntax. And to
+
+16:37  
+work to directions of translation parsing goes from concrete to abstract pretty printing goes from abstract to concrete.
+
+16:46  
+So for these words, not to remain too abstract, let me do a first implementation of a simple thing. parsing is complicated. But pretty printing
+
+16:57  
+is pretty easy to do, at least on some level, maybe not super pretty, but at least somewhat pretty.
+
+17:05  
+So here is the not so pretty, pretty printer that we could consider for this tiny language of expressions. It doesn't do very much, but it is
+
+17:16  
+it is more than nothing.
+
+17:21  
+So what did we say pretty printing was supposed to be pretty printing has to go from abstract syntax to concrete.
+
+17:29  
+So here, I'm defining a function, or actually the author of the book, I've just copied it defined a function from Abstract Syntax trees, which are this expert data type here, things like this,
+
+17:43  
+too.
+
+17:45  
+Concrete syntax, which are just strings,
+
+17:51  
+expressions, the abstract syntax, our recursive data type expressions are defined in terms of small expressions.
+
+18:01  
+How you typically process
+
+18:04  
+values in a recursive data type is by recursion, you look at cases. And in the non base case, in step cases, you try to reduce your bigger problem to a smaller problem, which you then don't solve yourself, but you leave it to recursion, so to say to worry about. So let's see if we can conduct this exercise.
+
+18:26  
+So what could be the simplest way of turning numerals and operator expressions to
+
+18:36  
+strings in a meaningful way so that they are at least semi nice to me?
+
+18:43  
+Well, here's the first try.
+
+18:53  
+If you want to speak I can't see that. Yeah. I was wondering about the type expression critical, critical orthodox question above.
+
+19:03  
+Yeah, I wrote it, because I couldn't because I don't see any arrows.
+
+19:08  
+So I don't quite understand what's happening.
+
+19:11  
+So we're talking about this definition right. Yeah, exactly, there is nothing more okay. So, this is a this is what what an F sharp is called a data type or a discriminated union type.
+
+19:24  
+You define these types, by giving a number of data constructors are tagged as they are also called here that are just two of them. Known an op.
+
+19:39  
+And these will work as functions that kind of don't do anything in the sense that they are purely syntactic that take arguments of specified time here. Non takes an integer of takes three arguments as a tuple string, a string and expression and an expression and what both
+
+20:00  
+To return our expression. So when you've written such a tight definition, what happens under the hood is
+
+20:09  
+you will get these functions.
+
+20:18  
+No, which actually goes from incorrect squirt. So this is one way of making an expression out of an integer, integer. And you'll see an example case here. So num of 1717 is an integer, but no more 17 is an expression already. And the other one that you get is Oq, which has done this type
+
+20:39  
+all of those, so it takes a triple and gives an expression.
+
+20:45  
+Now, when you would ask what do these functions do, they don't really do anything in the sense of computation, they just syntactically so to say, for new values, when 17 is the value of type int, num 17 is a value like this, you can simplify it any further there is nothing you can compute here.
+
+21:06  
+But it is already an expression. So this thing is a value of type expert, similar here for up. So if we already convinced ourselves that no three and no four are valid expressions, then I can form this triple of a string and two expressions. So now I have a triple like this. And when I apply off to it, all of a sudden, I have an expression.
+
+21:31  
+And by iterating, this procedure, of course, I can create deeper and deeper expressions.
+
+21:36  
+deeper in the sense of like, deepest a tree or highest a tree, depending on which way your trees grow. Does it make sense? Yeah, makes sense. Thanks. This is also similar to how for example, lists, empty lists and cons work, they don't do anything, they are kind of value forming operations. or similar to how love and burn worked in my example of node labelled trees the other day.
+
+22:00  
+So we can do these things. And okay, one thing I didn't say, these these data constructors are tags, they are special functions in the sense that you can actually use them to form patterns. So when you're given an expression, you can say okay, please show me what kind of expression you are. Are you a gnome, or are you an expression?
+
+22:21  
+And that is useful then for case distinction when you define functions. And an example is already here, right? So given an expression E, we can ask are, you know, of some integer, or IOP of some string and two expressions.
+
+22:38  
+So, if I've got, if I mean the numeral case, and I'm given some integer,
+
+22:44  
+I can just use the built in function that converts an integer to a string. Actually, there is this function string that is pretty polymorphic. It, it converts values from any type, it can handle two strings, in particular integers. So we don't have to manually need to worry about how do we turn like 17 into a string 17?
+
+23:08  
+And what's the reasonable thing to do when you get an something like this opp s e one, e two? Well, here, we are the in this situation, when we
+
+23:20  
+say, Well, perhaps the good idea would be to reduce the big problem into smaller problems. And then hoping that recursion then reduces my smaller problems into even smaller, even smaller events, all the smaller until the problem goes away. So to say, we reached the base case, everything in the end, we'll have to reduce to numerals because we've got nothing else as basic building blocks in our expressions.
+
+23:46  
+So I better find out how to how do I pretty print my two sub expressions, e one, e two,
+
+23:54  
+E, B, I'll put it on the next line is easier for you to read.
+
+23:59  
+And then what should I do? Well, reasonably, I should perhaps put the operation symbol between the two strings that I get this way. So that's here.
+
+24:08  
+Maybe it's nicer to read the file to leave some whitespace.
+
+24:14  
+And maybe that could be it. But remember, the three structuring my expressions also fixes which you know which operations are applied. First, to which arguments. So perhaps, a good foolproof way to make sure that the strings I get are unambiguous would be to put parentheses around every sub expression. Does it make sense?
+
+24:39  
+When this is excessive care, I don't really need so many parentheses. But to figure out what is the minimum amount, I should somehow know something about the presidencies of the operators and their association, but I don't so so let me just let me just do the simplest possible thing here.
+
+24:58  
+Does it make sense?
+
+25:00  
+If it does, then you can, I don't know, we can share.
+
+25:05  
+But otherwise, we could just try to play if we cannot pretty print anything, maybe I'd like to print it open up here. Maybe I'd like to print the print
+
+25:15  
+the simplest possible expression, which is
+
+25:19  
+numerous numeral 17.
+
+25:23  
+What I get back is 70. Not much big surprise here. Let's take something more impressive. Although I suppose at this stage, I can't really impress you at all, but it will come later today.
+
+25:37  
+So if we take this one,
+
+25:40  
+which already looks pretty bad and difficult to read, if I pretty print that one, then I get three minus four. And since I was careful, I also see these parentheses. Yep.
+
+25:51  
+Let's do one last one here.
+
+25:55  
+actually like to take this complicated one from here.
+
+26:08  
+And I don't get what I promised, right. And here, it's really important that I put parentheses around three minus four, because if I don't put any parentheses, then it's not clear. Which one is meant to be the stronger one of the two operators here.
+
+26:29  
+Because we've not said anything about times or minus, they're purely formal here.
+
+26:38  
+Okay, so you've seen a bit of 3d printing, but of course, it's very primitive, in particular, we produce too many parentheses, one can fix this, this is this is one of the games with which we will play a bit
+
+26:51  
+in the exercises, the idea would somehow have to be as you traverse the abstract syntax tree, the expression,
+
+27:01  
+you have to look at the the the operators symbols that you see. And depending on how their presidencies and association are, you make decisions about
+
+27:15  
+whether to print any parentheses or not. And, you know, with with the appropriate strategy, this is not hard at all. But for the moment, I want to talk about completely different things.
+
+27:30  
+So, we've done one direction of this translation, in, in a not very pretty way going from abstract to concrete, concrete to abstract I leave for the next week altogether.
+
+27:42  
+But for the time being, I want to discuss something different expressions are programmes, programmes are meant to run, which means they're meant to compute something. In the case of expressions, of course, we're interested in what their value is. Yeah. First, as long as we don't have any names, this computation is pretty primitive is like of the sort that you do on a like a pocket calculator if you know what disease or mean there is a corresponding programme in your in your phone right. in old days, we have these calculators. So we should be able to to mimic
+
+28:19  
+the functionality of a pocket calculator at least.
+
+28:29  
+This will again take you through some terminology. So simplification of expressions is often called or, which is supposed to lead to value is often called evaluation.
+
+28:41  
+Yeah, find the value of an expression.
+
+28:45  
+And this can be done in different ways. One is that you don't combine the expression into any other sort of more primitive programming language, but you try to evaluate it directly. So direct computation of programmes is often called interpretation. Yeah, interpret that. Like here, I'm working with the F sharp interpreter. I don't produce bytecode of CLR or anything or dotnet.
+
+29:18  
+I directly give F sharp programmes and want an answer.
+
+29:25  
+Similar thing for these expressions. If I directly want to work with them and reach an answer, without going through any other sort of helper language, this is called interpreting
+
+30:11  
+Okay, so what would I need on earth for interpretation?
+
+30:16  
+So I've got expressions like all of those here. What should I do to find the value? Like what should I do to find the value two times three plus one?
+
+30:26  
+Well, this is such a simple language that the process is not so different from,
+
+30:35  
+from pretty printing by its nature.
+
+30:39  
+So pretty printing went by traversing over the tree.
+
+30:43  
+And doing little actions to produce a string here is the same, I should just analyse my abstract syntax tree. And as I look into it, so to say, I will be able to, to define values Why? Well, because for numerals, we know what their values are two is 2331 is 142, times three, I already know this is six, because two and three, I know values four. And for the whole thing, I know that this is seven provided this is that I already found out that this was six. And then all I need to know to do is to add together 16 one, right, so in some sense, I should walk down the tree, and then walk back back up again, and just accumulate or calculate the value based on the values for for sub expressions or sub trees. So let's see if we can do this.
+
+31:40  
+Well, this needs a bit more of pattern matching, but not so much more, right.
+
+31:47  
+So what do we need to do? I'm writing here an evaluator that is often called eval or something like this. That is supposed to be a function that takes an abstract syntax tree for an expression to a value from the data type expert.
+
+32:04  
+And what I want back is what the expression should simplify to, which in this case, are just sort of naked, sheer integers.
+
+32:14  
+This goes by inspection of the expression and also by reducing bigger problems to smaller ones. So recursion, and, and magic.
+
+32:26  
+If I'm in the numeral case, my exercise is very simple. So I already have an integer, it just comes with this tag, I throw away the tag, I just extract the integer.
+
+32:38  
+If I've got
+
+32:40  
+an operator,
+
+32:45  
+sure.
+
+32:47  
+Then I need to, sooner or later look deeper into the string here, because depending on what the first string argument is, I may need to do different things.
+
+32:59  
+Yeah, let's agree that plus is for addition times it's for multiplication minuses for subtraction, as is customary. There could be more operations, but let's not bother about more. So let's say in the other case, we just don't know.
+
+33:13  
+And then what's our exercise? How should the addition work? Well, I should use the addition of integers as provided to me by F sharp.
+
+33:22  
+And then I suggest use the fact that recursion can handle my smaller problems and smaller problems here are to know the value of the two simpler, direct sub expressions of the given one, isn't it?
+
+33:44  
+notice some things are happening here. So
+
+33:50  
+all these three cases here are very similar. And what happens is that I've got some operation from the object language.
+
+33:59  
+And actually, I use a trick that you often do, I just use the corresponding operation of the meta language.
+
+34:06  
+Yeah. So expressions know nothing about addition, they're just, well strings. So represented in a glorified way is Abstract Syntax trees, they are sort of dead, dumb things that know nothing about anything. But F sharp knows a lot about everything. So in particular, F sharp has an interpreter which already knows what plus is about plus is addition. And we just reduce plus from this language, which so far, didn't have any meaning to, to, to code in F sharp language for which we have meaning provided to us by the F sharp interpreter.
+
+34:47  
+So we reduce
+
+34:50  
+exercises about the object language to exercises
+
+34:54  
+about the meta language but we don't translate to the meta language we never produce code in the meta level.
+
+35:00  
+Which, rather, the interpreter itself is code in the meta language to see this, I mean, I've got some fixed F sharp code, I don't produce any new code.
+
+35:10  
+But this new code will work for me as a as an interpreter.
+
+35:15  
+Let's see if this works. So suppose if instead of pretty printing, I want to have the value of this expression, known 17,
+
+35:28  
+I can know what comes back is just an integer.
+
+35:31  
+If I take the other one
+
+35:34  
+that I had, and instead of 3d printing, I just want to evaluate it,
+
+35:39  
+then I get minus one. So what happened was
+
+35:45  
+num three has value three, no four has value four. And then we just use the capability of F sharp to do the subtraction for us.
+
+35:56  
+And that is it. So our
+
+36:00  
+F sharp code has become an interpreter for the expression language. And the F sharp itself is interpreted by the F sharp interpreter.
+
+36:09  
+And I can also take the get more complicated expression.
+
+36:15  
+And ask it also, to evaluate this one. Now I predict minus two, we'll come back because the smaller sub expression here should have value minus one. And then what remains is multiply two by minus one, which should be minus two. And that's what we get.
+
+36:36  
+This so far Make sense? Maybe it's even very primitive.
+
+36:42  
+But it's important to see the different levels here, right object level meta language.
+
+36:48  
+And the fact that we are doing meterpreter,
+
+36:52  
+which we just
+
+36:54  
+write down as a piece of meta language code that executes.
+
+37:02  
+Copy
+
+37:04  
+is at least someone happy. Yeah, extremely, very good. content, if there are questions to ask, because I can, I can rush quicker, or I can go slower. Let me raise another point.
+
+37:17  
+Which is, again, to sort of
+
+37:21  
+emphasise the fact that this expression language itself knows nothing about anything. So it's, it's just strings that we perhaps have already converted into these nice Abstract Syntax trees. But they don't have any innate meaning. I could very well, I mean, I wrote some evaluator, and this sort of fixes the meaning for them. But I might write a slightly different evaluator, that might give a slightly different meaning to my expressions.
+
+37:50  
+And that's sort of also okay.
+
+37:54  
+So, when I write minus here, there is nothing that forces that the implemented by the F sharp miners, so there is nothing that forces that I intend subtraction here, I could very well intend something else.
+
+38:08  
+Here's a little example. So we we assign minus a different meaning, simply because we can write so this is the
+
+38:18  
+so nice feeling of the power of freedom, no one can tell us what to do. So we do what we want. And
+
+38:27  
+I've chosen the following thing here.
+
+38:32  
+It's sometimes nice to actually restrict these integers to be naturals only. So we could we could strive for,
+
+38:42  
+for all our values that come back to be natural numbers. Plus, and times don't take us out of the realm of natural numbers if we start out with natural numbers, but mine is of course can because the second number can be bigger than the first.
+
+38:55  
+So let's play this game that we evaluate
+
+38:59  
+both of them.
+
+39:03  
+But if the if the difference
+
+39:07  
+is negative, then we just return zero. So we basically truncate subtraction is zero, we refuse to go below zero.
+
+39:19  
+This should be possible. Let's see if it is. So all I need to do is I do eval m,
+
+39:28  
+maybe first to this one.
+
+39:33  
+Now hear three minus four is minus one.
+
+39:37  
+So
+
+39:40  
+I might be like one of these flatters theorists that says, there are no negative numbers.
+
+39:48  
+So I just refuse to see them. And then the way to to go on with my life is to say this is zero and this is it. And this will of course, percolate through more complicated expression.
+
+40:00  
+So for example, I had this one.
+
+40:06  
+So now, when I multiply this by two, of course,
+
+40:10  
+this is zero, even if I multiplied by minus two, which should
+
+40:17  
+take minus one,
+
+40:20  
+two plus two, I will not get there because I've already replaced minus one by zero.
+
+40:25  
+So this is fine. But But of course, you can do crazy things, right? You can completely obfuscate
+
+40:32  
+your code or confuse everyone, for example, by just swapping the roles of these two things.
+
+40:38  
+And there is nothing prohibiting me from doing so. Right.
+
+40:44  
+So
+
+40:46  
+I may well do this, when this gives me some sort of a meaning some sort of semantics for my expression language. It disagrees with what you might perhaps expect.
+
+40:59  
+But then, so what so I'm free to do this.
+
+41:03  
+Just to just to keep in mind, syntax itself knows nothing. So semantics is a way to assign meanings to pieces of syntax. And in principle, you can do it in any way you please.
+
+41:32  
+One way to restrict your
+
+41:37  
+freedom, though, which is natural is, if you say, you want to remain compositional, so it's reasonable to want, that the meaning of bigger expressions is made out of meanings of its smallest sub expressions, this is called compositionality.
+
+42:14  
+But this should be
+
+42:16  
+okay, so how far have we got that we spent 40 minutes. And I've not done so much. But But this pattern will repeat. So therefore, it's very important to understand what I'm doing now. For the moment, I'm not doing very much. I've introduced you a little programming language on the level of abstract syntax trees. So I don't really very much care about the string representation of this programming language or what people call concrete syntax.
+
+42:43  
+Although I've shown you how to turn Abstract Syntax into concrete by giving you a very simple, naive, pretty printer, but more importantly, I've shown you that I can do evaluation,
+
+42:57  
+which is
+
+42:59  
+writing an interpreter by my own for my little programming language and this fixes what everything means.
+
+43:08  
+And the typical way is, since expressions are given recursively as a recursive data pipe as these are given recursively you define the corresponding functions also by by recursion.
+
+43:20  
+interpretation as I said, meant that you try to execute the programme directly. So, here, you go over the tree and you you just do some little computations and you get the result.
+
+43:36  
+a different approach that will often has torn programming languages, especially if you want to use one and the same programme many times and you're after efficiency is not to evaluate programmes directly on input, but to what is called compile them combination means you turn a programme into another programme in a different language, typically simpler or more low level or say more machine
+
+44:07  
+friendly, closer to the machine more assembly like or fully assembly
+
+44:15  
+just machine code. And the idea is then that this should run more efficiently because the interpreter each time it runs has to essentially also understand the code or say
+
+44:30  
+in some sense, the interpretation may need to do more complicated computations than when compiled code may need to do
+
+44:40  
+and also often optimise, sorry, compilation involves an optimization step where you try to discover something in the programme that can be done simpler. So you've put some sort of intelligence you might call it artificial intelligence if you want into your compiler. So it does a little more than just translation is like translation.
+
+45:00  
+But modification is one of those.
+
+45:02  
+So let me give you an example of this here as well.
+
+45:06  
+So even for this very simple language of expressions, you might want
+
+45:13  
+to
+
+45:15  
+not interpret expressions directly. But to compile expressions
+
+45:23  
+into the code, have a little machine, a little snack machine,
+
+45:28  
+and then interpret the stack machine code. So then execution goes in two phases, first compile from expressions to stack machine code, that then interprets that machine code. So rather than using a more complex interpreter, we should be using another one for a lower level language, which then hopefully, is
+
+45:50  
+sort of more primitive and hopefully more efficient, in some way. Let's not go into the details of this right now. But I'll give an example.
+
+45:59  
+Um,
+
+46:02  
+so this is actually how a pocket calculator works more or less.
+
+46:11  
+If you've heard about the reverse Polish notation, this is actually what we will compile things to. So maybe I should first actually
+
+46:20  
+exemplified on our own a little example. So we have this example piece of code here, two times three minus four.
+
+46:40  
+I'm, so that's an expression.
+
+46:44  
+I'd like perhaps to translate it into machine code,
+
+46:49  
+machine code to be more precise,
+
+46:52  
+which will work roughly like this.
+
+46:57  
+I would say push to, I'll explain what this means.
+
+47:02  
+Then perhaps, push three,
+
+47:07  
+push four,
+
+47:10  
+then apply minus,
+
+47:13  
+then apply times.
+
+47:18  
+What's this?
+
+47:26  
+Has anybody seen this?
+
+47:32  
+Nope. So this is often called reverse Polish notation. To be honest, I don't know. I mean, what was I supposed to do with it.
+
+47:41  
+But the idea is pretty similar. So this is what is happening more or less.
+
+47:47  
+In every
+
+47:50  
+implementation of a programming language, you work with a little operand stack.
+
+47:56  
+And the idea is,
+
+47:59  
+you work with a stack, Does everybody know what the stack is? stack is, it's a kind of memory structure into which you can throw elements,
+
+48:10  
+you can store elements there. And then the only way to do this is to put them at the top of the stack. So you think of it as a stack is kind of a pile,
+
+48:21  
+like a pile of paper on your table. And you're only allowed to, to, to add more sheets of paper on the top of the pile. And also, what you're allowed to do is to take sheets of paper from the top of the pile and maybe apply some operations to them. You're not ever allowed to go deep inside the pile, and, you know, take a sheet of paper from in between some other sheets of paper. Yeah, does it make sense, then you could play this game. So this is almost like lists. And of course, you implement the stack via list, because list has this list have this property that the only direct direct access is from the head, you can, you know, you can compete off header elements from a list and you can cause new elements to the front of the list.
+
+49:06  
+And of course, you can also go deeper to the list. But this basically means that you peel off many elements, then you take out something and then you You, you, you connect these elements back onto the onto the list. So this really corresponds to pushing elements into a stack and popping elements from a stack.
+
+49:23  
+So one way to do this little calculation is to say
+
+49:27  
+I work with a stack.
+
+49:29  
+normally write the stacks vertically, but this is very difficult for me to do on the screen. So I'll write them horizontally. So first, my stack is empty.
+
+49:39  
+Then when I execute this to my stack will be two. So there is exactly one element there. Then I'll push three. So then the stack will be something like this. Then I'll push four, then the stack will be something like this.
+
+49:57  
+Then I do minus, minus is very simple.
+
+50:00  
+And distraction, it basically says, take the two top elements of the stack and subtract the first from the second in this order, because that's the order in which they went there, then the result and push the result back onto the stack, I'll do this, then the result is this.
+
+50:18  
+And then I should do times.
+
+50:22  
+And the idea then is, again, I take two of the top elements of the stack,
+
+50:27  
+multiply them together, push the result back on the stack. And then the result is this. You see, the stack went different states.
+
+50:36  
+Throughout this computation, I started with the empty stack and raw. At the end, the result mysteriously is this thing that I wanted. So this was sort of correct machine code for doing exactly this evaluation thing. So the idea is, these elements that are deep in the stack, they correspond to some values that you still need to apply some operations to, but for the time being, they are pushed, while relatively further down in the stack, they are waiting their turn. But
+
+51:12  
+at someone they at some point, they will bubble up and then bubble up. And then I use them like here, these two goes to the bottom of the stack. Then other things go on the top, do some work with them. So here I do subtraction for for example. But then the time comes when I actually need this value to
+
+51:30  
+I use it in multiplication, I get this result, does it make sense?
+
+51:34  
+know how I got from here to here. So that I get the correct result. Of course, I didn't tell you. So for the time being it's kind of like a rabbit from a hat.
+
+51:47  
+But But there should be some procedure.
+
+51:50  
+And this, in some sense is very simple code in the sense that this is just a sequence of instructions, like push two on the stack, push three on the stack, push four on the stack to minus which means pop two elements to the operation push the result back. And this is similar.
+
+52:09  
+There is just a straight line sequence of instructions, no jumping, no, no, no conditionals, no nothing. It's a simple straight line code consisting of simple machine instructions.
+
+52:22  
+Let me now describe my machine knows what the instructions are.
+
+52:29  
+And then we can play with this. So my goal for the next 20 minutes perhaps is
+
+52:40  
+give you the language of the machine code,
+
+52:44  
+which is basically so machine code code looks like this. But again, we write it in some abstract syntax,
+
+52:52  
+which is given by these two types.
+
+52:56  
+instrument code are actually stands, I think, for register.
+
+53:02  
+Later, there will be registers as well, for the moment you don't see them.
+
+53:07  
+But they will come one way or two introduce names.
+
+53:12  
+So I'll give you the machine instructions, I'll give you the little evaluator or the interpreter for the machine. And then I'll give you a translation, a combiner from expressions to stack machine code,
+
+53:25  
+and wine here. So far, we
+
+53:29  
+executed the expressions directly. This then will be the first sort of example of this workflow, when you don't execute programmes in a language directly, but you compile to a different to simpler code language, and then interpret that language with its own simpler interpreter citizen. Does this make sense? So there's two workflows, we will have for expressions, one is direct interpretation, the other one is compiled down to machine code
+
+54:04  
+and then interpret that.
+
+54:07  
+And if everything is saying, Well, nothing is saying in this COVID world, but if everything is is saying within this lecture,
+
+54:16  
+then the two workflows should lead you to the same results, right?
+
+54:21  
+So we just illustrated that the same language of expressions can be worked with in two different ways.
+
+54:28  
+I could perhaps say the interpreter is my language specification expressions mean whatever the interpreter
+
+54:36  
+does with them. And then we could have it as our task to write the compiler that is faithful to the interpreter in the sense that it agrees with the interpreter. Of course, one could also play the game the other way around, we could say no, no no.
+
+54:52  
+Stack machines we already know we know how stack machine is interpreted. And now the semantics of the expression language is fixed.
+
+55:01  
+By the compiler, so the compiler determines the compiler is the language standard, the compiler says, What expressions mean? And both? Both ways of going about the language are also feasible. And people people do both in real life to real languages. Yep.
+
+55:20  
+Okay, so let's look at my, my simple machine code language. Now it's, it's this part is given by two types.
+
+55:31  
+Sorry, not given this much.
+
+55:36  
+It's given by these two types.
+
+55:40  
+So on the top level, I work with tech machine code. But the code is just a sequence of instructions. So it's a list of instructions.
+
+55:51  
+So top mostly a piece of code is a list of instructions, what is what is a single instruction, a single instruction,
+
+55:59  
+you know, their language is fixed by a data type. So there is a number of options with different tags given that form instructions for you.
+
+56:08  
+So most of these tags don't even take any arguments. So there is a primitive instruction, addition, subtraction,
+
+56:20  
+multiplication, and their meaning is kind of that that you already saw, isn't it.
+
+56:26  
+So basically,
+
+56:30  
+we are not yet giving the SEC machine interpreter. But the idea is, should be the D stand for
+
+56:36  
+operations that take two topmost stack elements, combine them together with addition, subtraction, and multiplication, and push the result back.
+
+56:44  
+Our num
+
+56:46  
+corresponds to these little things here. So this is an instruction whose idea is to just push a given integer on top of this deck.
+
+56:57  
+And then for the fun of it, I also include, we won't need them to interpret expressions yet. As long as we don't have any names, but soon, we will. So I will also include two more instructions.
+
+57:13  
+Three more instructions, one is called pop. This is an instruction that just throws away the top element of the stack, like calculates the head of a list, if you wish.
+
+57:24  
+It's already calculates the tail of the list. So the stack
+
+57:27  
+is will be as before, but the head is done, the top element is gone.
+
+57:32  
+doop takes the topmost element and duplicate it. So if, if so number seven is on top of the stack, this is kept but another seven is added to the top of the stack. The swap just interchanges the two top those elements of the stack, but leaves the rest of the stack alone. And that's also sometimes useful. It's a it's a pretty typical machine instruction for for stack machines.
+
+58:00  
+Does this make sense?
+
+58:07  
+Hello, are you there?
+
+58:09  
+Yeah, sure. Let's see one more. Let's see some more. Okay, then you can imagine what what a piece of stack code could look like. So let me give you some examples. So a piece of stack code.
+
+58:21  
+So for example, this one, if I wrote it up,
+
+58:27  
+would actually look like this. It would be a list when I first do our num. Are num, sorry, our num to
+
+58:36  
+look like this like this. Then our num
+
+58:40  
+three, then our num
+
+58:44  
+four. Then what do I need to do? Our sub is my thingy for subtraction isn't it
+
+58:52  
+and then are
+
+58:55  
+called Armand model
+
+58:57  
+is my instruction
+
+59:00  
+in this data pipe for multiplication, the whole thing. Now each each each of the individual gadgets here is just an our Easter value for the whole thing is a list of our installers. So the whole thing is also cold.
+
+59:17  
+I think when I just give it to F sharp it will not tell me code. It will tell me our installer list. But code is defined as a synonym for it.
+
+59:29  
+Yes, it said are interlaced. But let me just convince you that I can also say code.
+
+59:37  
+stupidly for some reason, the interpreter wants parentheses here. And then it says this code so these two are really the same type. And the interpreter doesn't know which which one of the two types in earnings I want to see. I like cold water but
+
+59:53  
+for for the interpreter this one somehow is more primitive. Or is this a cash that you did with a semicolon
+
+1:00:00  
+Pardon
+
+1:00:02  
+was that the typecast you did there to assign it to coat or? No, it is just that
+
+1:00:09  
+there is no casting happening, these are exactly equal times
+
+1:00:14  
+what I do with semi colon, sorry, with a colon here, I can put always, you know, F sharp has type inference. So it tries to figure out that everything I write is well piped and basically assign a pipe to every sub expression or whatever I write. Also the to the top level thing that I write,
+
+1:00:34  
+but I may put in my own claims, or what I think the type is.
+
+1:00:40  
+So, I want to say, I mean, this is code.
+
+1:00:46  
+And no cost happens here. So, the reason why F sharp agrees with me is that I've defined these two to read to be the same type, and therefore, it's happy.
+
+1:00:59  
+registers, okay, yeah, you can also see this code, but I can't put say in here or string and just pretend that actually I can, and you'll see that the thing will wind loudly.
+
+1:01:14  
+So
+
+1:01:16  
+it works sort of outside in. So it doesn't even say that it has figured out that this is a list of instructions, just looking at the parentheses, sorry, at the square brackets. It figures that, that by whatever I've written here, I have something that is a list of whatever.
+
+1:01:36  
+Whereas I'm insisting it's a string, and then it says it's a conflict, right? If it had looked deeper, it would have found that this is not even just a list of something. It's a list of instructions. But nonetheless, there is this fundamental conflict between like, you know, strings aren't lists.
+
+1:01:53  
+Is this fine? Yep.
+
+1:02:00  
+Okay, so now what do I have, I have two languages, I have expressions, and I have machine code.
+
+1:02:09  
+For expressions, I have an interpreter for machine code for the time being, I have nothing, right, just the just the syntax I've defined with the Abstract Syntax trees are here. So to get going a bit further, I better define, now also an interpreter.
+
+1:02:29  
+For
+
+1:02:32  
+for these machines,
+
+1:02:34  
+yes. And then to sort of complete my cycle, I better also define a translator or compiler from expressions to stack machine code, then then I've got two ways to evaluate expressions, either directly, or first translating compiling to machine code and then
+
+1:02:51  
+evaluating that.
+
+1:02:54  
+Okay, so let's first do an interpreter for machine code.
+
+1:03:00  
+It's a bit different than the interpreter for expressions in that expressions, I could evaluate just so given an expression, I could find out its value.
+
+1:03:12  
+And the evaluator for
+
+1:03:18  
+code
+
+1:03:20  
+for a sequence of instructions,
+
+1:03:22  
+needs a bit of state needs the current machine state. Yeah, because, see, here, I did my little stack machine computation. The way it worked was that I,
+
+1:03:34  
+I was in some state and I
+
+1:03:38  
+evaluated the single instruction, I produced the new state, then I took the next instruction from from the code, I got to a new state, etc. until I reached the end of my instruction sequence, at which point, there was some final stack state, which kind of is the interesting thing to see this. So I have to work with a bit of state
+
+1:03:56  
+stacks, say, a walk here, we see, they are just going to be lists of integers. We're really stacks of integers, but we represent stacks. As lists. They're not much else, right? So stack for me, will be a list of integers. So that again, is a type synonym. The moment I've introduced this definition, to have a list of integers or to have a stack is exactly the same thing. I don't need any costs between them.
+
+1:04:25  
+But the F sharp type inference may show me either this, or this is the a fourth type, depending on the mood in addition,
+
+1:04:35  
+there but the really cool types.
+
+1:04:38  
+And then we need to write the interpreter that works with this sort of stack states.
+
+1:04:46  
+So what does the interpreter do?
+
+1:04:52  
+It takes
+
+1:04:54  
+a bit of code which is just a sequence of instructions, therefore I call it Nzs.
+
+1:05:00  
+And it takes
+
+1:05:02  
+the stack state, which is just a list of integers.
+
+1:05:08  
+And it gives me back an integer, which is the value
+
+1:05:14  
+I'm interested in doing me.
+
+1:05:23  
+And then let's just try to write an interpreter directly.
+
+1:05:29  
+And okay, and I didn't get say one thing. So then the idea is that sort of on the top level, of course, we want to start with the empty stack. So the stack works is kind of a, and accumulating parameter for the interpreter.
+
+1:05:45  
+for the,
+
+1:05:47  
+for the, for the top level code of interest, we just start with the empty stack. And then we see how far we get
+
+1:05:57  
+that, that shouldn't be complicated at all should it.
+
+1:06:03  
+So how on earth, given a sequence of instructions, and given the stack, you need to go?
+
+1:06:17  
+Well,
+
+1:06:19  
+if the piece of code that is given to you is correct, in the sense that it actually results from compilation,
+
+1:06:26  
+then the idea should be that when you've reached the end of the code, so when you've processed everything, there is nothing left no instructions left to do, then the stack height should be exactly one, and you should have exactly one element on top of the stack. But of course, we may write unbalanced code, and then this is not the case. So let's write it like this. So if there is no code to execute, we take the value from the top of the stack
+
+1:06:57  
+if the stack is not empty, so this is pattern matching on the stack, remember, the stack is a list which can be either a cons list or an empty list.
+
+1:07:06  
+So if it has at least one element, we take the first element, the top element, if the list is empty, then let's just complain.
+
+1:07:13  
+That's basically kind of a stack on their flow situation, we want an element but that is not provided.
+
+1:07:22  
+So this is how you finish. If you were in the middle of your evaluation, you're typically in this situation, you've got a sequence of instructions, there is the first one of them. And then there is more instructions.
+
+1:07:36  
+Yeah, some first instruction and the rest of the instructions. And here, the pattern match goes on what the first instruction is, it can be all of these different things that we have in the data thing.
+
+1:07:47  
+Yeah, that's the first argument. The second is the stack state, which may will also be interesting to pattern match,
+
+1:07:55  
+depending on what the instruction is. So for example, if I want to just push an integer on the top of the stack, I don't care how empty or full the stack is, if I want to do addition, I better have at least two elements on top of the stack, and then maybe some more. So I it's good to do a pattern match like this to read.
+
+1:08:14  
+If I just want to do pop, I only need one element on top of the stack if I want to do that's also the case swap still wants to.
+
+1:08:21  
+And then again, when we say when we see that none of these is the case, then we say evaluation doesn't work because the for the particular instruction, there are too few options on the stack.
+
+1:08:35  
+Okay, then what needs to be done is actually very simple. So when you've got your first instruction, and the rest of the instructions to execute,
+
+1:08:46  
+this just reduces to executing the rest of the instructions. But with some updated stack with some new stack will imperatively it would be an outdated stack. But here we don't do any destructive updates, we just pass around the stack arguments. So we will form a new stack. In the case of pushing an integer, we just formed the stack, which look like this. The the integer we wanted to push plus all of the stack we had.
+
+1:09:16  
+If we wanted to add together two numbers, the first one
+
+1:09:22  
+was pushed earlier. So it's a bit deeper in the stack. The second one is the one that was pushed last, then we just add them together and push the result on the stack. So it makes sense. So this is the new stack with which with which we make a recursive call to the evaluator.
+
+1:09:36  
+Similar for subtraction and multiplication. Now add amaal are commutative. Anyway, here it really doesn't matter which order have I won and I do but for subtraction of course it's it's important to know from which number I'm subtracting which So here, I see eye to eye one. I'm one minus item in this order. And finally
+
+1:10:00  
+Pop and swap
+
+1:10:02  
+for pop, you just get rid of the head element in the list or the top element of the stack. For dupe, you duplicate it. So push, in some sense, you take it, then you push two copies back. And for swap,
+
+1:10:19  
+use useful.
+
+1:10:24  
+Okay, so now we can play maybe with this piece of code, for example.
+
+1:10:31  
+Let me first take a brave step. Now I just want to evaluate only all of it at once. But then we can also step through it if we want.
+
+1:10:40  
+If I just evaluate the whole thing.
+
+1:10:46  
+So that's my piece of code. And if I start from the empty stack, what do I get back?
+
+1:10:52  
+Now I should cross my fingers, and I should hope. Where was it,
+
+1:10:57  
+that minus two comes back, right? Something like this should happen. consecutive recursive calls are made. This is the first
+
+1:11:05  
+stack that is provided.
+
+1:11:07  
+The recursive call is made with this and the new recursive call is made with this blah, blah, blah, these all tail recursive calls to at the end, we come back to this.
+
+1:11:18  
+It comes back with minus two, now we didn't see anything.
+
+1:11:22  
+How do we do something? Well, one way to do this is to
+
+1:11:27  
+is just to give less code for the machine to execute, because then I can see intermediate results. So if I just two
+
+1:11:38  
+or number two, then two is on the top of the stack, at this stage, isn't it?
+
+1:11:47  
+If I do the two first things.
+
+1:11:53  
+And then I basically reached here with my stack, so three should now be on the top of the stack.
+
+1:12:01  
+And if I also do
+
+1:12:04  
+our number four, then 40 is on top of the stack. That's all not so interesting. Let's do this one.
+
+1:12:12  
+So when I've done subtraction
+
+1:12:15  
+here,
+
+1:12:17  
+but not yet the multiplication, I should finish in this state. So
+
+1:12:23  
+the evaluator should return the top element of the stack, which at that stage is minus two,
+
+1:12:29  
+which is the case.
+
+1:12:32  
+Yeah, so this was some form of stepping, of course, you might want to see
+
+1:12:38  
+all of the intermediate stack states. And that's also possible. So we could write kind of
+
+1:12:46  
+watch as they call it, like an interpreter in a debug mode. So to say, where, for every instruction that we evaluate, you can see the intermediate stack state,
+
+1:12:57  
+that would be possible and would perhaps be a good exercise.
+
+1:13:01  
+What would we need for this?
+
+1:13:07  
+Well, I won't implement this now. But the idea should be clear, right? So what was the problem currently was that I only saw ever
+
+1:13:17  
+the topmost element of the final stack, of course, I could put that the return type is stack and modify the code here a bit, then I could extract the final stack. But I could also put the list of stacks here. And then the idea could be that I could see all of the intermediate
+
+1:13:37  
+stack states as well.
+
+1:13:40  
+And then interpretation would be going would be would go basically by by growing
+
+1:13:48  
+this list, adding new or new stack states as we as we go, but never throwing away any of the already constructed intermediate ones.
+
+1:14:00  
+So this is just an example that we can have a different language and we can have an interpreter. Now let's tie the knot.
+
+1:14:08  
+I'd like to have a compiler.
+
+1:14:12  
+I'd like to compile and an expression into stack machine code.
+
+1:14:18  
+This is easy to say
+
+1:14:22  
+on the type level, right? Why?
+
+1:14:27  
+All I need to say is From where do I need to get to where well I need a function that I will call our computer compilation to register machine.
+
+1:14:39  
+The input should be an expression and the output should be code.
+
+1:14:44  
+Ah, maybe maybe, to to comment, right? I mean, previously, I wrote what did I write in here I wrote colon code. So this was to give a hint to F sharp that I want the type of this thing to be called.
+
+1:14:59  
+I may
+
+1:15:00  
+I may not write these kind of hints. So here often I didn't, most of the time, I didn't. Also here, there is not nothing that forces me to write any of this, I could really write something like this.
+
+1:15:12  
+And then hope that F sharp derives some type for me, namely, that it figures out that he has to be of type expert. And then what comes back in all of these different cases of the match is always code because in that case, I really have a function from expert to code. But I don't manually have to say this, there are all sorts of intermediate options, I could say that my input is an expression.
+
+1:15:41  
+But
+
+1:15:42  
+choose not to say what I want the output type to be that's possible, then I just write like this, that's fine.
+
+1:15:50  
+Now I'm just saying the parameters type expert, I don't say what the return is. Or I could play the exact opposite game, I say, I don't care about the parameter. But the result should surely be of type code.
+
+1:16:04  
+And that's likewise possible. Remember that and notice now the parentheses here play the role. Since I didn't put parentheses around these two guys, what really means is that our companies have type code itself is of some other type.
+
+1:16:22  
+Doesn't make sense. And then if I want to give both types,
+
+1:16:28  
+I write something like this. And this is exactly the same as to sort of just make a little note for myself,
+
+1:16:35  
+which the compiler is which the F sharp interpreter wouldn't read, that our comp is a function from expert to code.
+
+1:16:46  
+All these things are possible.
+
+1:16:50  
+It's just different, different ways. Now, what is a good discipline? It really depends on
+
+1:17:00  
+it depends on many things, it depends on your proficiency. But it also depends on the kind of style you want to follow. It's actually good to give intended types.
+
+1:17:12  
+For two reasons. First is kind of documentation. I mean, if someone else looks at your code, this is kind of the first indication of what is going on, if you put these things in.
+
+1:17:24  
+But it's also a way of detecting your own errors early, even if you don't want to show your code to anyone else. Because if you write down some indented type, just type annotation.
+
+1:17:38  
+And if F sharp figures out that these types are possibly not achievable, then you know that you've done something wrong. And you're told is very early on.
+
+1:17:50  
+Who is this part of the development process then and early? Early detection of issues?
+
+1:17:59  
+Okay, so to finish this thing off,
+
+1:18:03  
+I now have to explain how to compile this may be a bit mysterious, but when you when you already got a bit of the feel how it works, then maybe you guess
+
+1:18:22  
+what it should be like?
+
+1:18:27  
+And because here I sort of manually compiled,
+
+1:18:30  
+I gave this example of an expression
+
+1:18:33  
+in concrete syntax for readability. And I showed you this compile for more sort of in concrete syntax, not not written, as verbose as time as down here. So how did I get from here to here? So this was my procedure morally,
+
+1:18:49  
+it should be the following. So when I see that the expression on the top level is times applied to two arguments, then what do I need to do is I need to produce code for the two arguments for to which justice for three minus four is just this.
+
+1:19:04  
+And I just concatenate these two pieces of code. And then finally, the code for the operation itself, which is a single instruction i need to put at the very end. And this is the principle that you need to follow. And there is nothing else a miraculous it works. And all of the operations are applied in the right order, believe it for you to think why this would be the case.
+
+1:19:27  
+So our time is almost up, but I'm also almost done, which is very, very good.
+
+1:19:32  
+So
+
+1:19:34  
+I have these cases here.
+
+1:19:38  
+So
+
+1:19:42  
+an expression can be either a numeral or an operator or an operator followed by some or an operator with some argument expressions. And we've only implemented plus times and minus.
+
+1:19:55  
+In each case, I need to separately combine the two parts
+
+1:20:03  
+And I don't really need to interchange any information between these two compilation processes, which is nice. So there is kind of modularity here for compositionality.
+
+1:20:13  
+And then at the end, I need to put the our add command.
+
+1:20:18  
+And similarly for time similarly for miners. So if I took my nice piece of code, where was it?
+
+1:20:26  
+This one the most complicated one. And if I just asked F sharp to compile it following this function here, what do I get back? I get back exactly the one that I manually did for you.
+
+1:20:42  
+Above here, isn't it? This one?
+
+1:20:46  
+Literally just this.
+
+1:20:53  
+And I might do something else. So I might, for example,
+
+1:20:58  
+do one of the simpler ones that they had, what were they?
+
+1:21:04  
+Like, if I just only do three minus four?
+
+1:21:14  
+I don't get this right.
+
+1:21:17  
+Then if I mean, maybe only do four,
+
+1:21:22  
+I get very little code, which is a sequence of instructions consisting of exactly one instruction, which is just push forward into the stack, which normally at the beginning should be empty.
+
+1:21:35  
+Yeah.
+
+1:21:38  
+And now then, how could I? How could I interpret my piece of code
+
+1:21:45  
+in the other workflow,
+
+1:21:48  
+it just goes by composition of the compiler, and the interpreter of the lower level language. So given a piece of code, all I need to do is to compile
+
+1:22:02  
+and then interpret. So take this guy, and apply our evil to it.
+
+1:22:13  
+If I just do this, there is a problem why? Well, it doesn't quite run, because our evil wants two arguments, a piece of code and an initial stack. So if I just partially applied it only to the first argument, what I get back is not an integer, but it's a function that still awaits
+
+1:22:33  
+a stack, and then is happy to give me an integer. So I need to provide to bar going the wrong direction. And
+
+1:22:40  
+I just need to provide also the stack argument. And I can always start with the empty stack. If I do it, I get minus two.
+
+1:22:50  
+So you see there is now two ways of evaluating an expression, any expression he either evaluated directly. So this is interpretation.
+
+1:23:01  
+And the other one is the compilation workflow that goes in two stages, compile it, and then use the interpreter of the other language here, the stack machine language.
+
+1:23:13  
+And then work like this.
+
+1:23:15  
+correctness of compilation, if you take the you know, the high level interpreter, as your as your standard, as your definition, is to make sure that for any expression, these two things always come out
+
+1:23:29  
+as the same integer value. If not, I've done something wrong, then my compiler
+
+1:23:35  
+is a bit buggy.
+
+1:23:39  
+And that actually completes what I wanted to say.
+
+1:23:45  
+Next time, we will go on to names. So this will be far more interesting. And then to local scope, which is where the real complications are. So today, I only sort of set up the stage and try to explain some important differences abstract versus concrete syntax. In this course, we mostly work with abstract syntax, and then the difference between interpretation, which is direct evaluation, and compilation, which is translation to another language, which you then may want three basic
+
+1:24:16  
+questions.
+
+1:24:24  
+There's already exercise
+
+1:24:28  
+out there, but we will also get a larger exci assignment this week. That's correct. Yes, you will get a larger assignment. Latest on Thursday that then you will have I think, two and a half or three weeks to solve.
+
+1:24:44  
+So this is the first assignment set which is about F sharp programming so it doesn't get touched this expressions part.
+
+1:24:50  
+And this Wednesday's exercises are still to prepare for this first assignment. But then from next Wednesday on week
+
+1:25:00  
+get to this expression,
+
+1:25:03  
+parsing topic also with the exercises, and then the second assignment, which will follow shortly, will be on exactly this topic of like simple expression languages
+
+1:25:13  
+and concepts around this little extensions that you have to do by hand to what I'm showing to you, etc.
+
+1:25:21  
+But yes, that's indeed what it is. So once this exercise is already there, you can start to have a look if you have time. But they are not yet about this part. So they're basically about the first part of the course.
+
+1:25:35  
+But they are of the type that will go into the first assignment. Actually, a large part of the first assignment is a variation of something that is in, in this Wednesday's exercise.
+
+1:25:53  
+Okay.
+
+1:25:56  
+Anything else anything about this thing today?
+
+1:26:00  
+I hope it was simple, it has to be simple, because it does get complicated. So
+
+1:26:05  
+this is to set up a framework. And what will happen in the next lectures is all these data types will grow with various things, right, the expressions we get added, like, you know, variables, then let construct, etc. And the stack machine will get more complicated. And we'll look at possible language features that you may have in different languages, sort of one by one, and we'll start piling up things. But the idea is always like, we're basically doing a programming language on our own. We're just exploring with
+
+1:26:34  
+exploring features.
+
+1:26:41  
+Okay, if there is nothing else, I'll stop the recording. Here. The thing will be natco, maybe two hours or so. And I might also update the code that I showed today with a little thing modifications.
+
+1:26:57  
+Okay, all the best for
+
+1:27:00  
+now then.
+
+1:27:03  
+Thanks. Bye.
+
+1:27:07  
+Thank you.
+
+Transcribed by https://otter.ai

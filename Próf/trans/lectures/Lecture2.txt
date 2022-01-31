@@ -1,0 +1,1597 @@
+0:18  
+Right, so I'll tell you
+
+0:22  
+something about lists, which is the first data type we consider.
+
+0:31  
+Also known, or you speak about these things in F sharp as discriminated unions. So lists are a data type or a recursive discriminated union type. And then in that connection, I'll also tell you a bit more about higher order ness and polymorphic functions. Because both phenomena are very common when you're when you programme with lists, let me share my screen.
+
+1:06  
+Yes.
+
+1:09  
+I'll also show you another thing related to the F sharp interpreter. So last time,
+
+1:15  
+we typed the things into the interpreter directory still.
+
+1:22  
+Which were things of two kinds, either expressions to evaluate for then definitions of new names with the previous lab definitions without an import.
+
+1:34  
+Now, let me show you something different. So of course, when we've got more code, you want to pre prepare it you want to load files is the way you work, maybe a
+
+1:45  
+whole host of files that you want to work with.
+
+1:50  
+So here is my module, F sharp Part Two and a file, that's also called F sharp Part Two Fs, I can load the file with a directive called load.
+
+2:03  
+So this one will produce some output on the screen. The first part here is some warnings. These are warnings about very weak things. So some of my pattern matches are incomplete, that is completely normal. And then we'll see all these names that were defined in the in the file.
+
+2:22  
+But they're in the modules. So to bring the module to the top level, I need to open the module for that I can use the command open, F sharp, part two, we already saw open system.
+
+2:33  
+So I do that as well.
+
+2:37  
+Right. So what are lists, lists are a data type.
+
+2:44  
+That's the word that you would use in so many languages, F sharp people like to talk about discriminated union types. So it's types that mix together values of a priori different types, discriminated by tags, and this one in particular is recursive.
+
+3:01  
+So, there is also polymorphism. In here in that you can define lists over various types of values. So what is a list a list is a sequence of elements
+
+3:12  
+of the same type of any finite length.
+
+3:18  
+list in some sense, are pretty similar to tuples. But there are two very important differences. Namely, in a list, you can only put elements of the same type,
+
+3:31  
+that length can be arbitrary, the length is not constrained by the type.
+
+3:37  
+In a tuple, things are exactly the other way around. You can combine together values of different types. In general, of course, they can happen to be the same, but in principle, at every tuple position, you can have a value of a different type, which is then also registered in the type of tuple as such,
+
+3:58  
+and the length is fixed. So lists the same type, any length tuple.
+
+4:05  
+In general, different types, fixed length.
+
+4:10  
+How's the type of lists over a given type Digi note, it's written as t list.
+
+4:18  
+So let's do a few lists. So such a thing, for example, is a list.
+
+4:40  
+Oh, sorry, single column, of course, single semicolon. So that's the thing, of course, is a list.
+
+4:47  
+So it's a list of three elements 123. They are all of the same type their values of the same type. So therefore it's a list of integers.
+
+4:56  
+I can also make a list maybe true false.
+
+5:03  
+So that is a list of two elements, of course, elements can be repeated, there is no problem, I can make a list of three tools, for what but it's possible, I can also do things like, Hello,
+
+5:16  
+world, here
+
+5:20  
+I
+
+5:22  
+come.
+
+5:26  
+And you can already see I'm making mistakes.
+
+5:29  
+So in so many languages, you do list with a comma, but in F sharp is semicolon. So that is a list of strings. And you might you can make lists of anything, you can also make lists of
+
+5:44  
+functions, if you wish functions of a specific type, you can also make lists of tuples, there's various things that you can make.
+
+5:52  
+What you're not allowed to do is to meet together at present origin. So I can't say for example, and one and two
+
+6:00  
+would be a list.
+
+6:02  
+So, so here look at the narrow right. Why is this list problematic? Because
+
+6:15  
+the first element is an integer. So therefore, the system already has the expectation that the whole list would be a list of integers. But then the second element is both now this one is complained about the both the second element.
+
+6:29  
+This is how this looked like they are finite sequences. But actually, this is, in some ways.
+
+6:40  
+Just the appearance, the surface appearance of things. Internally, lists are made with two different data constructors are in F sharp, we also say tax,
+
+6:53  
+which correspond to two basic ways of constructing lists. So there is the data constructor,
+
+7:01  
+empty brackets that corresponds to the empty list, it's a perfectly valid list. And then there is the tag or data constructor, double colon, which you can use to prepend a new element the new value to any list that you've already constructed.
+
+7:21  
+Let me illustrate this. So here I'm defining a particular list actually is already in the scope, but I can
+
+7:28  
+redefine this name in this scope.
+
+7:34  
+So, this is a good list is called x is one
+
+7:37  
+I could test if by any chance this is equal to this thing.
+
+7:47  
+And actually, these so this is really shows also through your what it is internally, it is seven prepended to the list, which is 913. mp, from where the visualise the rise, it arose from prepending, nine to
+
+8:04  
+the list consisting of 13 only. And that list in its oltre was made by prepending 13 to the empty list. So any list arises by starting with the empty list and prepending it means to say, putting
+
+8:20  
+individual elements in front of you know, the empty list.
+
+8:25  
+Now the test to succeed so that the two lists really are the same thing. What you here see is, is sort of nicely formatted representation of a list. This is what it is internally. And that is actually used
+
+8:40  
+a lot because you define functions on list by pattern matching.
+
+8:45  
+And it's important to distinguish two cases of lists, the empty list and cons lists. So the data constructor double colon is called cons for constructing. And any list is either a cons list or the entity
+
+9:05  
+doesn't make sense.
+
+9:07  
+And once again,
+
+9:10  
+lists can contain elements of any time provided, all elements are all the same type. So in particular, I can also have lists of lists. So for example, this thing would be valid.
+
+9:24  
+Sorry.
+
+9:32  
+So it is a list of list of integers. More rarely think parentheses are here, but they don't need to be written.
+
+9:42  
+So the outer list is this whole thing it can contains two elements. This is the first one it happens to be a list. This is the second one, it happens to be a list.
+
+9:52  
+And these lists in turn are lists of numbers and they happen to be of different lengths. For example, the first one is of length two, which is
+
+10:00  
+Second one is of length three, but that doesn't matter both are valid lists. Both are lists of integers. So therefore, they are the same type. Therefore, the whole thing is a list of a list of lists of integers.
+
+10:10  
+I should be careful with this. So, literally, if I want to have lists of lists, then I have to have lists of lists. For example, this one is not okay.
+
+10:20  
+Because the two first elements are lists of integers. But the last one is a single integer. So this one is not good. But of course,
+
+10:33  
+I could do this thing.
+
+10:45  
+In particular, of course, lists can also be
+
+10:49  
+a list of tuples.
+
+10:51  
+So very typical, are lists of pairs, way to think of the two components of the pair as corresponding to a key and the value in a kind of a dictionary, like, data structure. So for example, I might want, perhaps, to define this dictionary for reading out numbers in English or something. So I could say, one is one.
+
+11:18  
+And
+
+11:20  
+two is,
+
+11:24  
+and
+
+11:26  
+three is three. Do you see I already made a mistake here.
+
+11:33  
+So strings have to be in quotes. Otherwise, they're just names. So that is a good dictionary.
+
+11:42  
+Unless I managed to put some wrong sign here, this one is wrong. tuples with commas, lists with semi colons.
+
+11:53  
+And you can see it's a list of pairs of integers and streams,
+
+11:58  
+which is good. I should also tell you another thing. So which is maybe also good to know. So when you form a tuple
+
+12:07  
+unless this is required for 4444 presidents reasons, there is no need actually to put parentheses around 2%. And this is sometimes quite useful, you can avoid,
+
+12:21  
+you can avoid noise clutter.
+
+12:24  
+So you could also write this list of tuples. In this way, it's exactly the same,
+
+12:30  
+and maybe a bit better. So comma for tuples, semicolon for lists.
+
+12:37  
+And that's the dictionary.
+
+12:41  
+Let's talk a bit about how you could use lists,
+
+12:46  
+well, values of any type you use them by, you know, to process them with functions. So if I've got a list of numbers, I might for example, be interested in finding out what the sum of these numbers these are maybe what the product of these numbers is. And here are some first examples of doing this thing.
+
+13:05  
+Where we show that you know the process elicits you don't know the length of the list
+
+13:12  
+in a functional sorry, in an imperative language, you would perhaps use a loop
+
+13:17  
+in functional programming loops are not directly available to us such I mean there is no for loop construct or a while loop construct as such.
+
+13:26  
+But you can use direct recursion and you use you can use recursion with accumulators
+
+13:33  
+to programme things. And recursion with accumulators is already very close to loops. Essentially is, is a form of loop of loops.
+
+13:45  
+Let's write things directly by recursion. And this is to teach you how you have to think really don't think loops, if you can, it's always a good idea to see if you can
+
+13:59  
+think of math of functions mathematically. And then a function on a data type is really defined by case distinction. And recursion. recursion means
+
+14:13  
+I find function is defined in terms of itself. In the case of a data type, the very common pattern is you define what the function is
+
+14:26  
+on a value in the data type, in terms of what the function is on structurally smaller values on the data type. So basically, you decompose the given value in the data type into smaller and smaller parts, until you reach the bare bones. So to say in the in the list case, the empty list.
+
+14:46  
+And thereby you've fully defined the function. So let me let me show you here.
+
+14:52  
+So in the case of
+
+14:55  
+summation, so what's the idea I want to add together so this is already in this
+
+15:00  
+Nope, I can use it, I want to add together the elements in my list. So maybe like these elements,
+
+15:08  
+it should be three plus three plus four plus five, which would be 15.
+
+15:15  
+So how was this defined, the code is here.
+
+15:20  
+I'm recursively defining. So it's left and not only left, but like wreck the function some axes is my parameter. It's very common among functional programmers to denote.
+
+15:33  
+It uses names for lists.
+
+15:37  
+Things of the form x's, y's and M's, what s kind of indicates plural. So it's multiple axes. It's just a mnemonic is really good style to do it like this.
+
+15:51  
+So x is a list. Maybe if you've got a list of lists, then you would call it axes, like axes in clora. x.
+
+16:00  
+So I match axes. And I consider two cases. If the list is empty, well, then we should know what the sum is. If there is no elements to add together, it should be the unit of the addition, which is zero.
+
+16:14  
+Any other list is a cons list. So there is the head of the list, and that is the tail. what I call the head is the first element, what I call the tail is all over the rest, right? These are standard names.
+
+16:25  
+In this case, I could say the sum is this. I mean, mathematically, it makes sense. And then you should think why why it also makes sense, like programmatically,
+
+16:36  
+really,
+
+16:38  
+the some must go in there must contain the must contain the head element.
+
+16:45  
+And then what do I need to add it together with? Well, if I've already or if someone has already added together all the rest of the elements, for me, all that remains to do is to add together x and the sum of all the rest.
+
+17:00  
+Now, the idea with recursion is x is smaller structurally than x cons axes.
+
+17:08  
+We think that we've reduced the bigger problem to a smaller problem, and then we let the smaller problem take care of itself. So to say, the idea is, when I want to calculate the sum of 12345, I say, well, it's one plus the sum of the rest, then when when I tried to calculate the sum of the rest exists, well, it's the sum of two. And then what then remains, which is the sum of 3454345, I do exactly the same, I say, well, this sum is three plus the sum of the rest, etc, until you reach the base case, which is zero.
+
+17:44  
+Do you see this, maybe for one session break this
+
+17:50  
+just to explain.
+
+17:53  
+So this thing simplifies to
+
+17:59  
+just by definition, since this is a cons list, it will be at one plus sum of 2345.
+
+18:08  
+But that in turn, is one plus.
+
+18:13  
+Let me put parentheses to be very clear here. Some are 345,
+
+18:20  
+which in turn is one plus two plus three plus sum of
+
+18:29  
+five.
+
+18:31  
+The computer is quicker at this than I am.
+
+18:41  
+Took a list that was too big for plus sum of five.
+
+18:50  
+And what is that
+
+18:53  
+there is a few steps still to make.
+
+19:02  
+Well, that one is five plus some of the empty list.
+
+19:12  
+And this one is zero.
+
+19:16  
+And actually, now we can calculate.
+
+19:24  
+Let me just put the fatter arrow to signify that this happens now in multiple steps.
+
+19:29  
+There is something that may be slightly unsatisfactory here, which is that addition cannot start before I've reached the base case. So just accumulate numbers. So this can be counteracted.
+
+19:42  
+But it's really not important. It doesn't we know so much in inefficiency, another point we can discuss this. Great. So this is summation
+
+19:52  
+Murrell here, think reusing a bigger problem to a smaller problem and the idea is that you
+
+20:00  
+If you read repeat this reduction, which is what recursion does, then at the end, the problem should become very small and just go away. So to say, and this is what is happening here.
+
+20:11  
+Let's do another example product. So maybe I don't care so much about the sum of all these elements, but I want to multiply them together, which actually corresponds to factorial is, in the case, if the list is like, like this one here, so it's this particular interval from one to five.
+
+20:35  
+It is the same thing. So we have to think what is the product of the MPLS, it should be the unit of multiplication, which is one, I mean, one is the number such that if you multiply it with anything else, then you'll get the same number. Zero is a very bad idea, because if you start multiplying stuff with zero, then you never get off the ground, you will always have zero,
+
+20:59  
+but one is good. And then in the case, if I have a conflict, all I have to say is well, to,
+
+21:09  
+to,
+
+21:11  
+to find the product of a list that consists of a head and tail, I have to multiply the head with a product of the thing.
+
+21:19  
+And here it is distinct, it's the factorial of five in this particular case, but of course, my list could be completely arbitrary, I might be interested in multiplying together 17 and 42.
+
+21:31  
+or something else.
+
+21:34  
+I should maybe point out one thing here.
+
+21:39  
+Let's think about the scope of names here.
+
+21:44  
+For a moment, prod is something that I define is a name that I'm defining in this in this in this module. So when I load the module, it will be available is defined.
+
+21:57  
+Also.
+
+21:59  
+Now x is x is is a parameter, it is used here, the scope of the parameter is just this particular definition.
+
+22:06  
+But now something interesting happens. So I do pattern matching. When here, I introduce any names. These are again, an inner scope. So I've written axes here, that is not the same axis as this, because x is cannot possibly equal.
+
+22:25  
+x ex cons itself? No, it's another axis. It's the kind of inner axes, which is the one that I use here. So this axis is the homeless. That is the Taylor.
+
+22:36  
+Maybe it would have been clear if I wrote this.
+
+22:41  
+But you if you're sufficiently used to it, you don't really need to do this thing at all right? You can be used.
+
+22:48  
+Yeah.
+
+22:50  
+Keep the planet green.
+
+22:54  
+I should also say one thing. Last time, when I introduced definitions directly in the,
+
+23:04  
+in the interpreter, piping them at the prompt, I had to put the semicolon at the end of everything. So this was to signify I now want the process. You don't need to do this in a file.
+
+23:15  
+In a file, you can't ask the system to evaluate anything. So these things I just put here as comments, these are the kinds of things that you can try out at the interpreter prompt, I can introduce all these definitions, but there is no need for me to put the semicolon at the end here. I made the week.
+
+23:32  
+But there is no need to do it. And it's actually much less noise if you don't put any of these things in here.
+
+23:44  
+Let me introduce you a few more things that are interesting here. So these patterns,
+
+23:53  
+they can be nasty.
+
+23:57  
+What does this mean? It means that in the case of at least, sometimes it's useful not only to distinguish the cases where I've got the empty list versus I've got a conflict to a list of at least one element which is what constitutes these sometimes the the the the case distinction structure has to be different. So for example, it makes sense to distinguish the empty list
+
+24:22  
+a list that is Singleton
+
+24:27  
+which I could actually write different.
+
+24:31  
+also write
+
+24:37  
+double colon empty, but we can also use this syntactic sugar that we have for lists. So this is this is the sequence of one elements we can directly write with. Okay, so I want to distinguish, empty list one element lists and lists of at least two elements. So lists of at least two elements case, x semicolon, sorry, x double colon, y, double colon, something
+
+25:00  
+Girls,
+
+25:03  
+and hit I'm doing this so x, y.
+
+25:08  
+But then I also may want to give a name not to the,
+
+25:13  
+to the, to the remainder of the list after the second element, I may perhaps want to give a name to all of the pay. And then I can use this pattern,
+
+25:22  
+which includes the as keyword. So this is not as, as something as something else. And the idea here is, I may want to eat my cake and have it too. So I may want to break the tail of the given list into two parts, the head
+
+25:42  
+of the tail and the tail of the tail. But they may also want to keep it as the whole. Namely, I want to use the tail as the whole. And I want to name it axes. So these axes here is the name of the tail of the total list. Whereas the tail of the time, since I don't need it, as such, I've just written underscore here.
+
+26:03  
+What's the whole function doing? So this wants to do the following thing.
+
+26:10  
+The idea is I have a list of integers.
+
+26:15  
+And I just want to find the differences between consecutive pairs of elements. So let me do something like this.
+
+26:28  
+I'm after seeing that the difference of one and three is to the difference of three and five is to the difference of five and seven is to the difference of seven and 33. And the difference of 10 and 15. Is 50.
+
+26:40  
+Yeah,
+
+26:42  
+this is what I see 22235.
+
+26:47  
+Yeah, I've already implemented this, but what's the trick them? So what do I want to see if the list is empty? There aren't any differences. So I should get back the empty list. This is signified by this sort of clause here, what I'm saying this is how I treat the empty case. If the argument is empty, what comes back is the empty list. If the argument is just a singleton list, only one element then of course, I cannot also take any difference.
+
+27:13  
+There is no pair of elements to talk the difference of then I say, okay, no difference is here.
+
+27:19  
+As soon as the list is at least two elements, I can form a new list whose head
+
+27:28  
+is that is the difference of of the first two elements. And here's the interesting thing.
+
+27:38  
+So what are the rest of the differences?
+
+27:41  
+It would be bad to say that I apply diffs to the tail of the tail, because then I only get the difference of their first and second, third, and fourth, fifth and sixth elements. But that's what I want, I want to have all the differences first and second, second, and third, third and fourth. So really,
+
+28:02  
+at the point, when I've decided I want in the list that I produce, I want to return the first difference, I should say the remaining differences will come from the tail. So including also the second element of the of the global list.
+
+28:18  
+This is nested patterns.
+
+28:22  
+Let's do some more functions on lists. The lists that we saw so far are the list functions that we saw so far. They operated in integers, they were specifically integers.
+
+28:37  
+Well, module overloading because
+
+28:41  
+plus is also defined on floats. So actually, I can define type the function sum, not only as going from list of integers to an integer, but also List of floats to a float.
+
+28:54  
+That also works.
+
+28:57  
+This just uses overloading, but it's nothing that would work for any type in general.
+
+29:05  
+Did I? Did I declare it to be an integer?
+
+29:16  
+Oh, yeah, maybe it's already in the context like this, because there's somewhere indicated to type but but in principle, I could do it for floats.
+
+29:24  
+by just saying that I intend to type float here.
+
+29:29  
+He specifically the arguments, say axes
+
+29:34  
+or maybe the return type is is the flow. No, no, no, no, I see where the where the issue is. So of course, this is not polymorphic even even even by reaching the floats, because I should be careful here. To start to get to produce floats. I would need 0.000 sorry, so I was wrong here.
+
+29:57  
+This would work polymorphically because
+
+30:00  
+minus is overloaded, it also works on floats. And in the base case that don't mention any particular number
+
+30:08  
+was all correct.
+
+30:14  
+Still not, then I don't know why.
+
+30:17  
+Maybe,
+
+30:19  
+maybe I've still somewhere indicated that I mean that time.
+
+30:26  
+But now we want to do properly University polymorphic functions.
+
+30:35  
+So one of the things that you might want to do is to calculate the length of a list. There is actually a library functions for this. So such trivial things, you don't need to implement yourself. So we could very well say that I want to
+
+30:50  
+have this length.
+
+30:54  
+But it's true.
+
+30:56  
+But suppose I wanted to implement it on my own. And right now, I haven't opened the module list. So it's not in scope, I can't use it as such, I need to use a with a fully qualified name list dot length. So I'm free to implement my own thing. And I've already done this. So let's see how this would be done.
+
+31:13  
+It's the same idea.
+
+31:16  
+You'll have to
+
+31:31  
+you have to consider cases. So what are our cases? I've got the empty list. Well, the length of the empty list is zero. What is the length of any cons list? Well, it's just one plus the length of the tail Isn't that obvious, right. And then when we're given a big list of five elements, then for example, you say, Ah, that contains a head, therefore, it's at least one, then you look deeper, you see, there is also in the remainder has a head, so it's at least two, then you keep adding, and you get this thing. So in particular length of this thing
+
+32:01  
+is three, and length, this thing is four.
+
+32:08  
+And this function is properly polymorphic. In that what we return are integers or floats, I mean, we work with zero, which is an integer and plus some integers.
+
+32:18  
+But really nothing here needs to look at the actual elements. I could even emphasise this by putting an underscore here, like x is not used, the tail is used. But only even in the tail, I don't recursively look into any elements, I'm just calculating the same function length, and again, doing this pattern match where I never look at any real element. So therefore, length works, at least of any time.
+
+32:42  
+This, this apostrophe ad here is, is a
+
+32:48  
+is a type variable suite, which signifies this thing works for any type, as many.
+
+32:55  
+So here are two other functions that are very useful.
+
+32:59  
+head and tail. So we've already seen how to extract
+
+33:04  
+head and pain for use in a function by pattern matching. But actually, I could also define these functions head and tail as such, using exactly the same pattern matching mechanism. And it's very similar to how the first and second before so I could define heads like this.
+
+33:24  
+I say if I see a cause list, I just extract its head, I could define tail like this. I say if I see a conflict, I extract its tail.
+
+33:34  
+These functions are particular, in that they are not well defined on the empty list.
+
+33:43  
+Yeah.
+
+33:45  
+There is no case for the empty list. So this sounds dangerous. And that's actually what the warnings were about when I loaded the code.
+
+33:55  
+So
+
+33:57  
+for programmers convenience, I mean, this design could have been decided differently. But here's decided like this for programmers convenience, incomplete patterns are allowed, you're warned about them. So you have to use them with care. Because if of course you apply a function to an inappropriate arguments like here to add to the empty list, you will get a runtime error and runtime errors is something that you don't want. The idea of a strongly typed
+
+34:25  
+programme is that all type errors should be caught
+
+34:32  
+before running the code. And this should almost qualify as a type error because the thing is not defined on our list. It's only defined on a part of the data pipe.
+
+34:43  
+But But you do allow it, you don't specifically treat the sub case of non emphasis, or subtyping.
+
+34:51  
+So let's see applications of this. So if we take care of this
+
+34:57  
+surely it should be seven
+
+35:00  
+The tail is not seven, it's nine in Turkey.
+
+35:06  
+But if I do something bad,
+
+35:09  
+like take the tail of the empty list, then it loudly complaints
+
+35:16  
+actually here for the wrong reason, namely that in the first place, it doesn't know which type, the empty list is over, it could be the empty list of integers, empty list of
+
+35:28  
+floats or whatever. But I can be specific, I can say that this is a list of integers.
+
+35:34  
+You don't see
+
+35:36  
+I can pretend it is and then there is another problem arises, namely that
+
+35:44  
+namely, that you can't take time. Now it says, Stop due to error. There is lots of complaints. But but that But the main point is here, the match cases are incomplete. Yeah.
+
+36:01  
+The first case, I got this different error, which I have to explain On another occasion, simply for the case that there was not enough type information around. So this happens when you call tail on and on the emptiness like this on the top level. But if it's already an empty list of a specific type, you will get this error.
+
+36:22  
+One very typical thing that you want to do with list is to put together two lists, simply by concatenating, the two lists, which means
+
+36:33  
+take the two sequences, which lists are and just put them one immediately after the other.
+
+36:41  
+For your convenience, this is actually
+
+36:45  
+defined not in the list module, but in the bases environment. So this is you can think of it as a module that is always loaded. So these are some standard functions that are always there, you can use them.
+
+36:57  
+The names like this, you don't need to open the module, or you don't need me to use the fully qualified name. So append or concatenation.
+
+37:07  
+These are synonyms,
+
+37:10  
+takes two lists and make a new list.
+
+37:14  
+It's usually used in an infix notation. So therefore, when I define it, I should use it with parentheses. Now, I can't define it myself. Or I could, and then it would just shut out the one that is given by the best is environment. But but but morally, the definition is this, your pattern match
+
+37:34  
+the first of the two lists,
+
+37:37  
+the first list is empty,
+
+37:40  
+then you just return the second list.
+
+37:43  
+However, if the first list is cons, something to something, so there is head and tail,
+
+37:52  
+then you can reduce the big problem you have, which is to cons sorry, which is to append x cons, X's to y's
+
+38:01  
+to a smaller problem. Namely, what is this concatenation gonna be? Well, its head is clearly just
+
+38:10  
+x. And the rest you get by concatenating. Together the tail, and all the y's, the tape is already a smaller list than the original list. I mean, this is the original list, this is the tail of it by pattern matching. So we reduce the bigger problem to a smaller problem.
+
+38:34  
+And
+
+38:36  
+here's one application.
+
+38:40  
+Of course, the correct things happens. And you should also notice that here,
+
+38:45  
+well, differently from the case of length, where I didn't look at elements of lists at all, here we do, but still is a polymorphic function, because I'm only sort of,
+
+38:57  
+you know, I'm only
+
+39:01  
+I'm only passing around elements of my two lists, but I never properly look at them. So here I see a pattern match against x and I use x directly, not asking, you know, can you take the square root of this xR, can you add five to it? Well, the first thing would specialise it to a float and the second one would force it to be an integer, nothing like this. So x can be anything because I'm only passing it around not applying any specific,
+
+39:27  
+you know, a type specific function to it.
+
+39:33  
+Let's do another
+
+39:38  
+example of a polymorphic function.
+
+39:42  
+So very typical thing you want to do is
+
+39:51  
+use lists as kind of poorman array. In an array you want to have access to an element at a given position.
+
+40:00  
+given by a number. So I might, I might want to be interested in the NF element of the list where the first element comes is zero to zero with the second is really the first etc. As you start numbering from zero, this is the convention,
+
+40:15  
+you can define such a function, it's actually also defined in the last module. So you can use list item directly. When I can do something like
+
+40:27  
+list item, the first element in two 350.
+
+40:34  
+That is three because numbering starts from zero, that's the zeros. That's the first the second element.
+
+40:42  
+So I could use the library function by by which I can use it by using the fully qualified name or I could open the module list and then just use item. But I can use also use write my own item, which is what I've done here.
+
+40:56  
+And this is maybe a first example to show you
+
+41:01  
+that if you define that list function, you don't always necessarily pattern match on a list.
+
+41:09  
+You may, for example, want to pattern match to something else, because this one is a morally, a two plays function. So it takes
+
+41:19  
+it takes two arguments in a sequence in a curried way. First, the list and an integer.
+
+41:29  
+And one we pattern match on is actually the pair
+
+41:34  
+of the index and the
+
+41:37  
+other list Why?
+
+41:41  
+Well, let's see why.
+
+41:45  
+The real pattern match, I would say, in some sense,
+
+41:49  
+is on the number. Or there are different ways to look at it. But but this is one way to think about it. So it is very clear what to do. In the case, when I want the zeroeth element, then I should just extract the head of the list. So this is a very good situation. So if I'm interested in the zeroeth element, and the list actually is a cons list,
+
+42:18  
+then it suffices to extract the head, right?
+
+42:22  
+Make sense? Now, for any other number, remember, pattern matching goes from top to bottom. So first, we try the first pattern, if it doesn't match, then the second so if you reach here, you can be sure it is not zero, otherwise, you would have used this. So for any other i what i do is
+
+42:41  
+we should think that this is a positive number. So for example, if it's true, if I need the second element in the list, well, then surely the list also has to be a cons list. And the problem reduces not to finding the second, but the first.
+
+42:56  
+So the one one less position element,
+
+43:00  
+not in the given list, but in the tail. So whenever the number is greater than zero, which I'm not explicitly asking here, but I just don't care,
+
+43:09  
+at least I know is not zero, then then we make a recursive call on a number one smaller and on the table.
+
+43:21  
+And that should be fine. But now there are several things to notice. One thing to notice is that I'm not pattern matching just axes
+
+43:31  
+using some specific forms expected can take, neither am I doing it just alone on what and I I'm doing it at both at once, I could actually have a nested pattern match where I first pattern match an eye and then inside a pattern match on x's. But this is just too complicated. It's not necessary here. Also notice these are pairs.
+
+43:51  
+So I don't write the parentheses around because he's not needed, but they are pairs.
+
+43:57  
+Also note that this pattern match is is again incomplete. So there are cases where looking up an item phase.
+
+44:07  
+What is the base case of failure? Well, the base case of failure should be when I want to look up the first element, but the list doesn't contain anything. So for example, zero and empty is missing.
+
+44:18  
+But actually the same problem arises when I look at the bigger number still, of course from the empty list, you can't extract anything.
+
+44:26  
+So in general, what will happen is, if you now say want to look up as the seventh element in the list
+
+44:35  
+that doesn't have eight elements. Remember numbering starts at zero
+
+44:41  
+which is shorter then then you do get the pattern match error runtime which is maybe a bad idea. So maybe you would like to build some Exception Handling or some type safety here this can be done but this will be the topic
+
+44:56  
+of of next week.
+
+44:59  
+But for the most
+
+45:00  
+quantities like this. Also, you should pay attention to, to what actually happens if I happen to give a negative number, what do you think.
+
+45:10  
+So if I start with minus one, if I'm looking at the minus first element in a list, this is reduced to looking up the minus second element of the list provided the list is accomplished,
+
+45:23  
+then minus 30, then minus four, etc. So if you start with a negative number, you will actually loop forever,
+
+45:31  
+forever, maybe you have to take with a pinch of salt. Because actually,
+
+45:36  
+you, you get growth of,
+
+45:41  
+of the frame stack. And at one point, perhaps you get Stack Overflow. But But ideally, if your computer had infinite memory, you would run forever.
+
+45:52  
+So let's experiment a bit with this. So let me show it to you. So when I want to take the
+
+46:04  
+the fifth element in the list of one to 10,
+
+46:10  
+then it's actually six yet I'm showing you something else. So there are some, some shortcut mechanisms for writing down
+
+46:18  
+lists that go with a fixed step. So if I want to have the list 11231234, up to 10, I can just write this thing. That's the list. And the fifth element there, since I start numbering from zero is actually six. But now if I want to look up the 10th,
+
+46:36  
+sorry, V.
+
+46:39  
+What do I want? If I want to look up the 11th element here?
+
+46:44  
+What do I get? I get stopped, stopped you to era. Why?
+
+46:49  
+Because the elements are numbered from zero to nine here. So 11 is too big.
+
+46:57  
+Yes, in particular, you also get an error when you try to extract any element from the empty.
+
+47:07  
+Okay, let's do a bit more.
+
+47:10  
+Now, I want to show you something else. So you've seen quite a bit of Lisp programming already using recursion.
+
+47:22  
+Right now like to do a bit of another abstraction. So in functional programming languages, like ml type languages, also, Haskell polymorphism, is all over the place, and you try to exploit it to the degree that you can, it's really great if you don't have to write a special function, somehow, especially using representations of particular types, for every type that your function could potentially work on. I mean, if a function should uniformly work at any type, then you should be able to write down just just one function that that that can treat any type, which we've now done on multiple occasions here.
+
+48:03  
+Similarly, if
+
+48:07  
+it's in function inside functions, there are repeated patterns, then you might be able to group a bunch of functions together into a simple function. And that is the phenomenon of higher order functions. So you make functions take other functions as arguments. The definition of what a higher order function is, is it's a function that takes a function as an argument.
+
+48:33  
+We saw that you do two plus functions, you can do them in curried form, which means you do get functions that produce other functions as as returned values.
+
+48:43  
+That's one way in which it manifests itself that functions are first class.
+
+48:48  
+But that's not what I'm talking about here. More interesting is when a function takes another function not as an argument. So the argument type is a function type.
+
+48:59  
+We saw one little example of this before when I programmed the function twice, that took any old function, and was then ready to apply it
+
+49:09  
+to a given argument twice.
+
+49:14  
+So this was the sole example of a hardware function we've seen so far. But now you'll see a bunch.
+
+49:25  
+So one very typical thing that you may want to do with lists is you want to transform a list
+
+49:34  
+of some type into a list of some other type or even potentially the same time, as especially case by applying some given function to every argument. Like you've got some list of numbers.
+
+49:49  
+But perhaps you want to multiply all these
+
+49:52  
+elements but by to
+
+49:56  
+know intuitively how to programme this. It should go by recursion
+
+50:00  
+You should say, you know, in the case of the empty list, I just return the empty list. If it's a cons list, I take the head multiplied by two.
+
+50:09  
+And then I recurse on the tail.
+
+50:13  
+Yeah, that's perfect. You could write such a thing by hand. And it would be a pretty specialistic function, because it just works for multiplying by two. Okay, maybe you might want to generalise it to me to say, multiply with any fixed number.
+
+50:28  
+But suppose I don't want to multiply, maybe I want to add, maybe I want to use the mapping function just to to,
+
+50:37  
+to do something else, maybe I, for example, want to compare
+
+50:45  
+my list elements to some fixed threshold number.
+
+50:50  
+And I want to get back a list of truth values, like these numbers were, were bigger than the given number of these ones were smaller. So accordingly, I want to see true or false in the list.
+
+51:01  
+And I don't want to write all of these things separately by hand, I want to capture the common pattern, which is here, which is do the same thing to every element of a list. So what do I need, then, I define this to place function map in the curried form that takes a list of A's
+
+51:21  
+produces a list of bees.
+
+51:24  
+But before it takes, whatever I want to do with every given elements, so it takes a function sending these two B's.
+
+51:33  
+How's this divine, it's a recursive function. map is a recursive functions defined by left rec. So here are the two parameters given
+
+51:46  
+given one after another. So it's curried form. It can be partially applied.
+
+51:57  
+And then defined, well, it's defined by pattern matching on axes.
+
+52:02  
+If the given list is empty, I return the empty list. If the given list is of the form header, then x followed by axes, I apply F to x. And I recursively call the same thing on the tail. So I've reduced my bigger problem
+
+52:17  
+of transforming my whole list to the problem of transforming just the tail of it. And then I say, Okay, if I already mysteriously via recursion, no, the result of that, all that remains to be done is to also prepend, the transformed hedaan.
+
+52:35  
+So here are some examples. I can use map together with a multiplication function, multiply x,
+
+52:51  
+get the list of floats, which has numbers that are twice bigger,
+
+52:57  
+I can define a function is large x, I can consider all numbers lands that are strictly greater than 10 as a float,
+
+53:05  
+then I can do this,
+
+53:08  
+implement this function that goes from a list of floats to a list of Boolean
+
+53:15  
+that can apply to this particular list.
+
+53:21  
+And indeed, you get the list of billions, right. But map is large, alone, partially applied is what
+
+53:31  
+we call is a function that takes a list of floats to a list of Boolean.
+
+53:39  
+So
+
+53:46  
+here, I introduced names for the functions that I want to map.
+
+53:54  
+But also, this is one great place where you could actually just use anonymous functions. Because if the only place where you want to use your his Lodge is actually in the argument of your map, there is no need to invent the name for it.
+
+54:07  
+So let's see some examples of this. So
+
+54:12  
+shall we say, I want to do something else to this list of mine. Maybe I want
+
+54:19  
+actually, to subtract
+
+54:25  
+the element
+
+54:31  
+from any given missed element, then only all I need to do is I have to say, I apply this following function which takes which takes x as a parameter
+
+54:44  
+and returns x minus 2.0.
+
+54:48  
+This is a function. I didn't introduce a name for it because I only need it once just to show it to you.
+
+54:55  
+And this is my corresponding map thing even if I apply that here.
+
+55:00  
+is the result.
+
+55:01  
+That's great.
+
+55:04  
+Maybe I wanted to do the opposite thing.
+
+55:08  
+Maybe I wanted to subtract
+
+55:12  
+X from two,
+
+55:15  
+then I can also do that,
+
+55:18  
+like this.
+
+55:21  
+So I say, I apply the map to the following function, which has x as a parameter. And the The result is defined by the expression 2.0 minus x. We do that as well. And this is the result. Now it's different, right? For example, to minus 89 is minus 87.
+
+55:43  
+This is also the place to demonstrate to you that that partially applied functions are useful. Remember, mine is is just a function that is actually defined in curried form. Well, it's an operation, but minus in parentheses, I can see is a function in curried form. And here, I just want to fix the first argument to be 2.0. And the second argument is whatever then comes in afterwards, I have a shorthand notation for this
+
+56:10  
+just by using minus two as a curried function applied to only one argument, then it is a function that will need another argument x.
+
+56:22  
+What I've done here is I've written this above thing in a
+
+56:27  
+in a more concise form contains means shorter, and the result is exactly the same. So this C
+
+56:34  
+minus is a curried function.
+
+56:37  
+curried functions have a preference for specialising on the first argument. So So here, I wanted to fix the first argument to 2.0 that I can implement by just partial application. So I just choose to give only the first argument to minus the result is a function that the cap applied to whatever, in particular, two numbers four, or 589.
+
+56:59  
+If I want to specialise for the second argument,
+
+57:03  
+partial application doesn't help me, I really need to write an anonymous function, or there are other means also, but this is the most basic one. So I really want to say is the first argument that that I want to vary. But the second one, I want to fix the two points here. So overall, what I'm interested in is are these differences, where I say x is my parameter of this expression. So expression is a function.
+
+57:36  
+Now, there are some interesting things. So for example, we had the function length,
+
+57:42  
+which we defined by recursion, but you could actually get it
+
+57:46  
+if you want, also by
+
+57:50  
+by using map and some in combination, how could you do it? Well, given any list, you could do the following just replace any element with one and then some, the resulting list with a list of ones and if some will exactly be the length of the list. So that could be written as follows then, so we redefined length, like this.
+
+58:17  
+It's, it's,
+
+58:19  
+it has the correct time. So it takes at least over any type A into an integer
+
+58:25  
+defined like this. And then when I calculate the length
+
+58:29  
+of some list, like I want to say, let's take the list from five to seven, it should be a list of length three.
+
+58:38  
+Let me just does it
+
+58:41  
+But the trick is, you're in the middle, right? So let's just see. So what is the map of this thing to
+
+58:49  
+five to seven.
+
+58:52  
+So this is the intermediate results, it's a list of free ones. And the reason why we've got the length was three was that the summation over this list is three.
+
+59:11  
+So here is a yet different way of writing length, which you may perhaps want to use.
+
+59:24  
+Sometimes, very often in functional programming, you just compose functions to length is basically just a composition of of map and some
+
+59:34  
+Yeah, one after another. I could I could make explicit by using this piping notation, which just says you know,
+
+59:42  
+I make a long pipe, like like in the Unix shell if you know whether these are Linux shell if you wish, by just
+
+59:53  
+sending the results of certain commands as input to other commands
+
+59:59  
+in a second
+
+1:00:00  
+So here the result of map becomes the input to some and the result of the whole thing. The result of that is this notation for this for composing rules, or so that's also a definition that works.
+
+1:00:22  
+What if I want to compose in the other way, then I could just,
+
+1:00:26  
+I mean, both.
+
+1:00:27  
+Some people may want to write composition from the left to right, someone from the right to left. So this is also possible to write does exactly the same thing.
+
+1:00:41  
+So maybe one more example
+
+1:00:46  
+of a higher
+
+1:00:49  
+order function.
+
+1:00:59  
+Are there sorry, on a polymorphic function I wanted to say.
+
+1:01:03  
+So So here, we saw the following thing when we defined length, I said, just I want to replace every element
+
+1:01:12  
+of the list by one, so use this function that takes in anything and replaces and returns one. So it's a constant one function.
+
+1:01:22  
+And I may gave a name to such things that produce me constants. So let me define constancy.
+
+1:01:30  
+applied to whatever is just as a constant.
+
+1:01:33  
+This defines me so if you applied partially whenever you actually write, okay, let me define it.
+
+1:01:42  
+When I've defined this, then I've got the function for every possible constant that I want. So maybe I'm interested in the function constant 70.
+
+1:01:53  
+Such
+
+1:01:56  
+What did I do wrong?
+
+1:02:03  
+Okay, this is also a bit silly. Now, again, I need to do that type. It doesn't know.
+
+1:02:11  
+So this is about value restriction, which I promised I will explain at one point, this is a bit complicated. So a constant 17 is perfectly good.
+
+1:02:20  
+But the reason why I cannot type it is it doesn't know what the next time periods.
+
+1:02:26  
+But if applied constant 17, which is a function to an argument,
+
+1:02:30  
+which may be say, takes a string, then everything is good. Yeah, so I string came in, but I didn't care about it, I just returned constant 70. So in this notation, I could write the function length even more concisely as the pipe of map constant one
+
+1:02:52  
+with some, so in the pipe, the first thing that is applied to any given argument x is, is
+
+1:03:02  
+replace any, any elements with one This is done using the function constant one, and then finally, the sun.
+
+1:03:28  
+Here's something more complicated.
+
+1:03:32  
+This is an important higher order function, it's called fold
+
+1:03:37  
+in many functional languages is called fold l here, it's called fold.
+
+1:03:43  
+And this is basically
+
+1:03:46  
+a function
+
+1:03:49  
+to do loops.
+
+1:03:55  
+Well, in an imperative language, when you write the loop, you need the loop control variable. So this is the the variable whose value will vary with say changes in the loop. And then when you want to exit the loop is controlled by that variable, you you say, you know, I run until the variable obtains a certain value or until it satisfies a certain condition. So this the difference between four and one loops, here use an accumulator. and ignore really plays the same role as a loop control variable, except everything is still immutable. So there's never the case that
+
+1:04:30  
+that an actual Val variable would change its value, but we make new recursive calls with new or new values of the accumulator.
+
+1:04:41  
+So in each call,
+
+1:04:45  
+the actual argument is different than that then kind of models this idea of a changing or, or an immutable, low control variable.
+
+1:04:57  
+Fold has a very complicated type
+
+1:05:00  
+But the idea is, it is three plays curried function. So first comes in a function then comes in an element of type B, then comes in a list over type A.
+
+1:05:11  
+And what you're interested is a result of type B. So basically, you want to send the list into a value
+
+1:05:19  
+listo, raising the value of IP.
+
+1:05:26  
+And you do produce the final thing as, as the result, sorry, as the value of the accumulator by the time you traverse the list and reach the variant.
+
+1:05:40  
+So what are the two other arguments? AK, when you make a call to fold is what you should think of as the accumulator currently. So to say,
+
+1:05:53  
+f is
+
+1:05:57  
+kind of the loop body, if you so wish. So what to do with every particular iteration of the loop.
+
+1:06:03  
+And it says,
+
+1:06:06  
+given the accumulator value I'm given now
+
+1:06:13  
+given
+
+1:06:15  
+the head
+
+1:06:18  
+of the list that I'm seeing currently, or say, I walked down the list from the beginning toward the end by basically chopping off the head at every step. So that's the current head or the current element that I'm looking at. And this is the new value of the accumulator, that a recursive call will be made, then the definition is followed is defined recursively. These are the three parameters.
+
+1:06:42  
+F is the given function for the loop body, or
+
+1:06:46  
+x is the name for the accumulator x is the given list. How does it work?
+
+1:06:55  
+It's controlled by the list shapes that we match on the list.
+
+1:07:00  
+If I'm already at the end, all that I need to do is to return the current value of the accumulator.
+
+1:07:07  
+If I'm still seeing a head and a tail, so I maybe have some global list, I keep chopping off the heads and looking at the tape.
+
+1:07:15  
+So then I do the following.
+
+1:07:28  
+I carry on,
+
+1:07:31  
+I carry on with a tail.
+
+1:07:34  
+So I moved my focus to the from the current element to the you know, to the rest of the list, starting to look at the next head. So to say,
+
+1:07:42  
+I carry on and keep calm and carry on. My looper is still the same, but I work with a new accumulator value. So the next recursive call is made with the different accumulator value. And what is that
+
+1:07:55  
+it's obtained by using the current accumulator value,
+
+1:07:59  
+the one that was provided at this call, so to say,
+
+1:08:03  
+the current head element, the element I'm looking at, and then the loop body applied to those two things. So something happens in this particular iteration, while I go, you know, from the given element to the next.
+
+1:08:20  
+Let me explain this.
+
+1:08:23  
+Maybe easiest is to look at the sum function implemented in that way.
+
+1:08:28  
+So the idea here is to produce a number
+
+1:08:33  
+by walking over the list from the from the left or the right from the head, through all the elements until you reach the empty list at the end. So
+
+1:08:43  
+the initial value of your accumulator is zero.
+
+1:08:48  
+At every stage of the watch, and this is described here by this loop body thinking,
+
+1:08:55  
+you're given the accumulator, that's the accumulator at this particular recursive call.
+
+1:09:01  
+You're given that the element, the head element, that you're looking at this, this x here,
+
+1:09:07  
+all you need to do is to carry on with a new accumulator. So there is no kind of destructive imperative update of the of the current accumulated rather, you'll make a new recursive call with a different accumulator.
+
+1:09:22  
+Which is
+
+1:09:24  
+fold on these things is defined as fold on these things. We go now to the recursive call with x plus x is the value of accumulator. So that's this point here.
+
+1:09:36  
+The same for product
+
+1:09:38  
+for length is also the same. So you, you keep the kind of running length, walking down the list, initially zero. So whatever length you already add, so this is the length accumulated so far. When you see an element, you just ignore the element. You just take into account the fact that you do CNN and you just add one to that
+
+1:10:01  
+To The number you have, and you use it as the accumulator for the next
+
+1:10:08  
+disappear,
+
+1:10:10  
+this will mean a lot of exercise to actually get a feel for it.
+
+1:10:14  
+But this literally implements
+
+1:10:19  
+implement implements loops.
+
+1:10:39  
+accumulator plays the role
+
+1:10:43  
+of the loop control variable,
+
+1:10:54  
+or all the imperative programming missions.
+
+1:11:01  
+Now there is a different one, which is called fold back in F sharp, it's called
+
+1:11:08  
+fold are in so many other functional languages. And in some ways, the F sharp naming convention is really confusing. But I suppose it was done to to, to appeal to people that are more used to imperative programming So, so fold corresponds to loop and maybe in some senses is kind of more more intuitive.
+
+1:11:28  
+For an imperative programming background. They're also efficiency trade offs that I need to discuss in a bind. Because it's pretty, pretty subtle.
+
+1:11:38  
+But anyway, so there is another one called fold back, where kind of you go from the back of the list to the front of the list to the word back is, is appropriate. But it's really not loops, it's it kind of encompasses direct recursion.
+
+1:11:56  
+So whether they find a function by two cases, basically, you say,
+
+1:12:01  
+the value of the finish line or directly, there is no accumulation. and the value on a cause list is for me, given by the value of the T. Three is the value of the function on the tail, which is just assumed the recursion works out for me. And then I use it in some way combining with the value of the head element.
+
+1:12:23  
+So here is if
+
+1:12:27  
+the argument is also given in a different order. This is to give some intuition for some people. But here is the list over type A, and I want to transform it into a value of type B.
+
+1:12:41  
+This parameter here corresponds or these argument here corresponds to whatever I want to return in the base case of the empty list. And this corresponds to what happens in the state case, which here is the cons list of case.
+
+1:13:05  
+Here's the definition of fallback.
+
+1:13:09  
+Think of F as the step case, C is the base case, x is the list that you want to fall back on.
+
+1:13:16  
+So definition goes by cases.
+
+1:13:25  
+In the case of the empty list, you just return whatever was specified here.
+
+1:13:32  
+In the case of the
+
+1:13:35  
+columns, we say, we use exactly the same step case and base case
+
+1:13:42  
+for working out the value of the function on the tail. But then we also take into account the head.
+
+1:13:50  
+And yeah, we combine the head element and the recursive call results together in some way.
+
+1:14:00  
+Sort of the paradigmatic example of a function that you want to define by falls back, rather than fold is concatenation, or append that we saw before, which is really best defined by direct direct recursion on the first of the given list.
+
+1:14:18  
+So here's the definition.
+
+1:14:34  
+There is one argument missing
+
+1:14:38  
+should be the emptiness
+
+1:14:42  
+so I want to use fall back on on axes.
+
+1:14:49  
+Yeah, the base case is empty list.
+
+1:14:56  
+No, no, no, it was all correct. I said it's wrong.
+
+1:15:00  
+Everything was correct the base cases. So if, if the first test is already empty as the base case, I need to use the second list, right. So the second list is what you want to return if if the first list is empty, because you're only putting together the empty list and the second list. And of course, the concatenation is just secondaries.
+
+1:15:18  
+But what you do need to do in the staircase in the step case, you are, you can assume you're provided
+
+1:15:28  
+the result of the recursive call. So this is the result of putting together the tail of the first list. And the second list, you're also given the list the head of the first test, all that remains to be done is to actually just columns, the given element together with a result of the recursive call and that is the definition.
+
+1:15:51  
+So we can do this
+
+1:15:53  
+is full back into complex right now yesterday's because I defined it, so that is the definition.
+
+1:16:01  
+And then I should be able to just apply it, right. So I should be able to do 12345
+
+1:16:16  
+sure, everything good. Yes. So this is what we get by putting them together.
+
+1:16:25  
+It's really a pant, and it is polymorphic. But I've also worked with strings or anything.
+
+1:16:32  
+And let me show you also that you can make it even more cryptic, because
+
+1:16:38  
+I know you can't, unfortunately, now Yeah, not not we have to stop here.
+
+1:16:44  
+So you could do it with fallback.
+
+1:16:49  
+I wanted to say that you can do it a bit more cryptic by just using comes as a curried function. But you can't really because tags are treated somewhat differently. So otherwise, it would be so nice to say that this fallback just applied to double colon, and x's and y's doesn't quite work.
+
+1:17:17  
+Combination can also be defined with fold. But let me jump over it and maybe comment on it next time, because it's pretty subtle. Many a time, you may want to use a pole to define a function, and you can achieve some efficiency with it in the sense that you accumulate the function result directly as you go over the function.
+
+1:17:40  
+This corresponds to looping or also paid recursion, if you wish.
+
+1:17:56  
+Whereas fold is kind of direct recursion callbacks where it's kind of direct recursion.
+
+1:18:02  
+So recursion can be more efficient. But there are cases where where third recursion doesn't help you and
+
+1:18:10  
+is more complicated organise the thing in a recursive form. And if you do it carelessly, you just get something more inefficient. And append is one example of this. But this is pretty subtle level, discuss it another time.
+
+1:18:23  
+Let me finish with one other thing, which is one last
+
+1:18:29  
+function that is very useful
+
+1:18:32  
+as a higher order function in so many applications, so ever. So often, when you have a list, you only want to keep some elements of the list that you consider good. And the goodness is fixed by some predicate. Now, I might want to write a specific function that takes a list of numbers and keeps only the positive ones. Or maybe something that takes
+
+1:18:54  
+a list of strings and takes only those that are made of letters only or something like this.
+
+1:19:01  
+But in general,
+
+1:19:03  
+I could use this harder function filter that can use any test
+
+1:19:09  
+on on the given type of elements. So given a list or type A if I know how to determine the goodness, it's fixed by a function that returns a Boolean for every element, I can
+
+1:19:23  
+I can
+
+1:19:26  
+I can do this with filter. The filter you can do directly by recursion like this. And since it's direct recursion, you can call the call the double fullback. And again there is a slightly more involved thing that happens if you try to do it with fold for accumulators,
+
+1:19:41  
+then you have to be much more careful to keep the same efficiency, although in many other cases, directly more efficient.
+
+1:19:50  
+So filter is defined by recursion it takes in a function P that I'd like to call a predicate because it takes a value into a boolean value and then it takes
+
+1:20:01  
+In turn, I mean, what were the returns in turn pegs to list. How is it defined just the recursion on the list. So we reduce computing the function on the list to computing the function on the tail with the idea that the tail is smaller than the given this. So in the empty case, I only keep the good elements, but there are no elements. So it's just the empty list.
+
+1:20:25  
+If it's a cons list, I need to do the following.
+
+1:20:32  
+I test the head.
+
+1:20:35  
+If the head is good, then the result is the head comes together with the rest of the list with the tail of the filter.
+
+1:20:44  
+So this is the case where I keep the element. That's what I returned, if the test is negative, if the test is false, so then in this case, x is dropped, it's not returned in the result.
+
+1:20:58  
+And I only need to resolve return whatever comes back from filtering.
+
+1:21:04  
+Yeah,
+
+1:21:06  
+that's a direct definition. And if you look at the two cases, they directly give you the two arguments for four fold back. So the base case, for fallback, a defining filtering by fold back over axes comes as a second argument, the base case is empty.
+
+1:21:24  
+And here is what happens in the step case. So the step case looks at the head, it looks at the recursive result, which here is filtered p axes, but we just treat it as a parameter set. And what we do is this, we test the element. If the result is true, then we just conduct with whatever comes back from the recursion.
+
+1:21:48  
+In the other case, if the test is false, if the test fails, we just only use whatever comes back from the recursion.
+
+1:21:57  
+So this is it for now. I'll go deeper into it with you in a live session and they explain things and I'm happy to answer questions and then we also go on to further material. But there are a lot of sort of subtle details here. It is important to you to understand how polymorphism and higher order functions work. So
+
+1:22:21  
+I'll be more than happy to comment on the these things deeper.
+
+1:22:26  
+For now I stop sharing
+
+1:22:29  
+and I also stopped this session here.
+
+Transcribed by https://otter.ai

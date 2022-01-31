@@ -1,0 +1,274 @@
+4:10  
+Hello Good
+
+4:17  
+afternoon
+
+4:25  
+Can you hear me?
+
+4:27  
+Yes,
+
+4:29  
+very good.
+
+4:31  
+Make your volume also a bit louder okay more imperative programming What did we do last time
+
+4:44  
+I
+
+4:47  
+explained this very simple imperative language I emphasise there is a difference between expressions and commands in any reasonable imperative language so there are commands or statements whose prime idea is to manipulate memory also perform other side effects like input output from the terminal, or to the terminal from the console. And they explained this idea of store, which is something where like in an environment, you keep the values of variables or also maybe that definitions or functions. But the point is this must evolve in time, because we can change the values of things. So, we implemented it via a store passing mechanism. So, we didn't really use mutable store. But the idea was when you execute the statement, then you take the store as an argument, and you produce a new store. And if you execute commands in a sequence, then the second command sees the store that was produced by the first etc. So the story develops and is passed on from one command to another in a sequence. Then I explained that the language we looked at was, was very simple and naive, in the sense that we could deal with a very simple store model, where variable names are directly mapped to values. But as soon as you have local names, I said, this can't quite work like this. For the reason that you may have the same name in multiple uses. So in other block, you may have a variable X, you enter an inner block, which also has a variable x, the moment that you leave the inner block, you must be back at the old x, or the X of the outer scope. But if you just pass on store, and keep only one, store location, or address for the value of the variable x, then you will mix up the inner and the outer x. So this can't quite work like this, we need something more clever. And this is what we'll see today. So I think I failed at the end of the last lecture trying to show a simple thing. I'll show it now. Which was how you're going to have different semantics for the for loop, depending on how you exactly think for loops should be read in corner cases, where you change variables in the body of the loop, whose value actually affects when the loop is supposed to stop someday, then there's different options. And I had a silly issue with F sharp, I can show you where it was. The problem, of course, was something simple that you can't see online, but it was really a misalignment of one character. Okay, let me
+
+8:15  
+try to share,
+
+8:18  
+share,
+
+8:32  
+I think I want to share this window.
+
+8:39  
+So that was the code that we looked at. And we were at for loop. What are the options here? Okay, so how was for loop usually treated was like this. For loop is given by four things, there is the name of the control variable. So to say, there is the expression determining the initial value of the control variable, there is an expression determining when we should stop. So if the value of the control variable exceeds the value of this expression, we should stop. And this statement here was the body of the loop. And the idea then was to get going you evaluate this expression determining the initial value, ie start, you also evaluate the expression determining when you should stop. Let's call this value start and stop. And then you use a little helper function which is defined recursively that keeps you going on around in the loop. And it takes two accumulators. Start is something determines the value of the control variable for the next iteration of the loop. And store is the current store. And then what happened in the loop was the following, you first check. If the control variable already has a value greater than stop, when you finish and you just return the store that was passed to you, so you don't change anything. Otherwise, you you change the store, you change the value of the control variable x. To be my eye is what is the current accumulator, this is what you've been told to use as the value of the control
+
+10:50  
+value variable,
+
+10:52  
+then you execute the body of the loop. And then you just recursively continue with the new storage that the execution of the body of the loop produced. And then you say, Okay, next time, let the control variable be i plus one, this completely disregards that the control variable itself may change during the course of the loop, for which we had an example.
+
+11:23  
+For example, here, so we had the for loop, I was the control variable, and I was actually changed in the course of the loop. What the semantics does is that inside the loop body, you indeed multiply I by two, but when you go to the next iteration, you completely ignore that this happens, you just take the next value of y, according to the recipe here. Okay, then we said, This is what you usually do. But one alternative is to take into account what happens to the value of the control variable in the loop. And the modification then is, instead of continuing the loop,
+
+12:06  
+with
+
+12:08  
+with
+
+12:10  
+the new accumulator value being i plus one, you don't use whatever I was plus one, but you actually take whatever the most recent value of the control variable was, as you went through the loop body, and then you just increment that one. Yeah, so here, if I was maybe initially one, then here it is two, then for the next iteration, it won't be two, but it will actually be two plus one, which is three, and then you multiply three by two, you get six, and then for the next iteration is seven, you multiply that by two, it's 14, plus one is 15, which is already greater than 10.
+
+12:52  
+And you stop.
+
+12:54  
+Okay, and then we said, but something else may happen. Namely, you also have these examples, where perhaps the stop condition depends on something that you change in the body of the loop. So it's, it's kind of a moving target. So maybe Initially, it was 10. Indeed, because the initial sum is zero. But then the sum keeps changing. So after the first iteration is one, and maybe next time, it's already four. So then this value here is not constantly 10. And the question is, do I use the value that the stop condition had at the beginning of the loop? Or do I keep checking what value this guy takes, and, you know, according to change my mind about when I should stop. And that's the code that I wrote. Last time I wrote exactly this. And the only thing that went wrong, which I couldn't see was that by some copying thing, this thing was off by one. Therefore, the whole big match structure was broken at this point. And I was looking for the error in other places, stupid. So this shows how bad the diagnostics is here. It could be, it could be better. But anyway, the only little modification that you need to do is if you also want to use a dynamic value of stop is not to evaluate each stop once and for all before you get into the loop. But each time when you go round in the loop, rather, you evaluate stop. So the code is exactly the same, but it's not this initial value of each stop that counts. Well, for the first iteration it does, but for every next iteration, the storage may have changed. It's a new one. This this process loop goes around here as we implement By by my tail recursion, so it's next time the condition may be different. And then if you take this semantics, you don't stop. When I exceeds 10, you actually stop much earlier, namely, at the point when this guy has become equal to six, which is 10 minus four, whereas I has just become equal to seven, which is the previous value of i. And that was three times two plus one, which is seven. So seven is greater than six, and you stop at one point earlier. Okay, that's where we got. But the only interesting thing perhaps in this language was really, very some choice about what what for loops mean. And if, for example, you introduce repeat until loops, you get similar interesting questions. showing that there are corner cases in the semantics, and if you want to get rid of them, then you can also of course, alternatively, introduce syntactic checks, and just declare that some programmes are invalid. So for example, we could say this programme is nonsense. By saying, in the stop condition, I shouldn't use variables that are assigned to in the loop body. So here are some is actually changed in the loop body, it should perhaps be forbidden to talk about some here. And if you do these kind of syntactic exclusions, then the sort of ambiguity about what the right meaning of a for loop should be, they go away, because then there is no difference whether you evaluate stop only once or if you evaluate it each time because you do get the same value always. And then of course, you would use this choice rather, because it's more efficient, there is less computation involved don't do unnecessary, repeated, rare computations. However, as I said, last time, this kind of semantics is far more similar to what you have in C, where the syntax for for loops is different. But there is really a condition that is fully evaluated each time you go around.
+
+17:29  
+Okay.
+
+17:34  
+But you can only write programmes that are simple like this in this language. So what can't you do? And what are some goodies that we might want to have? Well, one is we have for the moment, no notion of scope. So all variables are global. There is also no interesting types we could give to them. So we don't have bear types. We don't have things that are very typical of imperative languages, like array types.
+
+18:12  
+There is no types at all. So therefore, I mean, no no form of type, enforcement of any sort. Also, we don't have functions here. And we do not have another very typical thing, which would be to work with pointers. Well, we have such a simple memory model that pointers wouldn't even make sense. Because the idea of working with pointers ease, that you can explicitly talk about addresses in the memory. So the idea would be variable names, mean addresses and addresses your store values. And then perhaps there could be direct means of manipulating addresses. And that's what pointers are. But here, since we didn't have any notion of, of address, none of this
+
+19:04  
+occurs.
+
+19:06  
+So now our next game would be to go to a more interesting language, something like C. And I'll explain the the features that that I'd like to involve by by little snippets from the fragment of C that we will support and then we discuss what is needed and what are some principles and concepts involved at all. So let me show you some some little code. So in principle, I be after a language that is really the See, but just a small part of it. So what do we have there? I'll show this first. On a bunch of examples, and then we tried to summarise the type of features that
+
+20:03  
+we want.
+
+20:05  
+So first,
+
+20:07  
+perhaps we should be able to have functions. It is typical to these kinds of languages that you define a bunch of functions and then you choose one of them as the main one. So differently perhaps from the functional languages, where the big weather code would basically be a big lead construct. And at the end, there is an expression that you want to evaluate, which is kind of the main thing. Here, you may point out the main thing that you're really after, by by a function that you call main, which may or may not take arguments, but the point is, when you run the programme, the function that is called is main. We want to have some types around because at the very least, we want to talk about integers, arrays, and then pointers to different things to integers, arrays and other pointers. And then you can annotate functions with pipes Actually, this is mandatory. So in this syntax here, which is slightly different from F sharps, we say that the return type of Maine is void that corresponds to F sharp unit, so nothing of interest comes back. So rather than write colon void at this point, we put void at the very beginning here, in general use prefix types rather than writing colons and postfix. So void is the type of return type of main and main takes a formal parameter n. And this declaration says n itself has to be an integer. And then there are blocks and you can nest blocks that you can see. And in particular, the function body is always a block in a function, you should be able to put return statements. This one doesn't have an example of this because nothing really is returned. But that will come in your time. But this one is an example of our simple, pretty silly programme that just counts down from a given number of n and keeps printing the printing numbers between n and zero going down. We will actually do very crazy things. I'll just first show you the example. And then we go through it step by step. Namely, let's look at this first as just a programme. So we will have here pointers and arrays and integers in all sorts of nested ways. And what actually happens in a programme like this is is pretty hard to understand. But this is what you're allowed to do in C, but just as a first glimpse. So apart from being able to so so here's the first thing to notice. We've got the main function that is called main here it takes no arguments you can have functions that take no arguments. In a language like F sharp, these don't exist, they are the same as constant. Here, this exists because even if you take no arguments and you produce nothing you you can do side effects and that's the main idea of of commands, which is what the body of a function is, in a language like this. One thing to notice is functions can have function bodies or blocks and these blocks may have local variables. So here, I have introduced a whole bunch of local variables p ay ay ay ay ay ay ay to IPA aap, there is some reason why these variables are named like this. This is for us not to get confused about what they are. But I for example, is defined to be a local integer.
+
+24:23  
+P
+
+24:25  
+is defined to be a pointer to an integer, this is C like syntax, maybe better would be to write something like this. So pointers to integers should perhaps be something like int star. But in C syntax, you actually put a star in front of the thing that you're declaring to be a pointer. So essentially, here you're saying star p, which stands for D referencing P is an integer, therefore it's p itself is a pointer to an integer. Okay, what else can We do. So here, that is a similar thing I'm declaring that I array is an array of 10 integers. And perhaps more systematic syntax would be something like this, that we'd be seeing that I'm now introducing a name IE. And it's it's an array of 10 integers. But that's not true, right? Traditionally, you write something like this. And that is also related to actually array access. Because iE 10 won't make sense. But you will have things like a zero, and I a one, up until I, nine, which are the 10 elements in the array, and you access them like this.
+
+26:04  
+But then come crazy things, because we can also do combinations. This one is still an integer. But these ones are crazy. So here, there is a combination of arrays, and pointers.
+
+26:39  
+And the idea is that the way you should read this is, when you don't see parentheses, they're kind of morally on the right. So I don't have to write it like this. But what I have are pointers to integers, which you can see here. But there is an array of 10 of them. So it's array of 10, pointers to integers crazily enough. But I can also have, for example, and here, I explicitly need to put parentheses like this, to have a different thing. Namely, here, fundamentally, there is an array, which takes, which contains, which will contain 10 integers. But actually, what I'm declaring itself is not the array but a pointer to such an array, which is the start here.
+
+27:36  
+And then you can have even more complicated locations for these things, then the main things that you can do is you can D reference,
+
+27:50  
+and you can fetch an address to a thing. So if p is a pointer to an integer, then I can ask what its value is, and I will write it like start P. So in F sharp, this was bank P. Yeah. And then maybe I can say, let the value of it now be,
+
+28:11  
+you know, the integer pointed to by p plus three, for example, and that would be good. But I can do worse things. I can also say, I is p plus three, but P is a pointer. So when you just write p, you don't get the value pointed to
+
+28:36  
+by P, but you only get the address. So in this case, I will be the address of p plus three.
+
+28:43  
+And these things will start to happen. But for the moment, maybe I don't go to the detail of this. I'll show you some more examples. And then let's be systematic about what is happening in this point. I'll only say one thing. So one thing that you see very often is ampersand ampersand is kind of the opposite of the star which is dereferencing. So given you can't apply this to everything, but say, given given a variable for integers, I can ask where is it in the memory? I can look for its address Yeah, and the result is a pointer which I can then assign to other pointers. So I can say P. Let p be equal to ampersand by and then ampersand and star are kind of each other's inverses. Because if I is an integer variable, then ampersand die is the address of that variable, which is a pointer then, but then I can dereference it writings Something like this. Now this will interfere with F sharps comments index. This is actually the same thing as I because I, I had a variable by up by prefixing. With it with ampersand. I'm now at the place where I get the address of that variable. But star allows me to dereference. And now I see what is the value stored at this address.
+
+30:36  
+And they're also the inverse the other way. So for example, if I've got a point there p, then I can dereference it.
+
+30:49  
+But then I can ask okay, but what is what is the address of this guy. And that's actually exactly the same thing as p again, and then it gets crazier than so let's look at some more examples. And then we come back to this, and we will have some headache here. So here is some other things that you can do. This is a little programme for pointing numbers between zero and the given number. And what it illustrates is, in a function, you can have local variables, which we already sort of saw, yes. And this function returns nothing, but it produces the side effect, you can see things popping up on your screen. Let's look at some more. So here is maybe a more interesting ones. So you're allowed. Apart from having this function mean, you can have many functions. So here we have two functions.
+
+32:08  
+Main is the one that will be called when we run the programme. And then we can submit a number from the command line to which the main function will be applied. And one thing that I we can see here is a global variable, which you can also have, and you can declare, so here we have an array of integers, which has length 22, these integers can be accessed via a zero through a 90. And then hopefully, these two functions will talk to each other. Because if we only run me, and print this never print R is never called, then it looks like a pointless function. But here we see the function calls. So in that sense, everything is good. What other features are there. So here you see something. A function may have local declarations. But it's not mandatory that they follow each other. So it's strictly. So it's not the case that the function body needs to be a bunch of declarations followed by a bunch of commands, you can actually interferes declarations with commands. So it's okay to for example, say that I is an integer, then maybe I want to initialise I, then I say F is also an integer, then I want to initialise F, then I do some stuff. So here's the loop, we go through the loop and the loop basically, is it's calculating sort of the running factorial of the control variable and putting all these computed values of the variable of the factorial sorry, in the array, yeah, this is happening. And finally, the rays printed. What is interesting here, you can pass pretty complicated things to today, I want to say two functions. So to print our we are not only passing an integer, which here is n, and here we call length length for the length of the array, but I can for example, pass the whole array to a function. Now, this example is maybe a bit artificial, but this function talks about a, and it doesn't locally declare a. So the A we're talking about here in these two places is therefore, the global array, a print R, however, has a with the same name as a parameter. So therefore, when inside print are I'm talking about a, this is a different day, this is a locally, which in this call actually is being made to coincide with a with a global one, but this would not necessarily need to be the case. So suppose this print our would not only print, but it would actually modify the array here, these modifications would only be applied to the local array here, and they would not be reflected in the global array in any way. Because the moment you call the function print R, here, you do actually copy the whole array or 20 elements from this globally, so to say, to to the local one, and they are located in different places in the store. So if you update one of them, corresponding to the inner scope of printer here, or the local scope of print are here, this has no effect on this guy here. This principle is called call by value. So parameters are passed to functions fundamentally, by value. by
+
+36:57  
+copying the actual value, yeah, and if the value is complex, like an array, you copy over the whole array, you may ask if this is the wise thing to do here. No, maybe not. I mean, in this programme, there would be many options. So first of all, I could just even not pass the array to the function at all, because it's available globally. And printer could also just work with the global array, that would be possible. And it's also possible to pass not an array, but not a pointer tweet. Actually, I'm thinking, I'm not telling you the full truth at this example. But let's look at let's look at the next one, and then we discuss. So it could be so as I told you, it could be differently. And then the question is, when I declare an array, what is it? So when I, when I pass around Not a single array element, but an array, what is it that I'm passing around, or what is the value of an array is the value of an array, the whole array, so not some single elements of it, or is the value of the array something else. And this is implemented differently in different languages. In C, we have the fact that something things are treated, or variables of some types are treated as directly containing the values. variables of some other types are treated as pointers, even if you don't declare them pointers. And this in particular, is the case with arrays. So when we say I'm introducing an array of length 20, then what really happens is that here, I'm allocating space
+
+39:33  
+for
+
+39:35  
+20 array elements. But if I just use a like here, not like a zero or a one or so, then what I mean is a pointer to the array, not the whole array. Therefore, when you do this call by value parameter passing, it looks as if you should copy over the whole array, but really what you do is you pass on On the pointer to the array, but the array is the same. So I had a pointer, I copied the pointer, but I didn't copy the whole array is the actual semantics that we're gonna implement, which is then different from for from a whole number of other languages where you would say no, if it's a complex data structure, you also pass it, pass it by values, you pass the whole data structure. So let's discuss this when we when we get to actually implementing arrays, and also when we go back discussing example. Now some simpler ones, that are modifications, I think add five here. Yes, sir, so far, we didn't see any way to return anything from a function.
+
+41:08  
+But we could here is an example that uses this call by value mechanism of C for passing around pointers, which sort of under the hood
+
+41:32  
+implements call by reference in the sense that it looks as if you will be passing values to functions as parameters, but since the variable or sorry, since since the argument is actually a pointer, then this has the same effect as as passing something by reference not copying it. And one way of using it is that you can return a result by a pointer argument. So let me try to explain this. So what is this programme doing? So, we've got a function that by itself returns nothing, it takes a parameter and which is an integer then this there is a body what happens here.
+
+42:30  
+So this function tries to illustrate multiple things at once. On one hand, we can see nested blocks here. So we
+
+42:42  
+have a local variable R, which is first declared this allocates memory for it, but doesn't initialise it to anything proper.
+
+42:54  
+And then we say okay, let the value of RB n, n is the integer that is passed in, then there is a block. And then there is a further print thing are is printed. In the inner block, there is another local variable declared which we again say R is an integer. This R is different from this, so it's located a different piece of memory. So when I update these are the outer will not be touched by. Okay, then what do we do? We call square, which is this function here, with two arguments ennahda. And these, this n, and the function square its mission is to just square a number, it's a silly one. But the way that we call it is to the function square, I pass the number and the value n. And then the address of our, so I'm not sending any particular value there, which would be that not the number n, but I'm sending the address of R. And then the idea is the function should perhaps use the fact that it knows the address of R, and then write something there. Then nothing is returned. But later, I can see what the new value of r is, perhaps. So that's exactly what we do. So we call square n address bar, and then we print our then hopefully our has a different value than it is here. Actually here. It's uninitialized. So only that guy will initialise it then we print R and then we print art. Again, what happens here is inner art is printed. Here, the outer art is printed. When you're given a sort of example execution Shortly, let's look at the function square. What does this one want, so some typing is going on. So square wants an integer. It's called i. So actually, when we make the call, the value of n is pasta wise I obtains the value of n. And then it wants a pointer to an integer that we call RP pointer to our sir. Okay, but this is a pointer. So what we can do is we square AI. And we don't assign it to Rp. If I did this, RP is a pointer. So if I did this, I would just change the actual address. So that would be silly. So RP points to some address, I don't want to change them, I want to change the value at this address sorry, and therefore I have to write star Rp. So this is d referencing RP the value at this address will be itI Okay, so let's run it with something. So, suppose I actually call it with main five See, then what happens here when I enter this thing, please, I allocate some memory for R. So R will be
+
+46:38  
+zero, maybe, then we say R equals n. So this means we actually store five address zero. Was this good because this this art is a local variable. So for this one, we have a location where you go to
+
+47:22  
+maybe I should oops, I should say address one because really what happens is n will go to address zero but let's ignore it for the moment. The exact address is not so important, but the way that these are manipulated Okay, then we enter the local block we declare a local our Uh huh. So at this point, we should allocate our but it should be a different RS which should go to a different address. So we maybe we put it at address two then we call square with n and R. In is the value which is five and r is the address of this R. So this is to maybe I should say here radio five and others. But really, the typing doesn't know anything about this it makes these up integers and addresses freely. And then Okay, then we should print out what now happens. So this is called by value. So we allocate stuff somewhere. I located maybe at three, and RP located.
+
+48:58  
+Four.
+
+49:01  
+But we do more stuff because parameter passing has to happen, right? So as address three, we should really put the value that is passed in which is five,
+
+49:19  
+address three. But now RP is a pointer. And it's located at four. But what do we store there? We should store where the point their points and the points to address to isn't it? So store
+
+49:44  
+address to address for you here. I could have said store value blah blah.
+
+49:55  
+Okay, so then what else do we do? Then here we need to look up on I is address three that receive we find value five. So, we multiply five by five and where do we need to put it, we need to put it where are p points RP is itself at address for and when we look where this points it points to address to So, there we put store 25 isn't it okay and then we return from the function nothing is returned. But, so, here odd was that located that address to nothing was stored there, but now we have 25 store that that are still so when we print it out we print 25 and then we print out are these are is the one that is allocated that address one and address one at address one we start five. So, now we print out five you can see that quite a bit is happening here. So there is this multiple multi layer organisation of things. So current values, sorry current variables are assigned addresses in an environment and a storage associates values to addresses. So there is like a two level organisation of memory there is an environment with associates addresses to names. And there is a store store that associates values to addresses. So if you want to look up a name, like maybe say R here, you first have to find out at which address cities and this one was allocated that address one and the environment knows this and then I have to go to the store and see which value was stored there and it will be fine. And if I'm in a slightly different environment where I say no, no our is not that does respond or is that address too. So then when I look up a value at address two in the same store, I do get a different value namely not five but 25 you get this so what we've seen is kind of a two level memory that one needs one is a environment or kind of a symbol table if you wish naively speaking and then there is a store that people also call E which is different from heaps in algorithms that just associates values to addresses and then there is this the effect of memory allocation that must happen when you when you declare when you process the variable declaration. What other examples did we have here? There was also six but this is maybe not so yeah, this may be is a kind of a similar game where we calculate a whole bunch of factorials you using a factorial function. And again, the
+
+54:01  
+what I want
+
+54:02  
+to compute the factorial of is passed as an integer, but what I want to
+
+54:13  
+do, so
+
+54:15  
+the value is returned via a pointer to an integer. So what we need to do is we send the pointer to the function. The function dereference is the pointer assign something to it. And then when I come back here, I can collect the value using the same mechanism. Okay. Now before the break. I should go back to the example because that was a tiny bit more complicated. Let's see what we need here. So this is just So, one single main function, where we have these pointers and arrays, and we sort of freely work with those essentially just by dereferencing pointers or asking what the address or something is
+
+55:27  
+and not much else. But, but the example illustrates the allocation mechanism and that actually illustrates how complicated things can get. So, let's go through this line by line and then we take a break Okay, the function main, what do we have here, we have a whole bunch of things that are local to the main some of them are more complicated, some of them are more difficult. So, so, here we introduce a pointer to an integer what happens at the declaration is simply that I have to allocate some memory for this pointer. So, this pointer will be at address zero. And if I were to dereference it right away, this is a null pointer, there is no interesting value there. And the way that we signify This is we we will have minus one there, this is like the initial value of all memory. This may be too naive, actual implementations may be far more unpredictable. So, when you use something that is uninitialized you can get an arbitrary value, there is no guarantee what kind of evaluate it would be may look like a normal value and you can really get mistakes from an initialization simply like this Okay, then, we want to declare an integer, so, I want need some space. So, we allocate I address one, but we don't initialise it. So, in this implementation, it will have the value of minus one, but in general, it could be something completely non deterministic and arbitrary. Then there is something more interesting we declare an array of 10 integers. So 10 integers will need 10 addresses in memory or 10 cells in memory. So, we just take the next available addresses. So they will go to 10 two addresses to 211 in our locator, but an actual allocative may be far more complicated. So this is it. This is like a naive idea. But but certainly here we need 10 words for these integers. So let's suppose they will be put that to 211. At this place, at this point also what happens is that I actually will point to, to to the beginning of the array, so I said when I want to look up at the say, if I write something like IE three, so this will go to address five. And this is done by simple pointer arithmetic. Ay ay ay ay is located at address two. So therefore when I want the third element of the array, we just go to address two plus five and look up the value there which is currently minus one. But I A to
+
+58:55  
+do that I put it
+
+58:56  
+actually points to pool. So at this point, maybe I should say this. If I now print, say i a
+
+59:07  
+three
+
+59:11  
+then you will simply see minus one because it's only initialised. If I were to print IE I will actually see two which is not the integer two you shouldn't think about it like this, but it's the address to Okay, let's do some more. I want to add a further pointer to an integer I suggest put it at the next available address which is 12.
+
+59:50  
+Yeah.
+
+59:54  
+So I a tool is now a point But for the moment it points nowhere, right? So is there no pointer
+
+1:00:11  
+similar to this one, it currently points nowhere it's located at zero. But at that address, you don't find any further address where where where the real integer of interest Okay, then what else now let's do a more complicated thing. So, this one was meant to be an array of 10 pointers to integers. So, at this moment, when we make the declaration this array will be at address you know the addresses from 13 to 22 will be reserved for you. And IPA itself will point to
+
+1:01:12  
+two
+
+1:01:21  
+tweets beginning to 13. Okay, then the final thing is a pointer to an array of 10 integers, the pointer will not take 10 addresses it will only need one so it will go to address 23. And initially there is nothing and one thing you may now realise is we haven't reserved any memory actually for these 10 integers. So, if we now try to put something at say, the seventh position in the array, this will end up in a place of memory in a definitely place of memory after we actually made the pointer to point to somewhere, but whether it's something meaningful depends on what we've actually made IP to point to and if it's something unreasonable then we will get an unreasonable result Okay. Now, let's do a few things. So, I is an uninitialized integers. So, when we print it out, we get minus one P is an uninitialized point that it should point to an address but it points nowhere. So actually also we get minus one when we print printed out then I can say okay let p point to wherever I ease I actually we put that address one.
+
+1:02:56  
+So, when we do this, then P points to I or which is also the same thing as to address or location what was one okay. So, therefore, if I do this then when I print p I do get one and one is not the value of i one is just where it is located. Yeah, we should not be confused
+
+1:03:36  
+about this perhaps. Okay, let's do something. What is the next thing we say is a tool is IAA. This is a very crazy thing, but in C you're allowed to do it. So I A is an array.
+
+1:04:09  
+So we reserved the 10 addresses for it. But it itself it points to two and it can be used as a pointer I don't need to use it as an array I can use it as a pointer, these kind of conversions are allowed within C. So therefore when I say I A to is IAA then although I was declared as a pointer, this is a valid thing and now I ate two points to well to the same place but I zero is so which is to say address two
+
+1:04:56  
+okay. If I were to dereference it, there is nothing that restore when I get minus one. Yeah. But if I were to print out, instead just a tool, which is this address, then I will get to, of course. Now what can I do? Now let's say I want p to be 227. But but not as an address, actually add the address that P points to because this one here is a D reference, I want to see 227.
+
+1:05:51  
+Okay, what what then happens? So I is address one p points to the same address. So therefore, the value of i is now 227 and P points to Location One containing 227 location and address are synonyms I started using address, it really doesn't matter. Now, it's very interesting to maybe print out all three for example, if I just print out P, P is a pointer, then I do get not the value stored at the address where P points to, but only the address itself. So, that is one, when I print out the reference of P This means I go to address one and I look up the value there, this is 227. And that is printed out. Further when I print I, I also get 227. And this point is interesting, because, you see, I never assigned anything to i the only way that I got this 20 2027 was that we created an alias. And when did it happen? It it happened at this point. Yeah, so there is two ways to talk about this address one b 27, I can directly refer to it by the name I. But I can also refer to it by the pointer P. And then if I were to dereference B, I get exactly the same address. And that address one contains the same value 227 whichever of the two ways I work to reach there, yep. Then I can do a silly thing, which I already commented on before, I can look up the address of I, which is one and then I so that one will give me an address and then the D reference or a pointer to an address, then the dereference of it is that address. And then I can store 12 if I do this, I change it to 12 even though I'm not writing it the easy way. I mean, I could have written y equals 12. And that's what I had exactly the same result. But this is a roundabout way of doing. So similarly, you can do silly things like this. So P is a pointer, I can dereference it. And then I can ask what is its address and make a new pointer. And if then I assign to the pointer p this new pointer I'm actually not changing anything because that is just p so equivalently like with everything p equals P so therefore, when I dereference p it is 12. Well, why is this? Well because the value of i is 12. So therefore also the dereference of piece 12 because both are located at value, sorry at address one.
+
+1:09:24  
+Okay, questions until this point or not. There is more but that actually gets complicated. So I'd rather like to postpone it a bit and then we can discuss it. No questions. No, not at this point. Not at this point. But because we could we take a quick break until say 15 sorry, 13 1305 and then maybe spend another 20 minutes. I won't get far today. But I want to get through this because that explains the mechanism. And then maybe we look at C syntax because there is a difference between L values and our values. And I'd like to introduce this concept to you and then next time, we can start thinking about, you know, what is the execution mechanism here and how do we work with a store model adopt. Okay, so let's take a quick quick break of five minutes. Okay so, in enmore um let me share this screen can never
+
+1:18:02  
+find the right one
+
+1:18:12  
+okay so we were in the middle of complicated code and the point was to illustrate how these different declarations affect each other. So, let me show you the declarations here. So these are the declarations we are working with in the upper half of the screen and in the lower one we're in the middle of the code. So P is a pointer to an integer. Whereas, ie is officially an array of 10 integers. But, I as such, if I just use it as a name like this, it points to two that contains an integer so it really for practical purposes, it works like a pointer to an integer. And and now we see sort of we will see interesting effects of it. So when I say P equals ay ay ay. so P is a pointer to a single integer. When I say d equals to i A, then P will point to is zero the zeroeth element in the array. And this is actually at address.
+
+1:19:31  
+One Where did it go?
+
+1:19:39  
+Now I can use these arrays in in wrong ways. I, I can refer to the first element of the array or the zero with depending on how you want to call it my writing is a square bracket zero, but I can also just write the reference of it. So if I make this one equal 14, then actually is zero becomes 14. So, arrays can be worked with in this sort of index notation, but you can just as well use the reference notation, it has exactly the same effect. So So indeed, when I write star II was 14, then I may want to print out is zero. And what is printed out this 14. Yeah, although it looks like I never had an assignment to the zero with element of A, with this command had this effect. Because I a zero refers to the same value that star Raiders. And I'll maybe let's do more crazy things, I may perhaps want to set the ninth or 10th depending on how you want to count element 218 14 for that, I may write IE nine equal 14. But I can also use the pointer dereference index. So it's okay manually to say I want to add nine to i A, which is a pointer so therefore denotes an address. And then I want to dereference which allows me to find the value at that address or, you know, refer to the place for the value at that address. And then when I put one 814 there, then IE nine is 1414. So really, after I've done this, when I print IE nine, I don't get worried 14
+
+1:21:41  
+I then may want to do the following thing. I ba was what it was an array of 10 pointers to integers. So then it's okay to say that the second or third depending on how you count element in that array is p because p afterall is a pointer to an integer. So, when you do that, IPA two will point to exactly the same place where P points which is the same as
+
+1:22:14  
+where not not to I points to talk points to p p points to IAA and where I point points to one. So that's not correct. We saw Yeah, that's what I want to say. So but that is at address zero. So what did we have there, we can print this thing. And what I'm printing out is not the value is and address is really at two
+
+1:23:17  
+which is fine, we have a value at address I have forgotten what address Do we still have no value. So if we were to print it out. So for example, if I if I were to print out its address tool, but if I were to dereference it, so if I did this which I can also write without parentheses By the way, then I would get minus two because there is still no value there. But here is then a test that says there are so many different ways that I can write the same. So I can so this one can be written without parentheses first of all. So I've got this array IPA that has multiple elements, I can be looking at the second element it is a pointer. So therefore I can do reference. But that means I could also just ask for the for the address of it. And thereby I kind of undone star so star and ampersand they cancel each other in effect. So listening is also just the same as IPA, which is by the way too, but I can write crazier things. So instead of referring to the second element of
+
+1:24:59  
+of the array, IPA via IPA to I can write IPA to star. And that gives me also the same second element. And then ampersand star doesn't do anything on top of it.
+
+1:25:14  
+And then you can play further like this. So it is really a very complicated mechanism. Hopefully you don't use all of the features of it. But when you do a language implementation, then you have to understand everything that's possible to write here. And people use ampersand then and star, of course, a lot in C code. Because you're Matt manually sort of manipulating the heap that you have in your mind. And you can do very unsafe things. So one things that you can do is, you have, for example, here, I've declared that I A is an array of 10 events, but nothing prohibits me from actually writing stuff like I have 15. And this will be valid, and it will refer to some address, namely, what I would get if I added 15 to a, and then D reference it for but of course, the value that is there can be anything, because we don't have any control over what else was allocated at that place, because we only reserved memory for 10 elements. So that's the nature of these languages. Okay, we'll finish off for today, let me show you the beginning of this micro c thing that will work with a bit. This is the language that we now try, we'll try to analyse. And an important point there will be that we have commands, of course, we have declarations, functions, blah, blah, but the most important point perhaps is, we will have two kinds of expressions, if you wish, there will be expressions and there will be something that we call accessors. expressions are things that denote values, and for them, you don't necessarily have an address or they are not necessarily stored at an address.
+
+1:27:28  
+So, these ones denote values are not necessarily scored in the store. And access source can be used in in two ways. So they then have both addresses and values. And sort of via addressees have a play have a you know have a definitely place in the store. So to say,
+
+1:28:19  
+let me try to illustrate what these things are. So expressions are also B. Sometimes we see they denote our values. And sometimes we say these things, you know, l values, where R stands for right hand side, and L stands for left hand side. And the point is that in general, your assignment commands, and assignments will also count as expressions, but that's a different matter. We'll have this form an accessor on the left. So that can be not just the name, but it can be a more complicated thing. For example, I can assign to an array element. So in general, it is an accessor. Whereas on the right, I can only have an expression. And every accessor counts as an expression but not the other way around. So one of the base cases for accessor is for expressions is accessors. I will write a for accessors. And then there are other expression forms. But it's not true that every access that every expression would be an accessory this way of conversion doesn't work. So one of the things to which I can assign and what can occur on the left hand side Have an expression is really the three kinds of things. So I can assign something to a name. That is pretty natural, because the name probably denotes a location or an address in the store. And that can store some value there. But Similarly, I can actually make assignments to the reference of P that is an accessor. Yeah, because where p is a pointer, why, because if p is a pointer, it doesn't store a value directly a pointer stores an address, or denotes an address I should rather say, and the address further stores of value. So, when I do a dereference of a pointer, what I what I do get is an address and that address is a perfect place where to make an assignment. And actually a similar thing happens with arrays, namely, I can make an update not to the whole array at once, but to a particular array element. So I can say for example, a zero equals something in general,
+
+1:31:11  
+a E,
+
+1:31:12  
+where A is an accessor. And he is an expression denoting a value, the point is, A is understood as an address. And he tells you how much further to the right I have to move from there, what do I need to what kind of offset to I sorry, or what kind of value Do I need to add to my address to get the new address, say, a three, when I write something like a three, the point is, a already denotes an address, when I look at a three is take this address plus three, you get a new address, and then that address, you can store something. So all of these counters accessors. And you can have them to the right authority to the left of the equal sign in an assignment. Whatever you can have to the left of the equal sign, equal sign of an assignment, you can also have to the right, and this is the first case of expressions. So any accessor counts as an expression, but then there is a whole lot of other things that also count as
+
+1:32:37  
+as expressions. So for example, I'm allowed to write a numeral like three. But the number is not necessarily stored at an address. So it doesn't make any sense to have three to the left in an assignment, you can't write, assign X to three, this doesn't work. Because three is just a number, it's not stored in any particular at any particular address. Therefore, this kind of assignment doesn't make sense. Similarly, when you've got operations, like plus minus times, blah, blah, you apply them to, to things, which may even be accessors, they are at some address, the result is not necessarily stored in some address. So the result is just the value you can use it as a value. But but but not more, the similar for AND and OR, similar for function calls, you can't assign anything to a function call. But you can have a function call in an expression to the right of an assignment. Then finally, when you've got an access or then you can ask what IP addresses this is also something that you can use to the right of a of an assignment sign, but not to the left. Because what you get back is an address, but this address is not necessarily stored anywhere, right? Maybe some variable X was an integer, then I can ask what is addresses, it is an address, but that address itself is not stored anywhere. So I can only use it to the right of the assignment. So to conclude, and I think this is I can't go much further today. In a language like C you will have two kinds of expressions, expressions proper. These are the ones that you can use to the right of an assignment sign and you will have accessors they are a more restricted class of expressions that you can only that you can use on the left as well. So anything that you can use on the left you can use on the right but not the other way around. And the particularity of accessors. Ease. These are things that are actually stored somewhere in the store. So an accessor, you can think of as both as an address, and as the value that you can access through that address. Whereas the general expression, you can only think, in general, in terms of some value, but it's not necessarily stored in the store. So some terminology for this is L values and our values. So we say that accessors have l values. And elevators are these addresses. And via l values, they also have the R values, they have the real normal values. Whereas expressions, they only have the real values, the R values. And this naming comes from the fact that these are the kinds of things that make sense to the left of an assignment. And these are the things that only make sense, to the right. Another kind of way of thinking of this is, left values are kind of like boxes, where you can put things and auto values are things that you can put in these boxes, and you you have to keep them different. And I think like a name is surely a box because you can assign stuff to a name. The same is true for a dereference. The same is true for an array element. But the number or maybe an operation applied to a number like a negation applied to five is not the box is just the thing that you can put in a box. So the next time I will, I will actually introduce an interpreter for this language. And we will have to then work with environments and stores and their location and I'll explain it in in painstaking detail, I'm afraid
+
+1:37:00  
+but
+
+1:37:02  
+the main concepts are two kinds of expressions and sort of two level access to real values. When when I think like an accessor denotes an address and under an address, you can have a value than the way that you reach the value is you first look up the address, then you go to the address and check the value there. So look up those two stages. How is this questions about this part?
+
+Transcribed by https://otter.ai

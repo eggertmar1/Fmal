@@ -1,0 +1,1825 @@
+4:49  
+Hello Can you
+
+4:52  
+hear me
+
+4:54  
+your hips very good.
+
+4:57  
+I saw the warning if there is no sound but I think it should
+
+5:00  
+Okay.
+
+5:03  
+So good afternoon.
+
+5:08  
+We're on the topic of functional programming for the second week. So what did we do before
+
+5:16  
+I showed
+
+5:19  
+what are local function definitions and function calls in an expressions language before. But now I'd like to discuss the the main, or one of the main salient features of functional programming, which is not so typical to other languages, namely higher order functions, we sort of did it in the F sharp Crash Course already.
+
+5:43  
+But this was maybe brief. But today, we will go into this topic in depth. So one of the leading ideas in functional programming is
+
+5:55  
+your compute with functions. But functions are as people say, first class. So whatever you can do to ordinary values, of simpler types, like maybe integers, or floating point numbers, or strings, or characters, or such,
+
+6:13  
+or even more complicated things, like pairs, or triples, or lists, the same thing, just you should be able to do also two functions. So functions are our values, like anything else in a higher order language, which means
+
+6:28  
+they have equal rights. And equal rights here means like, what can you typically do with values, you can name values, yeah, the value comes from somewhere, you'll give it the name.
+
+6:41  
+You can pass values around. So in particular, functions can return values.
+
+6:48  
+functions can take in values as arguments.
+
+6:52  
+And then the functions themselves are values, which is in this sort of first class approach, they have the same rights as everyone else, functions should be able to take other functions as as arguments. And they should also be able to return functions as values. This is somehow the idea. Also, you should be able to name functions arbitrarily. It's not like you define a function with a name. And it's, you know, this name is going to accompany this function. And this is the only name that the function can take. It's not like this in a higher order functional language.
+
+7:27  
+And you ask, why is this good?
+
+7:30  
+Well, there is two reasons. One is kind of aesthetic, if you wish. I mean,
+
+7:37  
+if we want to be systematic, we've got these values. So why should some values have less rights associated to them as others?
+
+7:45  
+In these times of sort of equal opportunities, that's one.
+
+7:52  
+But another is this really gives you modularity in the language for practical programming. So would you use higher order functions, above all, and over the place? Is his code reuse and ease of maintenance and sort of compacting code writing shorter when you can?
+
+8:10  
+And let's try to get going
+
+8:14  
+on exactly sort of research agenda,
+
+8:18  
+I'll share my screen to you.
+
+8:22  
+with you.
+
+8:25  
+And then I won't see much about user when you just interrupt when something is unclear when you want to ask a question, it's because I can't see raised hands.
+
+8:37  
+So take a coffee break in the middle. Yes, we can. Very good.
+
+8:42  
+And remind me if we go over time, but let's take a coffee break in about
+
+8:52  
+which would then be around 255. No.
+
+8:57  
+505305. Okay, um,
+
+9:04  
+share the screen.
+
+9:10  
+That's my screen for today. I'm talking about Python and functional
+
+9:15  
+languages, sort of in general, but we tried to fake it in F sharp as we did before with all these simpler languages. So before I even get to this,
+
+9:25  
+let me remind you of some examples of higher order functions we saw and what their utility was.
+
+9:32  
+And let me give you some more examples, just to sort of emphasise the point why you would be in this business at all.
+
+9:45  
+So I actually showed you two kinds of higher order functions in these first lectures.
+
+9:52  
+Some had to do with list manipulation, they were sort of important
+
+9:58  
+repeating
+
+10:00  
+Software patterns. So to say that you see with lists, actually with any kind of container data types, but lists are maybe the sort of most
+
+10:10  
+you know, they're the first example you would you would bring.
+
+10:15  
+And
+
+10:17  
+typical examples would actually be map and filter.
+
+10:23  
+I'll tell you what those are, or recap what those are. A version of filter is actually also called reduce.
+
+10:31  
+And you might, for example, know that,
+
+10:34  
+you know, these names are old names, but, but they've recently revived, for example, in connection to something called MapReduce.
+
+10:43  
+Which is, which is an idea of how you do high performance, parallel computing. The idea is, if you've got a huge data structure with lots of nodes, then often computations with such things happen, so that many, many moves can be done at individual nodes, where you're sort of little data payload is stored.
+
+11:08  
+And then every now and then you aggregate what all of these nodes store. And the interleaving of these two phases, is often called map and reduce because map is the idea that I do the same thing everywhere. And in the parallel world, it means every processor does the same thing to its own data. And that all happens in parallel synchronously. And then there is this other phase where maybe nodes in a in a in a parallel process, they talk to each other, and maybe you'll collect some data in this way. And that's typically called reduced and what there happens is nodes to talk to their neighbours, these to their own neighbours, etc, etc, maybe there is some some sort of centre root node that collects the overall aggregate. So these ideas have been around in for decades, and now and then sort of in your incarnations of them come up. In functional programming, they've always been present.
+
+12:08  
+But of course, the idea that
+
+12:11  
+you try to generalise things that you do on different types of data structures, is common in many places. Like for example, you talk about visitor patterns, say for for collection, data types, this is this is typical.
+
+12:27  
+And then what what can happen during visiting and, and higher order functions are the way to capture exactly these things.
+
+12:35  
+So, but back to sort of, let's,
+
+12:38  
+let's, let's go back to, to square one. So the simplest higher order function, or one of the most simple that people typically show you, which is not only higher order, but it's also polymorphic is the one called map.
+
+12:53  
+And besides being higher order, and polymorphic, it is also interesting in that it actually works with a user. Here not user defined by the principle user definable data pipe, through programming with pattern matching.
+
+13:07  
+The idea is, you should be able to do the same thing to any element of a list.
+
+13:14  
+So in F sharp, this thing is called list map. Or if I open the listening space, then it's just called map.
+
+13:23  
+And it's a handy way of processing lists. So maybe I want to do the same thing to all numbers in the range of one to 10. And then I can say what that thing is that I applied to all my numbers in that range, right? I could do the following thing, I take in three, I take in the number and they made me want to multiply by three.
+
+13:52  
+I should get back in your list which is based on the given one, but to every element, the same thing has been applied.
+
+14:00  
+So where is higher order ness here?
+
+14:03  
+The function map takes two arguments, one of them is
+
+14:08  
+not
+
+14:10  
+a source of high orderliness. It's an argument
+
+14:15  
+not such a simple type as integers or floating point numbers, but it's its list. General list of anything here it happens to be lists of integers.
+
+14:25  
+And
+
+14:28  
+the hard Holderness is actually the first argument is the first argument is not an ordinary thing. It's not like an integer or a floating point numbers string. Here, the first argument is a function.
+
+14:43  
+And then the trick is to write these functions. Yeah. So somehow abstract out from your programming problem at hand. If you notice that the same thing happens everywhere. When you abstract out the problem of finding out which is the thing
+
+15:00  
+VAT is the same and happens everywhere. And you have to write it down as a function.
+
+15:06  
+And I've done here, these things were called anonymous functions. So it's possible to write the function without giving it the name, I just say fun, I said with my parameters, I give the function definition or which is also called the function body. And they never named the function. And this is perfectly fine it legit, I can also give the function a name maybe like a lead local name, that is just as fine, I can say let phi the times three thing
+
+15:33  
+is
+
+15:35  
+not to turn. And that is the same thing.
+
+15:40  
+In effect,
+
+15:43  
+Now, of course, is evaluated differently and syntactically is different. But
+
+15:49  
+the utility for us
+
+15:53  
+is exactly the same unless I made a typo here, no, that is exactly fine. And there is this polymorphism. So I can apply these things
+
+16:02  
+to,
+
+16:05  
+to list of other types, or I can achieve lists of other types of for example, I think I can apply the function float, float to every integer, I hope this is correct.
+
+16:17  
+And then I get back a list of floats, which are my integers, each one individually converted to a float.
+
+16:25  
+Another very typical one was filter,
+
+16:28  
+where,
+
+16:30  
+which is also polymorphic, you send the list to a list. But now you cannot change the element type that's different. So if the first if the thing given is a list of A's, the result is necessarily a list of A's. So you can't send oranges to apples here.
+
+16:47  
+But what you do is you pick out good elements from a list and leave out the bad ones. And this was the definition.
+
+16:57  
+And then putting together a map and filter, you can do lots of things, right because many problems reduced to them. And what you typically do is you pipe a lot of these things together, right.
+
+17:11  
+And piping actually is another example of a higher order function. So here's a bunch of functions that don't specifically do anything with lists.
+
+17:23  
+But
+
+17:28  
+but work on any type, but they're very useful, for example,
+
+17:33  
+to put these map and filter things together in a good way. So what is pipe, so here is one possible piping
+
+17:42  
+highroad function also, you're often called higher order functions combinators.
+
+17:48  
+So I might use that word. And this is really like a pipe in in a Unix shell, if you know what that is. So really, this one doesn't achieve much it just is provides you kind of a different order of function application.
+
+18:03  
+So pipe applied to x and f does nothing else then applies F to x. But I've got the convenience that I can write x before F.
+
+18:15  
+Like before, not temporarily, but
+
+18:19  
+in the given line I'm writing x will proceed, F and then I can use this thing in an infix way. So actually, I can plug the symbol between x and f. So these parentheses indicate that. So when you define a function name in parentheses, it means you're going to use it as an infix.
+
+18:38  
+Okay,
+
+18:40  
+as this this thing looks like some sort of a syntactic manipulation, but it's actually a higher order function. What does it do? It takes in something of any type. So x is of type A, where A is a type variable can stand for any type
+
+18:57  
+F, then cannot be quite of any type f has to be a function and not just any old function, but the function whose input type is a, and then how to type can be anything B.
+
+19:10  
+But then what comes back cannot be anything anymore, that what comes back must also be of the same type B. And the way that you achieve it is you take the function here, f was of this type applied to the element x, which was of this type, and you do get the result of type B.
+
+19:28  
+And now I can write things with piping. Sometimes it makes sense. Sometimes it doesn't like a very bad way. For example, to write three plus four would be to say that I pipe three into
+
+19:40  
+maybe the function that takes a number I and then just adds forthwith.
+
+19:47  
+That's possible, but maybe, yeah, why would you do that?
+
+19:53  
+I mean, you would never write such a thing directly, of course. But sort of in some context.
+
+20:00  
+combinations like this makes perfect sense. So let's, for example, play the game that
+
+20:12  
+what can I do?
+
+20:16  
+I have some list of numbers, maybe a big list of numbers,
+
+20:21  
+I may very well have the idea that I want to chain to do something to my numbers. So I may 1 want to, for example,
+
+20:32  
+change it by mapping a function to it, which maybe just the following
+
+20:39  
+perhaps.
+
+20:43  
+Yeah, perhaps it multiplies everything by three, that could be good.
+
+20:49  
+But then maybe I don't like the result. So this will be the list of all numbers from three to 300.
+
+20:57  
+With Step three, but then maybe I say I only want even numbers from there. So then I could do the following thing.
+
+21:10  
+Sorry, list filter.
+
+21:13  
+And then I could give some predicate based on which I choose these numbers. And perhaps I would want to do this, I would want to check if
+
+21:23  
+the number is
+
+21:25  
+even. I hope it was written with the percent sign I can't quite remember.
+
+21:33  
+But we'll see. And that should be one example of a sort of more complex plumping of these pipes together. So I first send this list to my list map, as the second argument, the first is given here. And then the results to to list filter, and maybe then I want to map something to it again. Let's see if I managed to be right.
+
+21:59  
+And I did, yes. So these are the numbers between six and 300, but not at step three. But Step six, because I have to leave out all of the all of the bad ones, namely 915 21, etc.
+
+22:14  
+Yep.
+
+22:17  
+Okay, what other things could we do, we can do all sorts of things.
+
+22:24  
+One very typical one is, you may want to iterate the number a certain number of times. So this is a very generic part of the function now that we call twice.
+
+22:37  
+It takes two arguments F,
+
+22:39  
+which can be any function provided its input and output type are the same, some type variable a, signifying this here.
+
+22:50  
+And then it also takes another argument.
+
+22:54  
+You know, the result is a function in turn takes another argument, I may or may not write the parentheses here, I can just leave them out. Because I don't out is right associative, the arrow symbol.
+
+23:06  
+So the second argument is this x here.
+
+23:10  
+And once I've provided both
+
+23:13  
+the result lives in type A, and the way it's achieved is I don't just apply F to x, which is a nice thing to do.
+
+23:21  
+I applied
+
+23:24  
+I apply f to the result again.
+
+23:27  
+And this is a reasonable combinator. I think here, it's already in scope. Because
+
+23:33  
+I guess I brought it in.
+
+23:37  
+No, it's not. Okay, that's we can always define it. So let's do let's twice
+
+23:44  
+FX equals f of f of x.
+
+23:50  
+Yeah, here's the bit of magic that I will explain one of the next times possibly on Thursday, and which may have positive do quite a bit already. So F sharp has this thing called type inference. Even if I don't write down type annotations. F sharp tries to make sense out of what you manage to scribble to jot down.
+
+24:12  
+And theory thinks is this. You can ignore the F and X, they're just noise. But you could say, this is just kind of information for you could have mnemonic information that you had called the parameters F and x. But it's really irrelevant in the sense that no one else has access to these parameters. Their local scope is here. So you can't possibly refer to this F or x by name and hope to get anything but twice is now in scope.
+
+24:42  
+So let's try something.
+
+24:48  
+I can of course, twice, something simple, like maybe fun. I like these kind of things we already had. I want to add four to a number
+
+25:01  
+But not once, but twice.
+
+25:05  
+And here it comes. So I've applied it once, which was gave 21, and then another time, which is 25.
+
+25:14  
+But that's not the simplest. That's not the only possible application of the other thing, I can literally apply to anything. So I could very well do the following.
+
+25:26  
+I could take my list
+
+25:30  
+from one to 10. And now I could have the idea that they apply list map something
+
+25:36  
+to wait twice.
+
+25:40  
+And what can I do?
+
+25:43  
+Not quite anything that
+
+25:53  
+I can, for example, this is all boring.
+
+26:00  
+I can, for example, map the function multiply everything by three tweets twice.
+
+26:08  
+This is now a bit silly. So overall, this list is traversed twice. First everything is is multiplied by three. And then there is another traversal, in which course everything is multiplied by three again, as a result, everything is multiplied by nine. So that's maybe not the smartest programme programme that he was right. But this is just illustrated, this is how these things work.
+
+26:35  
+You may want to do all sorts of things, right? It's not very complicated to invent the function thrice. For example,
+
+26:46  
+by just saying that, you really want to apply your function three times.
+
+26:54  
+And actually, if you think about it a little, then you can write a generic higher order function that iterates a function any given integer number of times, you write this with ease by just recursing on the future.
+
+27:10  
+What often happens playing with higher order functions is you want to plug one function into another function is partially applied in the sense that it's like a two place function, but maybe only apply to one argument.
+
+27:23  
+And
+
+27:25  
+this way, by partial application is very easy to say.
+
+27:34  
+It's easy to fix the first argument of my function, like for example, for subtraction, I can apply partially
+
+27:41  
+minus three is a perfect function.
+
+27:47  
+It is a function that can apply to anything, what it does is it applies, the result is that the function minus three
+
+27:57  
+is applied to four.
+
+28:00  
+And the result, of course is minus minus one.
+
+28:04  
+So but the thing is, I can use this minus three as a separate function, right. And it makes perfect sense, like so far, I wrote my list maps in this form.
+
+28:18  
+Maybe something like this.
+
+28:21  
+But say if I wanted to
+
+28:23  
+subtract
+
+28:26  
+every number in my list from three, it is easy to write shorter, I can write it either by saying fun i, i minus three,
+
+28:36  
+no three minus i
+
+28:39  
+something
+
+28:42  
+maybe one more parentheses.
+
+28:47  
+And that's possible. But I can write it even more compact using the fact the fact that minus is actually a two place function. And I can choose to just apply to one argument, namely here three, and I've already achieved the the specialisation I want. So the following has exactly the same effect.
+
+29:08  
+I'm doing with my parentheses now.
+
+29:17  
+See, this has the same effect.
+
+29:21  
+But I can use this facility to write something so short, only because in subtraction, the convention is that the number from which you subtract comes first, and the number that you subtract comes second. And here I've chosen to fix the number from which I subtract.
+
+29:42  
+There is no way to directly play this game. If I wanted to fix the other argument.
+
+29:48  
+I can easily write something like this. I may want to
+
+29:52  
+subtract.
+
+29:57  
+It's too bad that it's twice and then consider anything
+
+30:00  
+Let me go back a bit. Of course, if you do three minus i twice, then it's three minus three minus i, and you get back the original list. That's not what I meant. I meant to show you something like this rather.
+
+30:14  
+So this thing here are subtracted I've, every I from three. And I wanted to say this is the same as
+
+30:24  
+minus three
+
+30:27  
+maps to everything. But the same way I can't do the other thing. I can't say,
+
+30:34  
+subtract three from every number in the list.
+
+30:39  
+For this, I need fun I arrows high, or I could do a different thing. So what is my problem? The problem is subtraction has minus has two arguments.
+
+30:49  
+I'd like to do partial application, but not to the first argument, but to the second.
+
+30:55  
+The second argument, the second is not the first. So I can't possibly give the second argument without giving the first in the syntax directly. So what's the trick? The trick is, if you want, and often you do is you could write
+
+31:13  
+a higher order function that takes any function
+
+31:18  
+which has at least two arguments
+
+31:21  
+in a certain order.
+
+31:23  
+And it just trans modifies
+
+31:27  
+the function. So it's the same function, but take the arguments in the in the converse order.
+
+31:34  
+So the second argument comes first and the first come second. Why would you do it ever? Well, if you want to give both arguments, then it's just you know, okay, maybe you didn't like how your colleague wrote the function and you, you're very stubborn, you have a certain preference, you want arguments in a certain order. That's one, of course. Or maybe you've got two different libraries from which you pull in functions into your code. And the designers have had different ideas about things and you just want to sort of fit everything a bit nicer than you might want to do this. But also one prime application is you want to apply or to place argue, function partially not to the first argument, but to the second argument. And the way to do it is make the second argument, the first make the first argument the second and then partially applied when you first.
+
+32:27  
+So let's see this in action.
+
+32:31  
+So if I apply minus
+
+32:35  
+42 and 17.
+
+32:39  
+This is 25. Yeah, remember this number is important number. Now we define this thing, which is not yet in scope.
+
+32:48  
+So now I have my swap arcs, change the order of arcs. And that let me now right swap arcs
+
+32:57  
+minus applied to 42 and 17.
+
+33:02  
+Guess what happens? What is subtracted from what now?
+
+33:09  
+Well, what happens is, minus is used, but with 17 as the first argument and 42 as the second. And the result is minus 25.
+
+33:23  
+Just to arrive at this result, minus 25. You would never go to these lengths, or doing any of this.
+
+33:30  
+But you might want to depending on your tastes to do this.
+
+33:35  
+In this example, no which example?
+
+33:41  
+Yes, in this example, so I'd like to sub have a function that subtracts three
+
+33:49  
+from something given
+
+33:51  
+the way to do it is to say, swap arcs
+
+34:00  
+minus
+
+34:02  
+three, the trick is minus minus is the ordinary minus, which takes you know the number from which you subtract first the number that you do subtract second,
+
+34:15  
+swap arcs. Trans modifies
+
+34:22  
+this function into another, which is also two plays, but it has the arguments the other way around.
+
+34:28  
+So therefore, you if you apply this partially to just one argument, this one argument is not about the number that you subtract from, it's the number that you do subtract.
+
+34:39  
+So therefore, now you should expect that every number in this list gets decreased
+
+34:47  
+by three and that's exactly what happened.
+
+34:51  
+And this is like an endless game. Yeah. So.
+
+34:56  
+So here's a very typical one. I call it parallel composition.
+
+35:00  
+It kind of is.
+
+35:01  
+So maybe someone gives you two functions.
+
+35:07  
+One sends A's to B's, the other ones and C's to these ABCD are completely arbitrary types having nothing to do with each other in general.
+
+35:16  
+Now, these two gadgets give you a way to transform any pair of an A and the C into a pair of A, B and the D, how that's like putting together little circuits.
+
+35:32  
+So I've got only one means to go from A to B, because a and b are arbitrary types. But I know the only thing I know about them is that I can convert from one to another using a function like this. And I also have a way to go from C to D.
+
+35:48  
+then surely, if any old pair comes in my way, comes my way, sorry, then I can just, you know, dismantle the pair, get the two components, apply F and G to them, and put the resulting things back into pair again. So here's the definition. Yeah.
+
+36:10  
+And now I could, I could work with it. So let's do park on
+
+36:20  
+let's go Park, the park.
+
+36:29  
+So here, again, what I think is the type here, actually, F sharp confirms my type, but it gives it in a slightly noisier way. It also tells me what all my formal parameter names were in this definition where it actually used pattern matching.
+
+36:46  
+So part comp.
+
+36:48  
+Now, there's so many ways that you could count the arguments, you could say it has two arguments,
+
+36:54  
+which are pairs, but you could in some sense, also say there are four,
+
+36:58  
+were two of them have to be given at once as a pair.
+
+37:02  
+And this is already a partial application. And then you can give another tool, but you also have to give them at once or one by one.
+
+37:10  
+Anyway,
+
+37:12  
+what you need to do is if a pair of functions and a pair of arguments comes in, you just apply them pairwise.
+
+37:22  
+put together the result into a pair. So what could we park on?
+
+37:27  
+I think I can't do anything super impressive, right? Now. Maybe we could do something like
+
+37:35  
+it's always very important to know what adding 17 to something gives. And then maybe
+
+37:41  
+multiplying by 42.
+
+37:44  
+And then I applied maybe to
+
+37:49  
+let's at least have integers and floats mixed.
+
+37:53  
+And then I applied to
+
+37:59  
+I have no idea
+
+38:01  
+1000
+
+38:04  
+maybe just 10 but have the right times to 1000 xinetd your attendees a float.
+
+38:11  
+And here's the result. So
+
+38:14  
+to 1000, I've added 17 to 10.
+
+38:18  
+I've applied, you know multiply by 44. Multiply 42 by 10. Rather, I should say
+
+38:41  
+How does that feel?
+
+38:45  
+Great to see you.
+
+38:54  
+anyone's been there? They're
+
+39:01  
+still here. Yes. How does this feel? So um, these are
+
+39:08  
+some important examples of how you go about pirate functional programming. I should really make sure that I've motivated is but but the trick is.
+
+39:20  
+Yeah, the trick is really to put together some circuitry of things. And you can be sort of vague, for example, what you want to put as gates in your circuits and you can only supply these things later. So for example, all of these functions here, efficient chair again,
+
+39:42  
+all of these functions here like those. They are just some plumping machinery that don't do a lot, right they just pass arguments around to functions etc.
+
+39:56  
+But
+
+40:01  
+But then then you have to meet at some point. So for example, in the case of Lisp programming, you're at the meet by actually providing some, some some interesting functions here
+
+40:11  
+that do something are actually similar here, right? So you can swap your arguments how many times you want, but in the end, you want to plug in some real function that that that is of interest to you.
+
+40:22  
+There is like no limit to this game at all. So one, one typical thing you might want to do is to say,
+
+40:30  
+let's do one more.
+
+40:33  
+Maybe I'll call it
+
+40:35  
+diag for diagonal.
+
+40:42  
+What it does is it takes a function that needs two arguments of exactly the same type,
+
+40:50  
+and provides something else maybe an element of B. And this function is modified into a different one.
+
+40:59  
+That actually just takes an a into b.
+
+41:03  
+And the definition is not hard.
+
+41:06  
+Suppose this function in here
+
+41:09  
+is F.
+
+41:13  
+Suppose this guy here is x.
+
+41:17  
+Now there is almost I mean, if you look at the generosity of this type, there is not so much I can even choose to write here, there is very little I can write here.
+
+41:29  
+If B were some fixed type, I could cheat, I could say, for example, if we were integers, I could say yeah, let's just say 17. Always. But now B is a type over which you have no control whatsoever.
+
+41:42  
+Yeah, the only thing you know,
+
+41:45  
+if you have to make a value of b is that you can use these two things.
+
+41:51  
+And now this is like a game of Legos. Yeah.
+
+41:54  
+Or Tetris or something. So these are some pieces, and you have to plug them together in ways they fit. And you just hope that you can make the you know the figure that you're required to make. In this case, I've got this a given. And I've got this function given that can consume A's and make a B for me.
+
+42:16  
+What can I possibly do, there's only one thing I can do, I can submit this a I bought only one a I'm required to have two A's. What I can do is I can I can I can use the same a twice because I don't have two different days given I put these A's here and ask the function to give me back a B, this bag, because there is no one else that can make a B for me.
+
+42:38  
+And therefore the definition I can write is this. I mean, what else can you write, you can't write anything else. Maybe you can write Of course, the same thing with different variable names. But beyond that, there is not so much else you can do to agree.
+
+42:54  
+And that is actually a pretty useful thing. So because often it is the case
+
+43:00  
+that you've written some function that is pretty general for some purposes. But then in some applications, you're only need a very specific form of it. You only need to know what the function does. So to say at the diagonal, which is when both arguments are the same.
+
+43:17  
+Let me just give you an example. What example could I give you?
+
+43:21  
+So
+
+43:24  
+let's just diagonalize
+
+43:27  
+times.
+
+43:30  
+And let's apply it to
+
+43:33  
+five.
+
+43:36  
+Let's not do this because the system doesn't know what back is. And here I forgot Diack and doesn't tell me anyway.
+
+43:50  
+So let's just diag
+
+43:53  
+times,
+
+43:55  
+Any guess what comes back?
+
+44:04  
+Yeah, times is a function,
+
+44:07  
+which is sort of ad hoc polymorphic, it can take either an intendant to an int, or a float and the float to float.
+
+44:15  
+By default, it's always inferred to take an int and then to an int, because it's not fully general, it doesn't take a and date way in full generality.
+
+44:24  
+But that's fine, because
+
+44:27  
+diag is happy whenever I've got the function that is of this type for some values of type variables a and b. And here I can choose both A and B to be int. So my argument is int to int to int, that's good. Then the second argument will also have to be int, but it is, so it's fine. And what comes back is 25.
+
+44:47  
+Now when I put three, I get nine when I was four, I've got
+
+44:53  
+16 when I when can I get 100. What function is it?
+
+45:00  
+Well, it's sort of generally, X times X or Y times Y as written. So it's called square. So that's one way to,
+
+45:10  
+to write it.
+
+45:14  
+Okay. I think maybe this is good as a last example for the moment.
+
+45:21  
+No, we're very questions about
+
+45:27  
+this part.
+
+45:31  
+I'm wondering about the F YY syntax. The F is the multiplication function. Yep. Why isn't it like Why FYYFY? Why? Okay. So,
+
+45:48  
+okay.
+
+45:52  
+Well, multiplication really is a function,
+
+45:55  
+buddy. It's a function of a, with a special syntax that you often call operations.
+
+46:02  
+Namely, these ones where you are allowed to write the function symbol between two arguments rather than in front of them, there is two ways to write multiplications.
+
+46:13  
+So one is sort of the official one, which says always the function name should come first. And then you know, you're making a function call and then you give the argument. So therefore, this should be like 10 times 10, or this should be 10 times seven. But of course, that's not how we generally want to write multiplication. So therefore, there is disagreement that I can of course, also write the ordinary thing, which is exactly the same. Okay, I understand. Thank you. So, so what is generally the convention in F sharp also typically, in functional programming languages that,
+
+46:47  
+you know, typically function application is infix, sorry, prefix, which means function and a bunch of arguments.
+
+46:59  
+And that is it. And these kinds of function. names for such functions are typically just ordinary names, which I think Here comes generally would begin them with a small letter, followed by letters and numbers, and maybe some special symbols are allowed, like, primes or dashes, whatever they call.
+
+47:20  
+Maybe it's also even possible to write them with capital letters. To be honest, I don't know. But that's not the typical convention.
+
+47:29  
+But then, there is a special agreement that whenever
+
+47:35  
+a normal function identifier cannot be something like this, it can't be like it can't start with a special symbol.
+
+47:43  
+But you allow them
+
+47:46  
+in infix. So a typical infix can be anything like this, it could be like arg one, like x, then maybe plus minus is a special symbol, or maybe plus slash or some such thing.
+
+47:58  
+And you can define these things, just by saying, maybe like, let's define a role. Plus slash x, y is
+
+48:11  
+maybe x plus y
+
+48:16  
+divided by three, for example, x plus y divided by three.
+
+48:22  
+And I think that should be accepted.
+
+48:25  
+If I remember the conventions correctly, yes. So I can make my own operator symbols. And now once I've done this, these ones will have to start with a special symbol cannot start with a letter. Then when you define it, you have to give it in this prefix form.
+
+48:43  
+But then later, you can use it
+
+48:46  
+the nice way, like four plus five,
+
+48:50  
+it will do something, I think it will be three because it's like nine divided by three.
+
+48:56  
+What did I do?
+
+49:04  
+For plus, slash five?
+
+49:13  
+Oh, yes, sorry, sorry, sorry, parentheses, I'm adding four together with five over three and five over three here is,
+
+49:22  
+is one, the integer division, of course, we get five.
+
+49:28  
+Actually, I meant to put the parentheses in a different place, but fair enough. That's correct. So this is this is the mechanics of it you. By default function applications are prefix. Your normal function name starts with letters. But then you can have these things that are often called operations, which, if you write them without parentheses, you can put them in the middle of two arguments.
+
+49:52  
+And then some further arguments can follow.
+
+49:56  
+I should also say one thing, and that's important. There can be more arguing
+
+50:00  
+So for example, this one can take more.
+
+50:08  
+No problem.
+
+50:10  
+Where did it go?
+
+50:16  
+Bad key combination.
+
+50:20  
+So that's fine. But no, it's interesting because
+
+50:25  
+I mean, this syntax is a nicety for,
+
+50:29  
+for two argument functions, right? But this one has three. What about it still has to, but it just returns a function, isn't it?
+
+50:38  
+So now it can get a bit confusing. So now I can do things like 100 plus dash 10.
+
+50:47  
+This is a partial application of that guy to x and y. So on its own, it's a it's a well, well defined thing. But it's just a function, which
+
+50:58  
+is waiting a further argument, namely that and I can give it but where this is an infix notation. And really, I should be able to give it just after so.
+
+51:11  
+But maybe it requires parentheses No, I'm not sure. Okay.
+
+51:15  
+And you see, there is a parsing problem when I write just like this.
+
+51:20  
+The silly guy thinks that application always binds tighter than an operator symbols with try therefore tries to apply 10 to 500. That's not possible.
+
+51:30  
+But I can indicate that this thing here should be read as a thing.
+
+51:36  
+which happens to be a function and that one is an argument. And now it's good that you get some value.
+
+51:44  
+Yeah, to see this.
+
+51:46  
+So it's literally about the two first arguments have, in general multiple argument function.
+
+51:53  
+Okay, but now I think other further questions are written here. Do you want to have your coffee?
+
+52:05  
+Anyone?
+
+52:10  
+Everyone is having their coffee,
+
+52:12  
+coffee, coffee, let's go Yeah, let's take five minutes until 15 past, and then I'll not do much today, I'll just show the evaluator from the last time wherever changed the few lines, so that we can now actually programme our own or make our own higher order functional programming language on the level of abstract syntax, which then is a bit clumsy to work with because we don't get or here we don't adjust the lexer and parser for that, but it's it wouldn't be a big job and then you will have your own, you know, done yourself.
+
+52:46  
+functional language where you can add more features or remove them or play around. Okay, coffee, break time.
+
+1:00:40  
+Hi,
+
+1:00:48  
+can you hear me? Let me check?
+
+1:00:51  
+Yes, yes, yes. Do you
+
+1:00:54  
+please a bit of mystery around these
+
+1:01:00  
+pseudo sound settings? Okay.
+
+1:01:03  
+Let me share this screening again.
+
+1:01:14  
+I'm here.
+
+1:01:18  
+Remember we discussed
+
+1:01:21  
+expressions first, what could we write in expressions we could write? Well, first of all, we couldn't write much, we were able to write numerals plus times minus maybe a negative Roman numeral, then you could add Booleans. if then else.
+
+1:01:37  
+The first fun part was to add names into expressions. So you can have variables, variables don't have values by themselves, if they're global variables, you better somehow fix from the outside of the expression what the values of the variables are. And you could say, there is an environment, which is like a little dictionary where you can look up by name, but the values of your variables are.
+
+1:01:59  
+But another game was, you could also have local names which have limited scope within your global expression or top level expression. And then these little local definitions which say, in their scope, these variables that I've introduced have these values. So a variable
+
+1:02:18  
+local definition is given by a lead construct, which has a body which is an expression here.
+
+1:02:24  
+And then there is a definition part that consists of a pair of a string, which is the name, new name and a right hand side expression, whose value
+
+1:02:35  
+in the enclosing environment determines
+
+1:02:41  
+its value. So in this language, it was perfectly possible to write stuff like let x
+
+1:02:48  
+be three, in someplace like class
+
+1:02:56  
+x.
+
+1:02:58  
+Four,
+
+1:03:00  
+we play this game many times, so that that should now be an expression of formal expression,
+
+1:03:05  
+unless I made some typo, or miscounted, the parentheses
+
+1:03:09  
+and, and that is the mean by itself, it doesn't do anything. So if I want to see what its value is, I have to write an evaluator. And if I use names that are global here in the sense that they are not locally defined,
+
+1:03:24  
+then I have to provide an outside environment. And then that was all it for some while ago, or some while ago, sorry. But then we introduced also the possibility of defining function names.
+
+1:03:38  
+And making function calls.
+
+1:03:43  
+Let me actually first talk about defining a function with a name. These were functions with one argument.
+
+1:03:53  
+And the syntax was a bit like this. So a name for the function and name for the parameter that you're using the body to talk about what is happening, then the function definition or the function right inside the function body. And finally, the body of the whole app. So this bit here is the function definition corresponds to this here.
+
+1:04:17  
+And this is the actual interesting part. I mean, the function definition is kind of a helper thing. Yeah. But that is the actual thing, in whose value you are interested that, in reasonable cases then calls the function because otherwise, we didn't have any other way of using a function other than calling that was the first order language.
+
+1:04:38  
+Now in a higher order language, I change this a bit.
+
+1:04:43  
+And namely in the calling aspect. So previously, a call could only be a function name,
+
+1:04:52  
+applied to some argument, which was an expression.
+
+1:04:57  
+Now here, we are going to be a bit more liberal.
+
+1:05:02  
+Namely, the function
+
+1:05:05  
+in this function position of a function application need not generally be a name, it can be something far more general, it can be, I don't know, maybe another application of
+
+1:05:18  
+all the functions. So you could do to place functions by sort of putting calls inside each other. And that works. And we could do other things. And the reason is,
+
+1:05:30  
+I have higher order functions. So not every function I use is necessarily, you know, given by just the local definition of function that I call may very well have arisen from myself having already called the higher order function. So imagine, for example, list map.
+
+1:05:50  
+Okay, here, we don't support lists. But, but but the idea is this anyway. So
+
+1:05:55  
+a function that you may want to apply to a list need not necessarily be a primitive function that I've written, or primitive, sort of a function that I've written directly as a function that operates on lists. Rather, that could be something that list map returned to me, and that that can now apply to my given list. Yeah. So it's perfectly possible if list were supporting here that this guy here, or maybe this argument to which I'm applying a function, could be some list.
+
+1:06:27  
+But the function on which I'm calling it is, is not just given by a name, but maybe it's of the form list map applied to something else, this might apply to some function a little.
+
+1:06:38  
+Okay? So on the level of syntax, not much changes here. But the overall ideology changes, because now we want to be able to pass functions around, like, you know, first class values.
+
+1:06:54  
+Yeah, no racism, all values are of the same class.
+
+1:07:02  
+In older days, one could joke at this place, but now I can't anymore.
+
+1:07:08  
+But anyway, so it's like, full equal opportunities thing? And,
+
+1:07:16  
+um,
+
+1:07:19  
+yes, and, and also, we can return functions as values. So it's perfectly possible that that the right hand side is sort of the body here, well, that expression actually evaluates not to a number, or to a Boolean, it may evaluate to a function.
+
+1:07:37  
+Let me first illustrated with little examples, what what do I have in mind? What should we be able to write? And what should we be able to evaluate, actually, so the first two examples, I think, are going to be easy, they are going to be like ordinary first order situations that we could already do before.
+
+1:07:58  
+So for example, the following one should it be possible,
+
+1:08:02  
+I should be able to say that I'm interested in the value of f1 apply to 12.
+
+1:08:09  
+In a local scope, where I actually have some definition for f1, which says f1 apply to any x is that x plus one.
+
+1:08:20  
+That should be possible, and it's easily possible. So we just code it up as this.
+
+1:08:26  
+And it's exactly the same that we had before. Except before. When a function was applied. It was always a name. So we didn't write var. But now here, the function that is applied can be any expression in principle. So strings are not expressions, but var string. So variables are actually they do count as expression. So I have to write var here.
+
+1:08:52  
+And that is perfect.
+
+1:08:55  
+I should stress which I did last time, but I forgot here, that when we talk about lead fun here, we sort of always implicitly mean that we don't want to make any difference between lead and lead track. So everything is kind of wreck by default. So I don't write it in the syntax, but you should think we do allow recursion.
+
+1:09:14  
+So here is a bit more interesting. That's a way to do
+
+1:09:19  
+factorial on your own. So we first make a language of our own. And then we make our own factorial. We make everything with our bare hands.
+
+1:09:30  
+So how would you do this?
+
+1:09:36  
+So this is the result here is factorial applied to a particular number. So called their var fac to n.
+
+1:09:50  
+I could actually choose to return just factorial itself as a function and that will also be fine.
+
+1:09:58  
+We'll see this later.
+
+1:10:00  
+This modification, but then the How is factorial defined. So this is
+
+1:10:06  
+a function introduced locally and we say factor of x is the usual sort of recursive definition that says, Well, if x is the number zero, then the factorial is one else, I have to take x and multiply it with with the factorial of its predecessor to this way, all together, multiplied together x x minus 1x, minus 2x minus three, all the way down to one, which is the base case. And that's exactly how you should find the factorial. And you can just straightforwardly code it up. And it would be exactly the old definition, again, except for this additional VA.
+
+1:10:48  
+But now, let me consider something we couldn't do before.
+
+1:10:54  
+something completely different in nature. So, so this is really higher, or the functions in action, at least in one way, and then we had more high on the list.
+
+1:11:04  
+So I may be, remember the, the thing that I called twice before,
+
+1:11:11  
+I think it's still in the context of my F sharp buffer. So it was a highlight of the function that takes any old function, any old, simple thing and applies the function to the simple thing twice.
+
+1:11:29  
+Provided that the types of IP so it's, it's about exactly this, it's actually I want the programme this little gadget,
+
+1:11:38  
+I want to programme twice,
+
+1:11:42  
+applied to multiple, multiply by three,
+
+1:11:47  
+and 11. And the idea is, in the end, this should be a convoluted way of writing down just by way of an example.
+
+1:11:55  
+A machinery for multiplying three times three times 11, which would be 99.
+
+1:12:03  
+But it's done with functions here. So model three, is a simple first order function. So in this scope, I have defined model three, it is there, why is just the parameter to it. And I'm saying multi is three times why
+
+1:12:20  
+what is not defined here, it's defined in a yet further out their scope, namely here, the top level,
+
+1:12:28  
+introduce these, you know, to this expression, a local function tour.
+
+1:12:35  
+And tour of G is what.
+
+1:12:38  
+And that's then interesting.
+
+1:12:42  
+The value of tr, G is because I can only programme one argument functions, and I can't write what we did right? In my F sharp but I did have the luxury of writing twice f x was f of f of x, I can't quite write this. Because
+
+1:13:02  
+I've chosen to do the language in such a way that the function only can take one argument, I mean, multiple argument extensions are possible was actually a homework exercise. But, but you can also do just with one argument, but then it's a bit more work. So and here, this is done. So we don't define twice f x, we define twice g
+
+1:13:21  
+or twice F, then
+
+1:13:24  
+f and g, of course didn't make any difference.
+
+1:13:32  
+How?
+
+1:13:34  
+Well, I can do a trick. I say twice g is just GG.
+
+1:13:41  
+And now, this is the first place where you see that something that is a function is a return because twice g is not a simple thing. It's not an integer is not a Boolean, it's really a function. So twice g has to be a function.
+
+1:13:58  
+But then what is this function that function itself I defined locally and here I take the further argument, which is called here x.
+
+1:14:05  
+So I say twice g of x is just g of g of x.
+
+1:14:11  
+To see this.
+
+1:14:14  
+I could do the same thing here. I mean, I don't need to define twice like this. I could also define twice by saying left twice, but it's just a bit convoluted. I could say twice g is
+
+1:14:31  
+left dg x equals g of g of x
+
+1:14:38  
+in GG.
+
+1:14:47  
+That should be fine.
+
+1:14:52  
+Yes, and that is the perfect twice. How do I prove it to you I can just maybe apply to
+
+1:15:01  
+My squaring, squaring was Tiger bIack star, and then I applied to five. So I'm squaring five points first, I get 25. And then I get something bigger.
+
+1:15:11  
+Namely 25 times.
+
+1:15:18  
+Yes, 25 times 25. Which six? Is it really?
+
+1:15:25  
+anyway.
+
+1:15:27  
+So that's, that's a piece of code. So these kinds of things should work.
+
+1:15:32  
+Now, I've defined actually this thing as these three.
+
+1:15:36  
+So let's see,
+
+1:15:39  
+what is E three,
+
+1:15:43  
+e three is this horrible thing, which is just the same thing that I've written, maybe printed out with a slightly different indentation, but it's literally that.
+
+1:15:53  
+And then I actually do have an evaluator. And here there are no local, sorry, there is nothing Global Indian that you need to know. So that one should evaluate in the empty environment. And we can try eval II, three in the empty environment.
+
+1:16:09  
+That's 99.
+
+1:16:12  
+Remember, when we did values, or values are tagged, so every value because it's kind of a mixed bag, a value can be an integer or a Boolean, or it can actually here even be a function. So I have to, I have to make a discriminated union or a data type out of those. So here, I'm saying this one that comes back is an integer and
+
+1:16:34  
+okay.
+
+1:16:37  
+So that's what we'd like to do. But let's also look at the variation. So of course, I mean, this looks very rigid. So why did I need to write the programme to apply to all three apply to 11? Because now is applied only to 11? And only 213? Can I go a bit more generic? more general?
+
+1:16:55  
+Maybe I would like to return just twice small three?
+
+1:17:00  
+because then I can apply not only to 11, but to every other possible thing that comes back?
+
+1:17:06  
+My Way, isn't it?
+
+1:17:09  
+So let's try that one as well. This is called e4. It's just literally this written up in my
+
+1:17:15  
+abstract syntax.
+
+1:17:17  
+Let's see what the four E's.
+
+1:17:20  
+Before is that. But now how do I use such a thing? Well, I can try to evaluate that something comes back, it will be a closure, because we said function values or closures. That's not by itself. super interesting.
+
+1:17:35  
+But let's see anyway,
+
+1:17:38  
+basically, four years 64.
+
+1:17:42  
+Yeah, what what comes back is a horrible thing. It's a closure.
+
+1:17:48  
+And we haven't discussed closures yet. Today, we discussed them before.
+
+1:17:54  
+f shows that it's a function values for its closure. And we get to know a few things here that somehow the functions name is for recursive causes GG, the parameters x, this is maybe the body
+
+1:18:08  
+and the local environment is somewhere This is pretty difficult to read. But I now have the possibility to actually
+
+1:18:18  
+be able to use it any way I want. So I may want to apply it to some, some
+
+1:18:26  
+some real argument.
+
+1:18:29  
+So why don't I just call it with something? So how about calling e4 is a perfectly good expression. So I can always apply it to something remember, call takes an expression.
+
+1:18:44  
+So the whole thing is an expression and that can just apply to something. And then I can apply to something like maybe 11.
+
+1:18:58  
+And that should work and that should be 99 but not necessarily 11. So why not seven, and I get 63 because three times three times seven is 63. So this I can do I can do other things. I can for example, abstract out this nonsense and I can say I call this var n
+
+1:19:17  
+and then I provide the end from the outside I say n nice by the way fight.
+
+1:19:25  
+So my expression now says e4 apply to var n
+
+1:19:29  
+n is a variable name that is not introduced inside the expression is a global variable. But if I provide the value from the outside, I'm able to evaluate it provided the Detroit no five but integer five.
+
+1:19:43  
+What comes back is I 45.
+
+1:19:53  
+And of course I can do further things I can maybe abstract out this thing. I can call this thing n
+
+1:20:00  
+By can say,
+
+1:20:04  
+you know, my gadget does this my gadget
+
+1:20:09  
+applied to N is this thing,
+
+1:20:12  
+which takes my expression and evaluate it in an environment that I set up here by just saying what I want the value of my variable NB.
+
+1:20:25  
+This is getting pretty cool already. So there are multiple ends around. This n is a variable name in the object language, which is my little, you know, highroller expressions language that I'm programming, this n is a different thing. He this n is a variable in F sharp. And these are two different things, right? For F sharp, this guy is not a variable, it's just, it's just a completely dumped string.
+
+1:20:50  
+Whereas this one is a real variable. But of course, for my object language, this one is a variable.
+
+1:20:56  
+I can take my gajic. And now again, I can apply to all my old things, if I want, like I can apply to 11. To see all these gains are possible.
+
+1:21:09  
+Doesn't make sense.
+
+1:21:12  
+Questions about this font, I just show you the code, the code is literally changes maybe in all together, three or four places in the code.
+
+1:21:24  
+Because we changed very little
+
+1:21:27  
+in the setup of the language.
+
+1:21:34  
+Okay, let's do.
+
+1:21:36  
+So this is just a reminder of what dictionaries are. So in general, in a dictionary, I can keep for strings, any sort of
+
+1:21:45  
+meanings, I may want to assign them, like I can associate the value to a variable name, I can also associate the type of variable name depending on what I'm doing. So here is actually used for assigning values later. So this is the type variable is instantiated to value, but it works with everything. This was my little function for looking up a key or like a name in a dictionary.
+
+1:22:10  
+And let's not repeat it anymore.
+
+1:22:13  
+Now, the first place to change is is the notion of closure. So just leave space here. So what kind of values do we work with, we work with integers start with a Boolean tag with B. So these are the values of integer and Boolean expressions. But we can also have expressions that return function values. So now, it's not only that we can throw in, you know functions to the environment, because we made a function definition, which we can only use with a call.
+
+1:22:44  
+Now calling is just one way to use a function. In other ways you don't use call a function at all, you just pass it on to someone else that may be calls it
+
+1:22:55  
+at the end of the day.
+
+1:22:58  
+So functions are first class.
+
+1:23:01  
+Function functions, meaning is what? So I don't the same approach that we had before, where we basically say,
+
+1:23:10  
+we have sort of a very intentional understanding of what the function is a function is basically, its definition. Remember, it's syntactically recorded syntactically. So the most important things to remember about the function are the parameter name, and the function body or right hand side.
+
+1:23:28  
+But then there is two more things that we need to record.
+
+1:23:32  
+So these correspond to like, you know, x and d.
+
+1:23:37  
+Like a function parameter, and some some function body that uses this x is the expression whose value is returned, it contains x, which is the parameter.
+
+1:23:47  
+So as we argued
+
+1:23:50  
+last Tuesday.
+
+1:23:53  
+In reasonable functional languages, you use the static scope rule, which means that any names that you see in the function definition that aren't local but come from the outside should be taken not from the function use site, but from the function definition side. So therefore, in the closure, you have this additional facility, that you remember what the environment is at the point when the function definition is made. So when you make the function definition, you remember this, and you only ever use it when you actually finally, at the end of the day, call the function.
+
+1:24:29  
+Now, an important thing that happens is previously
+
+1:24:34  
+we didn't have to remember what the name of the function was because, so that the name was intimately tied to a function.
+
+1:24:41  
+If you introduce function, introduce the function under the name of F.
+
+1:24:46  
+This is the only name that it ever gets. So I could have previously written something like let f of x equals
+
+1:24:56  
+something in terms of F index, so it can use recursion right
+
+1:25:00  
+to death can be used to the right hand side, and then maybe there is some body. That's how function definitions were before.
+
+1:25:09  
+They're still like this. But you see, now I can do much crazier things. I mean, I can I can, I can make this a function definition. But then maybe the next thing I do, I say,
+
+1:25:22  
+let g be this F.
+
+1:25:25  
+And then maybe I find that in somewhere, and then maybe I finally say, bla bla bla bla g
+
+1:25:32  
+17.
+
+1:25:37  
+And at the moment, when I form the closure, which is when the function is formed,
+
+1:25:43  
+I sort of know that its name is F for the recursive call.
+
+1:25:50  
+But later, maybe I create this alias for this function, I mean, I say G is also a function, and by the way, it's the same function as F. And when I then look at the meaning of G, it is a closure, which in its right hand side refers not to G, but still to F, because we just literally recorded the syntax of this right hand side.
+
+1:26:15  
+So we have a problem. So a function can change its name, or can it?
+
+1:26:21  
+Yeah, in his lifetime, so to say or in its usages.
+
+1:26:26  
+But, but but the meaning of a function depends on what his name was, because the function definition can contain a recursive call. The way to sort of overcome this is just we record the given function name in the closure.
+
+1:26:41  
+So if the function definition is made of the form, let f x, blah, blah, blah, then we remember that blah, blah, blah, will remember F and x, and also will remember all of the current environment. This means wherever the function ends up under whichever name or maybe unnamed, we still know what the name of the recursive call was.
+
+1:27:04  
+Once this is done, we are fully set up for the evaluator. The evaluator is this humongous piece of code that you see here. It's like one screen full and the bit more.
+
+1:27:17  
+But it's not changed a whole lot compared to what we had. So
+
+1:27:23  
+an evaluator its mission is given an expression, find out a value for it.
+
+1:27:31  
+If the expression is closed, so if all the names it uses are introduced within the same expression locally, then that is enough to determine the value. But surely, an expression may be non closed, especially if a top level expression is closed, its sub expressions are never closed anymore. Like, you know, the bodies of lead constructors are not closed because they contain further names. To work with these, we have this auxiliary argument that we call end, that records what we already know, are the names of the of the sorry, are the values of the names that have been introduced in outside
+
+1:28:11  
+structure.
+
+1:28:15  
+Everything is pretty much as usual, I just only maybe very quickly remind you of the main cases, like when you see a numeral, then there is not much to evaluate. You just say, okay, it's a numeral, therefore it is an integer, and that is the value. If you see a plus of two expressions, then you have to evaluate both, there is no way that you can ever figure out the sun without knowing the summons.
+
+1:28:39  
+You're only lucky if both come back as integers to you, in which case, you can add them up and say the result is an integer. In all other cases, like one of them is a is a Boolean or a function. You say, you know, I'm a, I'm a complete failure, because my arguments are not integers.
+
+1:28:59  
+Okay, similar for Boolean expressions and Boolean constant that there is nothing much interesting happening
+
+1:29:07  
+when I look up a variable, so if a thing is used as a variable, previously, he had to be an integer, a Boolean, because
+
+1:29:17  
+a function could not be used just so a function could only be used for calling. Now it's no longer the case, you can just also return a function.
+
+1:29:26  
+So this case actually becomes simpler. Previously, we looked at the thing in an environment, if it was a function, then we said something bad is going on. Now, we always just return what comes back from the environment.
+
+1:29:39  
+So if you're at the name use place, just consult your dictionary, like google it up.
+
+1:29:45  
+And that's your value. Yeah, Google says 1770.
+
+1:29:52  
+Let is the old one.
+
+1:29:55  
+You evaluate your body in an extended environment. What are the extended
+
+1:30:00  
+environment is achieved by evaluating the right hand side of the local name definition, and pairing up the local name with the value that you've got and adding it to the dictionary. The reason is,
+
+1:30:13  
+this expression here, can can refer to one name for one name more than the whole length expression, namely, to the local, the new variable x that was introduced here.
+
+1:30:31  
+When I make a function definition, this is pretty much as before, the only difference is
+
+1:30:37  
+the normal now, I only consider the statics Cobra, forget about dynamic, we will do this.
+
+1:30:43  
+The only difference is that in the closure now, because as I told you, you know, a function can have a new names or completely loser name, we remember the functions name from the time that it was defined in the closure. So when I make a function definition,
+
+1:31:01  
+then
+
+1:31:03  
+the value of the whole let fun construct is the value of the body, but not in the original environment that, you know is passed as down from the main call. But in the in an extended environment where we've inserted the new knowledge that the name F is now bound to the closure, which is the following about the function, we remember what its name for recursive calls in the body. The parameter, the function body, or the right hand side of the definition, always make a difference between the function body and the left body, these are different things. And then the environment from the time that the function definition was made. This is super
+
+1:31:49  
+important.
+
+1:31:51  
+Okay.
+
+1:31:54  
+And now the only place to explain is this guy, how does calling work?
+
+1:32:09  
+Calling works
+
+1:32:11  
+quite a bit the same as before, but there's some differences. So
+
+1:32:20  
+I have to do what previously the function was given by a name, and they just looked up the name in the dictionary.
+
+1:32:28  
+And it had to be a closure here is not the case that the function can given can be given by a complicated expression. But when you evaluate it in the given environment, it should give you back a closure,
+
+1:32:41  
+like an honest closure, which is this thing here.
+
+1:32:48  
+If what I call closure is not f something when I just fail, I say the expression called is not a function. Now this as closure was actually quite unnecessary, because I've already given the whole thing, exactly the same name flow. So that's kind of remnant from the old code. It doesn't do any harm, but it's also quite useless here.
+
+1:33:07  
+Okay, so then what happens if, if the function I'm calling really is a function? So everything is good in this respect? So what what do we do we do the only thing
+
+1:33:17  
+you have to evaluate the argument in the environment you're given?
+
+1:33:26  
+And then we have to evaluate?
+
+1:33:47  
+Correct? Yes, you must be, then we must evaluate the function body in an environment, which knows both the value of the argument which was figured out here, we just say, okay,
+
+1:34:01  
+the body can now use the parameter x, and we just agree that the parameters value is whatever is passed down to us as the argument.
+
+1:34:08  
+And then just for recursive calls, we say, you know, this body can contain F, we say the F value is the very same closure. And that ensures for us that recursion works.
+
+1:34:22  
+Well, that's pretty much it. So
+
+1:34:26  
+in the old code, this f was not present.
+
+1:34:31  
+But, but f actually was the name that we made the call with here the name may have changed. So I just or maybe the whole thing originally.
+
+1:34:43  
+Yeah, the name may have changed. But, but but we have some expression that evaluates to a function, but the closure knows it.
+
+1:34:53  
+And in which we can just use it.
+
+1:34:57  
+Okay.
+
+1:34:59  
+And that actually
+
+1:35:00  
+should be what I wanted to say here. So now we can see if we can evaluate something.
+
+1:35:09  
+What can we evaluate? We've already evaluated a few things.
+
+1:35:14  
+On the topic of this twice, let me maybe revisit this with this example of a factorial
+
+1:35:21  
+two factorial.
+
+1:35:26  
+Now nicely, this thing is written so that it contains the expression contains n as a global variable. So therefore, I can evaluate it to maybe in some environment that knows something about and
+
+1:35:40  
+so maybe I want the factorial of six.
+
+1:35:48  
+So there's just one string.
+
+1:35:50  
+And its value should not be six, but I six, then we get back the factorial of six, which is 720. That's nice. But I can also abstract this thing out into a function by just
+
+1:36:03  
+returning not verifique applied to n.
+
+1:36:08  
+But just var faac itself.
+
+1:36:14  
+Perfect, maybe I should say.
+
+1:36:17  
+So let's do that.
+
+1:36:19  
+I can say let back. Maybe I call it is this programme.
+
+1:36:27  
+Which part? Maybe this may fade now because of indentation reasons. But maybe I'm lucky.
+
+1:36:37  
+I think I just want to save more back. So we don't apply planned. That's the point.
+
+1:36:48  
+Just
+
+1:36:52  
+so that's my programme for four factorial, which doesn't return fact apply to some given n, it just returns back. So when I now evaluate it, I can evaluate it in the empty environment, no problem.
+
+1:37:04  
+But it's just a closure. So I don't see anything very interesting. However, it's a function. And now I can make calls of it.
+
+1:37:13  
+So I can call it on anything I want now. So I can do call
+
+1:37:19  
+this fact on
+
+1:37:23  
+norm,
+
+1:37:25  
+anything, maybe 12.
+
+1:37:33  
+That's the factorial of 12. And in case you didn't know, that's the factorial of 100.
+
+1:37:41  
+The reason is that some silly overflow with integers happens. So integers have a fixed size.
+
+1:37:48  
+Okay.
+
+1:37:50  
+This is pretty much what I wanted to say. So what are the messages? Holderness is important, if you are serious about
+
+1:38:01  
+whatever abstraction you've invented, it should basically acquire the same rights in your language as anything else. So if you can pass around stuff,
+
+1:38:12  
+and you've invented the thing like functions, then you should be able to pass them around.
+
+1:38:17  
+If generally, your things have values than functions should be values like any other.
+
+1:38:25  
+In particular, they should qualify as return values. The pragmatics of this is you can reuse code, you can write very general things.
+
+1:38:36  
+And then you can just plug little pieces of code together with kind of a blue as if
+
+1:38:44  
+and
+
+1:38:48  
+an implementation wise, if you're systematic about it, there is not too much additional overhead about any of this game. As you could, for example, see, my evaluator wasn't so much complex, more complicated than the evaluator had shown before. Actually, maybe in some sense, this is unfair, it was even kind of simpler or more streamlined. And that exactly came to the fact from the fact that I wanted to treat everything the same way. So functions received exactly the same treatment the same features and and Booleans.
+
+1:39:23  
+How we're doing with
+
+1:39:27  
+questions,
+
+1:39:37  
+Is this good? Is this clear, very unclear needs sinking in a sinking
+
+1:39:53  
+my peers previous experiences, it needs time to sink in.
+
+1:39:59  
+So that you can sort of
+
+1:40:00  
+To fully exploit the
+
+1:40:04  
+power and responsibility that comes with functions, I mean, they are a weapon and then you have to use it with care. But
+
+1:40:14  
+yeah, if it also for humanitarian purposes is only for the good of humanity, good needs sinking in. Yes, I did do a thing I published the solutions of the first assignments, if you go under assignments, and you just click on assignment one, then amongst all the fines, you see the solutions as well.
+
+1:40:34  
+And then we'll grade those.
+
+1:40:38  
+I do recommend that you talk to the DBAs. And then the classes on Wednesdays so you'll get some further insight and can play with it can play with things.
+
+1:40:51  
+I'm going to spend two more weeks on sort of explaining the central concepts of functional programming. So next time, we'll sort of dig deeper into polymorphic types, and then specifically into type inference that and then when we get over these things, we look into sort of what are the most crucial things about the imperative languages, which is always like programming with memory, like mutable memory is specifically references or pointers, however you call them. But then also the associated memory management like either languages with explicit allocation and deallocation
+
+1:41:27  
+or C, or languages where this sort of happens behind your back.
+
+1:41:34  
+Allah, Java or Python, if you wish.
+
+1:41:39  
+were usually there is something in the picture that you don't see that is called garbage collector, but it's very important for maintaining
+
+1:41:49  
+high hygiene and you having enough memory to do something useful with do something useful.
+
+1:42:00  
+Okay.
+
+1:42:02  
+Anything else for today?
+
+1:42:07  
+is very much like you to speak a little more.
+
+1:42:12  
+But it's okay. Also, if you just talk to the TA,
+
+1:42:16  
+ask questions on Piazza. We'll try to answer.
+
+1:42:24  
+Okay, I think I'll then stop the recording here. This will be it for
+
+1:42:30  
+today. And then talk to you again on Thursday.
+
+Transcribed by https://otter.ai

@@ -1,0 +1,1543 @@
+4:40  
+Hello
+
+4:44  
+you me
+
+4:49  
+very good.
+
+4:51  
+So good afternoon. This is the last lecture which is really not the lecture but kind of a recap. So let's talk about the eggs
+
+5:00  
+Sam, I also prepared a few things to go over
+
+5:06  
+that maybe you'd like to rehearse about, in particular lambda calculus and piping.
+
+5:15  
+So
+
+5:17  
+what is important, I prepared
+
+5:23  
+a little list for you about
+
+5:28  
+things to revise for the exam.
+
+5:31  
+So so first of all details of the exam, right, the exam is going to be three hours on Monday.
+
+5:40  
+I'm gonna set it up as, as a canvas,
+
+5:45  
+Canvas assignment, rather than a big exam, it's a fully open book thing, you can use whatever you want, but you should not communicate to each other.
+
+5:55  
+There will be a part with
+
+6:01  
+multiple choice questions or concepts. And then there will be free text questions, which are also
+
+6:10  
+for the largest part of them about concepts,
+
+6:15  
+maybe two or three problems
+
+6:20  
+that involve either understanding a bit of code or writing code.
+
+6:26  
+But these would be small things.
+
+6:29  
+The good thing about the home exam is that you can actually check these things.
+
+6:35  
+With with any interpreters, you don't write something that is that is completely wrong, or you can sort of self self test yourself.
+
+6:45  
+I've got a list from the teaching office about the number of students that there are a number of you that are entitled to a longer
+
+6:56  
+exam period. So instead of three hours, three hours and 45 minutes,
+
+7:02  
+I'll see how I set it up, I tried to do it so that
+
+7:08  
+it is saying it is assigned differently for you. So that you have a different deadline for for for sending in your solution to to Canvas. But if it doesn't properly work out,
+
+7:21  
+in the sense that I cannot separate the two groups the way that I want, then you'll just get extra time. And then you turn in the solution by email.
+
+7:31  
+After the zoom, sorry, after the canvas thing has closed, I'll write a clear instruction about this. So on Monday, you'll see which way it is
+
+7:42  
+and you don't have to worry about submitting at the right time.
+
+7:47  
+Is this
+
+7:49  
+clear? I may want to I may make the multiple choice part
+
+7:58  
+a separate assignment with with a separate shorter deadline something like 45 minutes out of the three hours
+
+8:07  
+then that would mean simply that you have to upload two different things
+
+8:14  
+or answer it in the quiz format, whichever way is the smallest
+
+8:20  
+here to set it up. So, here is the list of topics that I prepared these are on
+
+8:30  
+let me share my thing
+
+8:36  
+which would be this.
+
+8:38  
+So, I prepared a list of topics to revise to think of
+
+8:45  
+for the exam, especially on the level of concepts, you have to check the material of the lectures or better read the book.
+
+8:56  
+So, about F sharp, you will have to understand things like first order versus higher order functions will Pyro the rest means the idea that you can do two argument or in general multiple argument functions, either curried are encouraged to submit arguments, saying the two argument cases pairs or maybe one by one,
+
+9:18  
+recursion polymorphism. How do you work with a list type with the option type which has these tags,
+
+9:27  
+some none.
+
+9:32  
+Exceptions and references I won't really go deep into at all and you don't have to programme with them. Especially not with references, but you have to be able to understand code and understand the concepts. Then the main part of the course is basically in in three sections. So just basic expressions where you cannot even distinguish whether it's so functionary imperative setting, then split
+
+10:00  
+Specifically functional programming and then specifically imperative programming
+
+10:06  
+in the expressions part what is what is very important is
+
+10:11  
+well, the basic distinctions interpretation compilation lexing parsing for for syntactic pre processing,
+
+10:20  
+understand the
+
+10:23  
+the idea working with a stack,
+
+10:26  
+understand the idea of
+
+10:29  
+local scope or let blocks.
+
+10:33  
+So, the idea that you can have local variables and they can shadow out the less load local variables.
+
+10:41  
+And these are chapters two and three of the book. In functional programming, what is important you have to understand that you can define functions with LED but there are also these things called anonymous functions or lambdas.
+
+10:54  
+Very important for the processing a functional language is the concept of closure. So, when you process a function definition, you remember its definition in syntactic form together with whatever free variables that are in scope at the moment.
+
+11:16  
+The difference between static and dynamic scope role
+
+11:21  
+the idea of pipes and type inference versus programmer supplied pipes
+
+11:28  
+and the lambda calculus
+
+11:32  
+to the degree that we went through it, so, it's important to understand the concept of reducing lambda terms. Also the idea that
+
+11:44  
+lambda terms you can type either simply typed or polymorphically typed.
+
+11:49  
+There may be small problems on lambda calculus, you have to understand the important things that when you
+
+11:57  
+when you do computation with lambda terms, that then substitution is done properly is capture avoiding, so you don't get
+
+12:06  
+free variables bound by accident.
+
+12:11  
+And then from imperative language, what is important to understand is this idea of naive store.
+
+12:19  
+And to level stores where you map variables to locations and locations for the two values.
+
+12:27  
+Very important is the difference between
+
+12:31  
+expressions that have just our values. So, like three plus five only means a and other expressions like x or
+
+12:42  
+I don't know, the third element of x that actually also denote locations and that can occur to the left hand side of the assignment symbol.
+
+12:51  
+Regarding parameter passing to functions, it's important to understand the difference between call by value and call by reference.
+
+12:59  
+Regarding compilation
+
+13:04  
+it's important to understand the idea of frames for
+
+13:09  
+activating functions.
+
+13:14  
+And then the last topic was
+
+13:18  
+was heap allocation
+
+13:21  
+and automatic garbage collection through one you should know the notions of what is the heap
+
+13:28  
+free list and the main methods of garbage collection that I should say are the main main things and this corresponds to chapters.
+
+13:40  
+Well, Chapter One is really an introduction, but chapters two to 10 of the book, there are more chapters in the book please I will touch also in chapters
+
+13:52  
+two and three, and in some later chapters as well, every now and then, the book talks about
+
+14:01  
+lexer generation and parser generation but this was not covered in the lectures at all. So we I showed you some handcrafted lecture and the handcrafted parser. But I didn't tell you about the automated Lex Lexa generation or passage generation. So these ones are outside
+
+14:19  
+the scope I won't cover them
+
+14:23  
+in the exam. So
+
+14:26  
+let me know switch and show you how last year's exam look like.
+
+14:44  
+So here's the last year exam that I posted.
+
+14:49  
+When I first uploaded the file there was there were two silly types typos in the first two problems which came from my experimenting with colouring the right
+
+15:00  
+answers but no, they, I corrected them on the same day. So they are correct there. So these are sort of typical examples of what multiple choice questions could be about. They're really about
+
+15:14  
+concepts and principles, they don't go deep.
+
+15:18  
+They they test the understanding of the subject like, there is the big difference, for example, between statements and expressions that you have in both functional and imperative programming. In imperative programming statements, or commands are the main syntactic category in functional programming expressions are the main one.
+
+15:39  
+And the statements are the guys that essentially are not supposed to return anything, but they typically produce a side effect like changing the memory. Whereas expressions are things that normally don't produce side effects.
+
+15:55  
+So they don't normally read or write the store, although they may, but the main their main purpose is to return a value and the question is, what is more primitive computing values or changing changing memory and depending on that, you you're organised the language imperative programming is all about changing the memory functional programming is all about
+
+16:15  
+expressions that return values. So similarly, I could I could ask what is the difference between a list and a tuple. So lists are homogenous, they collect values of the same type, there is no restriction on the length normally, whereas a tuple is a thing of a fixed length like a three tuple or, or the tuple of In other words, or a pair or a two tuple.
+
+16:41  
+But
+
+16:43  
+elements can be of different types. So lists, the correct answer is B. tuples, would be the correct answer would be, etc. So
+
+16:53  
+there are basic questions about like interpretation versus compilation that could be about
+
+16:59  
+L and R values that could be about difference between say lexing and parsing,
+
+17:08  
+conventions about, say, compiling code to stack, like you expect that the statement, or a command doesn't change the stack height. Whereas an expression is supposed to return a value on top of the stack and grow its height by one, two, here a is the correct answer.
+
+17:34  
+Yeah, and they are really similar. You can go through them one by one I.
+
+17:38  
+Of course, there is no promise, I'd ask exactly the same question. But there is a spirit of
+
+17:48  
+I don't like tricks. So the exam will contain no tricks. But this doesn't mean that you should Google for answers, you should really think.
+
+17:56  
+And
+
+17:58  
+the really important thing is to
+
+18:02  
+read the question correctly, not, you know, not too shallow, so that you have some impression what the question is about, but you miss an important keyword in the question. That would be sad, because
+
+18:16  
+that will have a bad effect on on the correctness of the answer.
+
+18:22  
+Then
+
+18:24  
+the free text questions here,
+
+18:28  
+you will have to write something. In this particular exam, there were
+
+18:33  
+three cases
+
+18:37  
+where one had to write some code.
+
+18:41  
+The code would always be very small, like maybe sometimes just one line, or maybe sometimes five lines here. The same thing can also be written in four lines. If you do it more thoughtfully.
+
+18:55  
+There could be questions about is something a correct type for something? Or what is the correct type of something?
+
+19:07  
+I might ask some little thing about
+
+19:13  
+lexing or parsing
+
+19:16  
+them. So in this particular example, sorry, exam, there were two questions on this general topic. Like one was to understand how
+
+19:31  
+precedent precedences between operators work. So if I tell you one operator is stronger than the other, and maybe they have certain associations, how do you then read this thing? Where do you put the parentheses and here is the correct answer.
+
+19:50  
+So there was also
+
+19:53  
+an example about parsing where there is a little grammar of expressions and just to test
+
+20:00  
+to parse this expression
+
+20:02  
+as an expression.
+
+20:07  
+In the past three, you will have the different other kinds of syntactic categories there are there are parts of this string that actually correspond to summons and factors. And the question here was to just find out in this grammar, so what will be what So C is obviously a summon.
+
+20:26  
+And this whole thing is a summoned because the whole thing is a big sum. But also, everything in parentheses will have to be an expression, because the way that you process parentheses are goes via this
+
+20:40  
+rule of the grammar.
+
+20:43  
+So, this thing here, like the top level expression is also an expression and therefore,
+
+20:50  
+a and seven, the eight are actually summons as a result.
+
+20:57  
+And they will show up here
+
+21:00  
+maybe some things having to do with excuse me, yeah, sure. Isn't there a common mission in the last line?
+
+21:11  
+Oh, indeed, yes, here there is a common missing thanks, I can fix that.
+
+21:15  
+Very good observation.
+
+21:21  
+So there could be little things trying to understand what something does I mean, not not, not, not the real computation. But in this exam, the question was to understand what happens here.
+
+21:34  
+And then
+
+21:39  
+here, since Obama
+
+21:45  
+continues not to show everything at once. In this example,
+
+21:53  
+there is a function call
+
+21:56  
+where the function involves a free variable. And now, you know,
+
+22:05  
+most tools yours static scope rule, which say, if you've got a free variable that has already have to be in the scope at the moment when you make the function definition, and then the correct
+
+22:20  
+variable
+
+22:22  
+you should have in mind, so here in this particular case, definition, x is 70.
+
+22:26  
+But it's also possible that you want to
+
+22:30  
+consider this under the dynamic scope rule, and then it's different. So then it's not the function definition side, but the call side that matters.
+
+22:38  
+And in the call side, this occurs in a block where x is locally defined, and shadows out the the x that is further out. So instead, you would use 42.
+
+22:58  
+This problem here was really a way to test if you understand closures.
+
+23:04  
+And the say, next problem is on the same topic, there can be little things about lambda calculus, I
+
+23:12  
+promise only keep these small, because it's easy to earn simply
+
+23:19  
+in a
+
+23:21  
+you know, in a jungle of parentheses, otherwise,
+
+23:25  
+even though nothing deep is going on. And here there was a little problem about understanding how reference is also known as as pointers work
+
+23:37  
+the exam will be roughly the same size
+
+23:43  
+and
+
+23:45  
+not more complex than So, also not more, not more, not much simpler than so
+
+23:55  
+used this.
+
+23:58  
+Clear, would you like to go me to go through some particular thing here.
+
+24:05  
+Otherwise, I thought
+
+24:09  
+I would perhaps repeat a few examples from from lambda calculus with a blog post.
+
+24:41  
+Share.
+
+24:52  
+Okay,
+
+24:54  
+so let's do some lambda.
+
+25:00  
+All
+
+25:13  
+right.
+
+25:17  
+So in lambda calculus, the interesting questions will be to understand how reduction that is to say simplification of, of lambda terms works.
+
+25:30  
+I could also specifically ask about substitution, which is, which is a thing that you need in simplification, but it's not an important thing on its own.
+
+25:41  
+And there could be something about
+
+25:46  
+types. So let's take,
+
+25:49  
+let's do some examples.
+
+25:53  
+I want to look at this term.
+
+26:19  
+So let me first remind you what the rules of association are here.
+
+26:24  
+So you don't make mistakes in that regard. So for lambda, the rule is always lambda extends as far as it can to the right. So when you So here, for example, there is this lambda Zed lambda abstraction. So after the dot, you can go as far as you can, to the right until the first closing parentheses
+
+26:51  
+that was not opened in this lambda term. So as
+
+26:56  
+at the moment when you hit a closing parentheses,
+
+27:00  
+which doesn't belong to the same term, then this is the end of the of the lambda abstraction. So here there is no sipes, I mean, there is a pair of parentheses, but they belong together. And the the left parenthesis here,
+
+27:16  
+this one
+
+27:24  
+already is part of the lambda term, so the the right parenthesis, okay, so everything belongs here. And the lambda y here similarly spends the whole thing.
+
+27:35  
+And likewise, the lambda x here spends the whole thing. So that's not particularly interesting or complicated on this example, but we'll see from some others.
+
+27:48  
+How about applications application associates to the left? So
+
+27:58  
+here, we see three things in a row. Like we see hex zet. Why apply to that? And the question is,
+
+28:09  
+what is applied to what here, but application associates to the left, so that really means that the missing parentheses
+
+28:20  
+are sort of morally here.
+
+28:26  
+And they are not in the other place.
+
+28:35  
+So the missing parentheses are not
+
+28:39  
+here.
+
+28:42  
+It's not like you're applying that to Y to that
+
+28:46  
+and then X to it, that's wrong.
+
+28:50  
+What is done here is we apply X to that and the result is applied to white to white
+
+29:01  
+noise on the screen.
+
+29:10  
+Okay.
+
+29:15  
+Now, let's, let's do some exercises about it by the way of simplification. So,
+
+29:22  
+let me call it s the whole term here.
+
+29:27  
+Simply to write less,
+
+29:29  
+I could be interested in for example, the following simplifications. I could be interested in applying s to
+
+29:43  
+be applied to W.
+
+29:47  
+Or I could be interested in applying s two V
+
+29:52  
+and two W and these are two different things because in the second case
+
+30:00  
+What is really kept in mind, but not written is to implicit parentheses here. That's because
+
+30:06  
+it's clear that we have got two applications in a row. But we don't know in which order we have to do the application. So then
+
+30:13  
+the left one has the stronger precedence and the right one has the has the weaker precedent. So first S is applied to me. And then the result is applied to W. And if instead I want to apply the V to W, then I should rather
+
+30:32  
+put it in the parentheses explicitly like here.
+
+30:38  
+But now we can we can deal with both and see what we get.
+
+30:44  
+So in the first case,
+
+30:52  
+let me spell it out fully. So we can see what is going on.
+
+30:57  
+This is our picture. And now the whole thing is applied to be W.
+
+31:04  
+So what is the rule of simplification, there is only one that is important.
+
+31:23  
+Yes,
+
+31:25  
+there is only one rule that is important, which is the one that says if I've got
+
+31:32  
+a lambda term like this lambda x dot t,
+
+31:36  
+and I apply it to you, this should simplify to you.
+
+31:42  
+Sorry, to
+
+31:48  
+where I've replaced every free occurrence of x with you.
+
+31:53  
+And you can apply this rule
+
+31:56  
+not only top level, but anywhere inside your given term.
+
+32:02  
+And the intuition is lambda x dot t is just the lambda calculus way of stating anonymous functions is a function whose return value is described by T, the T may contain x's and x is the parameter. And when you actually make a function call application is making calls, then, you put the
+
+32:26  
+what people call the argument or the actual parameter instead of the parameter or what those would be to call the formal parameter. So instead of x, we put you
+
+32:35  
+that's what is done. And it's only the three axes that you actually can replace,
+
+32:47  
+we only substitute you
+
+32:51  
+for free x.
+
+32:56  
+Moreover, the substitution has to be done such that there is no capture. So there may be free variables in you that if you do the substitution naively get bound in T, and that is not allowed.
+
+33:11  
+So then you have to do some reading first.
+
+33:30  
+Okay, let's let's do the example. So
+
+33:34  
+the term here is exactly the correct shape,
+
+33:39  
+like this, so the simplification applies straight away.
+
+33:45  
+So what do we need to do? We have here a function whose formal parameter is x, and the argument or the actual parameter in the application is V applied to W. So we have to put v apply to W instead of x at all occurrences of x. And here there is exactly one. So the result is straightforwardly lambda y, lambda Zed,
+
+34:13  
+v w goes in place of x,
+
+34:19  
+then applied to Zed, then applied the white to Zed.
+
+34:26  
+And actually,
+
+34:28  
+this pair of parentheses here is not needed. Because our precedence rules say, we may just as well not write it. So it's also okay to drop it now.
+
+34:56  
+Okay, and that is actually not the result because
+
+35:00  
+We are no longer in the situation where we would have a lambda abstraction applied to something. Because
+
+35:09  
+this inner lambda abstraction upon lambda Zed law is not applied to anything. This lambda,
+
+35:18  
+you know, its scope is until the end of the expression. And similarly here, this one is not applied to anything. So that is actually the, the the end result here and nothing else happens.
+
+35:30  
+How about the second example that looks very similar? It looks similar, but it's quite different.
+
+35:37  
+So, let's do that too. So,
+
+35:42  
+this piece
+
+35:45  
+is come here.
+
+36:02  
+Yes, go away,
+
+36:04  
+slowly in combination with
+
+36:21  
+I apply S to V and then to w.
+
+36:27  
+So, now, it looks very similar, but the picture is quite different.
+
+36:41  
+This whole thing is applied to VI. And the result is applied to W.
+
+36:48  
+And let me remind you, there are implicit parentheses here that we don't need to write.
+
+36:54  
+But they are here like they were here.
+
+37:03  
+Okay.
+
+37:04  
+Now, actually, there is a bit more simplification that we can do.
+
+37:14  
+So, what happens?
+
+37:21  
+So what is the structure of the term given to us, we've got one lambda abstraction applied to V, and the result is applied to w. So, the top level thing is not a lambda abstraction applied to something, the top level thing is, is an application applied to something else, it's an application of a big thing applied to me, in turn apply to W. But the big thing apply to V is of the right form it's
+
+37:48  
+assisting here.
+
+37:51  
+Right? So therefore,
+
+37:56  
+we can use the rule. And what does it say the formal parameter or depending on your way of speech, the formal parameter or parameter parameter is x, then the actual parameter or argument is V. So v goes for x. So let's let's make this move
+
+38:16  
+lambda y length reserved
+
+38:19  
+V for x,
+
+38:21  
+y, Zed.
+
+38:24  
+But still, we have to take care of the application to W, which we haven't yet done. So now this is the situation in which we are
+
+38:34  
+after one first step.
+
+38:36  
+And now on the top level, we are in the situation where I've got a lambda abstraction applied to something. And the rule applies here on the top level. Now, who is who, why is the formal parameter W. Now in this case,
+
+38:55  
+is the actual parameter or argument so that means w goes for needs to go for y, and then the result will be
+
+39:07  
+and then visit
+
+39:10  
+visa
+
+39:13  
+W.
+
+39:19  
+And we're stuck here because the whole thing is a lambda abstraction is not applied to anything. So this is the normal form. This is the final form that we can reach with this term.
+
+39:31  
+Now, these two examples were nice in that we didn't ever have to have to worry about capture or renaming. Why didn't we? Because essentially, we never tried. I mean, the variables were already sufficiently named apart, right? So in the first case, we were putting v apply to W for x in a big term and neither v
+
+40:00  
+Or w occurred, bound, for example, in that term, so there was no danger of us actually
+
+40:13  
+capturing
+
+40:16  
+a free variable, sort of by accident illegally. And the same actually occurred in the second case, because here we had VW as well, while the parent visitation was different, but but we is substituted for x in a term that doesn't contain that doesn't bind V, and, and, and the same for W. So that was all nice. But let me just for comparison, put here on the same page, an example where things are not as easy.
+
+40:58  
+So let's do a variation on exactly the same theme. So maybe I'd like to do s apply to,
+
+41:09  
+shall we say y apply to set?
+
+41:20  
+Okay. So S is just a name is an abbreviation for for an actual lambda term. So for us to see everything very clearly, let me write out this again.
+
+41:39  
+This is one big lambda term. And we want to apply to Weiser.
+
+41:44  
+So this wants to be very similar to the first example. But now
+
+41:50  
+we've used less letters for our variables, and there is already some danger for clashes lurking. Because for example, when you look at the y's, their usages in the term that y is in two places.
+
+42:12  
+The first one here, this one is bound by this lambda.
+
+42:17  
+The second way This one
+
+42:19  
+is free, is not bound by anything.
+
+42:23  
+Okay, so this has now of course effects when we actually want to do the simplification, which would be to do what?
+
+42:37  
+What would be my first step of simplification, actually, the only one that I can do here anyway, is to replace x with y Zed in the lambda term, and of course, then remove this prefix lambda x.
+
+42:51  
+So I have to make
+
+42:57  
+a substitution of y's that for x.
+
+43:01  
+But what y and Zed are these, these are the three top level three y and Zed.
+
+43:06  
+If I put them in the place of x, which actually is here,
+
+43:12  
+then they will get bound by the two lambdas that are here.
+
+43:18  
+This one and this one.
+
+43:22  
+So that's not good. This is exactly what is called capture something that is that is free.
+
+43:30  
+And should mean something for us on the top level of the term would,
+
+43:38  
+we'd get mixed up with something that was entirely local, namely, these y and Zed here in the lambda term. So what are you supposed to do in this case is, well, we can't,
+
+43:51  
+we can't begin with simplification, we actually have to replace the term with what is called equal but more more precisely alpha convertible version of it, where we've renamed some bound variables.
+
+44:07  
+And you can always freely remain renamed bound variables,
+
+44:14  
+provided you don't create
+
+44:17  
+further captures by this, but here, the only ones that matter are the bindings of y and Zed. So let's rename them into something different.
+
+44:27  
+So let me write lambda x,
+
+44:31  
+lambda y prime
+
+44:33  
+numbers a prime. So I've decided that instead of using y as the local name, I'm using y prime instead of using Zed as the local name, I'm using Zed prime.
+
+44:43  
+And then accordingly, the body of all these lambdas would be x zero prime, y prime z prime, this is what it is.
+
+44:54  
+And then in here,
+
+44:57  
+sorry, this term, we want to apply to y Zed.
+
+45:00  
+Let's hope that we are now in a better shape. Now, if now I'm gonna put y Zed for x
+
+45:11  
+in the body of this lambda x thing here, which is here.
+
+45:16  
+This is contains exactly one fee occurrence of x, which is this point. And now this x, if I were, if I were to move, why is that there, which I'm going to do in a sec, then
+
+45:30  
+they do not get
+
+45:32  
+the y and Zed do not get bound by accident. So this will be a good thing to do. And the result will be
+
+45:40  
+lambda, y prime, lambda Zed prime,
+
+45:45  
+then why is that is for x,
+
+45:50  
+then Zed prime, y prime z prime,
+
+45:55  
+like this. And,
+
+45:58  
+again, the association rules are there. So
+
+46:04  
+I can actually drop a pair of parentheses here,
+
+46:08  
+which would be those.
+
+46:21  
+Okay, this is the final result.
+
+46:24  
+And if you compare it to what we saw before, this one here,
+
+46:30  
+it is a bit different, right? Because
+
+46:34  
+we had to be able to, to refer to these wines that that are globally free. So therefore, we don't have the luxury that we had here.
+
+46:44  
+That we can use the names y and Zed as local, local names. Yeah, we needed really to rename the local variable. Is this clear? Or does it raise questions? I have some more examples that we could look at. But
+
+47:00  
+can you tell me if this is
+
+47:04  
+fine by you?
+
+47:11  
+Okay, just shout when there is something, let me let me show you a slightly different example more involved, just to illustrate the exact same ideas,
+
+47:22  
+then we can think of we can proceed.
+
+47:28  
+So here's one,
+
+47:31  
+which has a tiny bit more interesting structure. So we've got lambda x.
+
+47:39  
+And then
+
+47:41  
+lambda y, and why acts like this.
+
+47:52  
+Reply to
+
+47:54  
+numbers that
+
+47:59  
+closing parentheses, applied to, shall we say why?
+
+48:11  
+Now this is a tiny bit more interesting situation, because
+
+48:16  
+we've got more lambda abstractions here, and they are nested in each other in more interesting ways. So let's look where they are. So one is here, lambda y. And the body of the lambda abstraction is this bit, right. And then there is lambda that the body is partisan.
+
+48:32  
+And then finally, there is lambda x.
+
+48:36  
+And now what's the scope of this, this is an illustration of this principle that lambda extends as far as possible,
+
+48:45  
+until you meet until the very end of the term or until you meet an unmatched closing parentheses. So here I can go this far. And then I have to stop because there is a closing parentheses that was not studied within this ambetter right. So this is the outer lambda.
+
+49:04  
+And now we are in a situation where there is two ways that I could start
+
+49:10  
+simplifying it
+
+49:12  
+because I can do the sort of outermost strategy or innermost strategy and by the rules of lambda calculus, this will take me to the same place unless I have side effects like printing or so they don't have here.
+
+49:28  
+So we could try both and see what what happens.
+
+49:40  
+So we could do inner most.
+
+49:45  
+First.
+
+49:48  
+We're okay most
+
+49:52  
+first, wind can also be
+
+49:56  
+right axes that are on the same level then you also have to say left to right.
+
+50:00  
+First, I always mean Left, left most. So left, mostly normals are left most often most.
+
+50:07  
+So here are the two strategies.
+
+50:12  
+So which are the red axes here? One is the whole thing. That's the outermost one.
+
+50:21  
+Because it's a big lambda apply to why.
+
+50:26  
+But inside I have another one, which is this, which is the body of the alter lambda, namely this guy here.
+
+50:34  
+Yeah, because it's, it's a lambda thingie lambda y y, y x applied to something namely lambda that.
+
+50:44  
+So the big one is the outermost one to touch the small one is the innermost and there is no other candidate for innermost because
+
+50:54  
+this one here lambda says that this is not apply to anything. So that one is not
+
+51:02  
+useful as as as a red X or as part of a red X. Let's do the innermost being and most has
+
+51:12  
+lambda y,
+
+51:15  
+y x as the function and lambda Zed Zed Zed as the argument or actual parameter, the formal parameter of the function is, is y, so we have to replace y with lambda Zed, Zed, Zed,
+
+51:29  
+and that will be it. So we'll get as a result lambda Zed,
+
+51:35  
+then we replace y with lambdas. That's what we get when
+
+51:43  
+applied to x.
+
+51:55  
+The whole thing applied to why this is what you get.
+
+52:02  
+So where did I start, I started here, let the market begin, I started here.
+
+52:08  
+And this bit got simplified to this.
+
+52:13  
+lambda y is gone. And for y, I've put lambda Zed Zed Zed index is still there.
+
+52:20  
+So it's the body of the function that we had previously. So the body was here.
+
+52:26  
+And in this body, I've replaced y, which is the formal parameter with lambdas.
+
+52:32  
+So now, actually, I have a red X again, actually, I have still two. So I've got one inside, which is these lambdas that apply to x. And the Ultraman is lambdas, that blah, blah, applied to y. So again, we do the innermost first two, I just continue with the same, although I could switch down to both now, but but that's not. So let's continue in our most and why is that first lamp
+
+53:02  
+set not x.
+
+53:05  
+Well, this one here, this is a very good observation, this is just copying mistake, this is what has to be the same Of course, the lambda y is gone, right? Because that was the that was the formal parameter of the function that was called on lambdas, etc. Okay.
+
+53:25  
+Now, what should the inner one then do? Well, what is happening here,
+
+53:31  
+so the function is lambdas, that were that that is the body so this is what is returned, and that is the formal parameter. And now for the formal parameter, we put the argument that will people also call the action parameter. So x goes for that.
+
+53:47  
+And we do get
+
+53:50  
+lambda x, x x
+
+53:54  
+applied to y.
+
+53:57  
+And it's also easy to see what happens one. Now again, we've got a function applied to an argument x is the formal parameter y is the argument we actually parameter. So y goes for
+
+54:12  
+x
+
+54:16  
+Okay, I could have started at the other end to see if this gives the same result.
+
+54:22  
+So here,
+
+54:25  
+we should have started
+
+54:28  
+with a whole thing as the as the red X. So the function is lambda x blah, blah. And the the argument or the actual parameter is y. So y should go
+
+54:42  
+in place of x,
+
+54:44  
+aha, but that is a bit dangerous, because where is x?
+
+54:49  
+x is here.
+
+54:53  
+But this is
+
+54:57  
+in a context that binds y
+
+55:00  
+Don't want to put why there. So that's very bad, because I will have my free why the top level why that gets then confused with a local why if I do this, so we can't really afford this at all. So really, we should do some renaming here.
+
+55:19  
+So let me first rewrite it,
+
+55:22  
+like the equal term
+
+55:24  
+is just the one where I've renamed one suitably.
+
+55:28  
+And that will be
+
+55:32  
+lambda x, lambda y prime. But you can also put any other name prefix picks
+
+55:48  
+the whole thing of like the why.
+
+55:51  
+Now I'm in a slightly better shape. So I'm not in danger of mixing up
+
+55:57  
+the two different scopes for y, I mean, the top level y and the local y are not going to be confused by this move, which I want to do. So y goes for x, and then I do get lambda y prime, y prime y, blank lambda Zed,
+
+56:30  
+then we're doing the outermost strategy. But actually here, it doesn't matter because there is only one thing that we can currently do.
+
+56:40  
+Because lambda y prime is part of a red X, and we look at the function applied to something but lambda said that this is not part. In that sense. I mean, we were not applying the function lambdas of block or anything. So we need to work with this whole thing here
+
+56:57  
+and replace y prime with
+
+57:03  
+lambdas.
+
+57:13  
+I'd like to why. And then
+
+57:17  
+it looks different from the penultimate step in the other production sequence. And it is because things happened in a slightly different order. So we've dispensed with
+
+57:27  
+bound variables,
+
+57:30  
+Zed and x in a different order.
+
+57:33  
+But the end result is going to be exactly the same.
+
+57:47  
+Okay.
+
+57:49  
+And these are two of
+
+57:51  
+the possible simplification sequences or reduction sequences that you can carry out here, which were sort of implemented by this pure strategy by their innermost first throughout our outermost first throat, but of course, because we would have switched on the way So, in the end, actually, there are four different ways that you could have arrived on the same result like I could have done the innermost first first
+
+58:14  
+and then maybe switch to outermost first
+
+58:17  
+and then continue. And there is a similar story here, I could have done the outermost first here, but then switched to the innermost first idea and Oh, forget it before combination, but it really doesn't matter. In the exam I may tell you well, please use one fixed strategy, what corresponds to languages like we looked which are called call by value is the is the one where you are in this is more deeply than so but, but on the level that you need to understand it corresponds to doing things. innermost first.
+
+58:52  
+Does it make sense?
+
+59:04  
+Perhaps I should also show some little things about
+
+59:09  
+typing
+
+1:00:31  
+So I'd like to look at the following one.
+
+1:00:37  
+So let's do type checking rather than inference, I'll tell you what the type is. And then we can, we can try to verify whether this is
+
+1:00:47  
+indeed,
+
+1:00:49  
+correct.
+
+1:01:24  
+claim this is the following type, I'll just use capital letters for
+
+1:01:32  
+for four types here
+
+1:01:35  
+are sort of schematic five variables, they could be anything.
+
+1:01:41  
+So this one is like this
+
+1:02:05  
+may look a bit complicated. But But what is happening, so the whole thing
+
+1:02:12  
+is a big lambda term.
+
+1:02:15  
+And you can see it's a sequence of lambdas in a row. So this is this idea of, of curried functions. Really, in some sense, we are dealing with a for place or for argument function here. But but the arguments are given one by one. So which you can also see here in the type. So there will be one argument corresponding to type A, another argument has to be of this type, a third of this type and the fourth of this type. And the result we claim here is of type A, which happens to be the same type as the type of the first
+
+1:02:49  
+argument, right. And I might want to know why this is why this is correct, why we can apply everything exactly in the ways that we
+
+1:02:59  
+expect.
+
+1:03:03  
+So let's see, we have these rules, that allowed us to check types.
+
+1:03:20  
+So I want to prove such a thing,
+
+1:03:31  
+which is a formal way of writing down
+
+1:03:36  
+something that also intuitively makes sense with checking all the lambdas whether they are functions of the correct type, and we're checking if if all our applications of this was not straight.
+
+1:03:48  
+We also want to check if if our applications are reasonable.
+
+1:03:58  
+So, what is required for a function lambda x block to be of this time, we really need to check that if we assume that x is of type A, that then the rest of the term which is the body of this abstraction
+
+1:04:15  
+is of the correct type.
+
+1:04:17  
+Namely this
+
+1:04:21  
+and then because of the structure of this term, we will repeat the same exercise a few times
+
+1:04:26  
+before we see if this works.
+
+1:04:29  
+So what is the term I'm looking at now it's again the lambda lambda f and then the body. Well, for this thing to be a function type like this, I have to check if f has type B airway airway does the body have type B arrow B arrow a
+
+1:04:49  
+introducing is to see if excess type A and as tight as we said
+
+1:04:58  
+your way right
+
+1:05:02  
+Is it true that the body which now is lambda y, lambda Zed
+
+1:05:07  
+have Y and Zed x? Does it have time the arrow?
+
+1:05:16  
+Well, it's still the same gain points, because we've got two more parameters here to deal with in lambdas. So let's check that under the assumption x is in type A, and f is in type B arrow a. away.
+
+1:05:33  
+And y in type B, is it really the case that lambdas that f y, Zed x is of type
+
+1:05:45  
+B away?
+
+1:05:48  
+Well, this depends on if the last function that we're trying to type here has the correct type. So for input, type B,
+
+1:06:00  
+sorry, for
+
+1:06:02  
+under the assumption that Zed has the correct input type B, we need to check that the what the function returns which is the body as the type the return type A.
+
+1:06:31  
+Oh, okay.
+
+1:06:34  
+Sorry,
+
+1:06:37  
+that went too fast, like this. Um,
+
+1:06:43  
+well, let's see, let me give this thing a name.
+
+1:06:47  
+The context that we have here, could be called the whole thing gamma,
+
+1:06:52  
+that actually also delete all of this, because I don't need it anymore here.
+
+1:07:05  
+So this is an application
+
+1:07:08  
+F, applied to y is applied to F at X.
+
+1:07:19  
+So in the context, gamma, we have two type f applied to y in some way, and we also have to type
+
+1:07:31  
+the text in some way that actually fits together.
+
+1:07:39  
+Now, what do I have to write this types? So?
+
+1:07:47  
+Well, I better be in the situation where the function gives me something of type A, and here I don't know what to put here.
+
+1:07:56  
+But, the argument
+
+1:07:59  
+supplied to the function has of course, to agree with the input type of the function, so that the total currency is a question mark here should should really be the same type.
+
+1:08:12  
+So maybe we can check a bit.
+
+1:08:21  
+So, what's the situation here, if is applied to y, we actually know the type of F this is b arrow a arrow a, and we also know the type of y which is B. So reasonably the result that we get here should be a airway.
+
+1:08:41  
+Just looking a bit the head
+
+1:08:44  
+and formally we can complete this by saying look in the context gamma we very well know that f is of type
+
+1:08:51  
+era airway
+
+1:08:54  
+and y is of type B. So, therefore, we are entitled to conclude that f of y in this situation is of type A airway these two are just actions because
+
+1:09:07  
+all we are doing is we are using the knowledge that we have in this context gamma about F and why Okay, so the question mark was was
+
+1:09:17  
+was a swan better check that everything is here as well, good here as well.
+
+1:09:27  
+So, I need this and this again is an application. So in gamma, I have to give some time to upset
+
+1:09:36  
+and in gamma, I have to give some time to x. But actually, we know what the type of x is the type of x is a.
+
+1:09:46  
+So therefore, f apply to that has to be of type a way for this application to be well typed at all. And then
+
+1:09:56  
+what do we know here? We know that gamma
+
+1:10:00  
+says f has type B arrow, a ray.
+
+1:10:08  
+And gamma also says that has type three,
+
+1:10:13  
+type B.
+
+1:10:16  
+And these two together give us that F applied to set is the correct way
+
+1:10:27  
+to learn.
+
+1:10:30  
+Okay. And this is then foolproof. But in the end, what did we do all we all that I played with was I was, I was applying the lambda calculus rules that tell me how things work. So let me record for you what they were. So I'm entitled to say that
+
+1:10:51  
+in context gamma x has is of type A, it's actually this is part of the of the context gamma. So if you've gamma contains this knowledge, then I'm allowed to use it, this is how I finish a derivation.
+
+1:11:05  
+For lambda, what is the trick? If I want to prove that some term key sorry that some term x, lambda x to T has type A or ob, this is only justified if in the context gamma extended with the knowledge that x is of type A, I can prove the T is of type T. So this is checking that
+
+1:11:33  
+for a function to have type A arrows B, I can really deduce that the body has the return type under the assumption that the argument is or that the parameter has the correct type. And then for application, we have the rule that says
+
+1:11:52  
+you have to be in the same context is of type a aerobie, for some a, and then you is of type A, so it's a good application. So in a function application, the main thing to ensure is that the input type of the function agrees with the type of the argument
+
+1:12:13  
+when we see it.
+
+1:12:15  
+That was too hasty writing this because I also want to fit in the gamma
+
+1:12:20  
+in the context cannot be proven.
+
+1:12:29  
+This is how to do these things.
+
+1:12:42  
+This makes sense.
+
+1:12:45  
+I did this very slow. But I also hope sort of sufficiently carefully. I'm
+
+1:12:55  
+sorry, quit this exercise be on the exam.
+
+1:13:01  
+Maybe not as big but the smaller one could, in principle, be yes.
+
+1:13:07  
+So that you need to do a few steps in this in this type.
+
+1:13:11  
+type system.
+
+1:13:18  
+What is the format of what have
+
+1:13:24  
+you the basic format is you really, you just write something in a text file, like using a notepad or whatever text pad,
+
+1:13:34  
+if you feel that you need to draw, I will allow this as well. So I mean, you can you can take a picture of something.
+
+1:13:44  
+I've tried to minimise this.
+
+1:13:47  
+But this is the best I can do.
+
+1:13:49  
+So the important thing is that I understand what you've done has to be in a readable, readable format. But the main thing is to really upload the text file. I'm not a big fan of if you draw if you if you convert it into a
+
+1:14:05  
+doc or PDF, but but but that's also of course possible, but I don't want you to spend a lot of time on typesetting. So you should really
+
+1:14:14  
+if you want to sketch a drawing or maybe two or three like this, the best is you just attach
+
+1:14:20  
+you attach a photo so I make the upload sufficiently liberal for this.
+
+1:14:27  
+But the the absolute preference is just just plain text
+
+1:14:32  
+for most things at least.
+
+1:14:36  
+Okay, but sorry, in plain texts, like simple like that, to understand simple rhodos whatever. Yeah, yeah, I mean, then of course, I mean, if you if there is a problem like this, then then you have to come up with something I mean, for the for the turnstile, you'll probably do vertical bar minus and for an arrow you'll probably do minus and greater than, and you don't need so much more right and for lambda, you can just
+
+1:15:00  
+To a backslash. And if I put such a problem, I will, I will put some hint in the, in the text as well how to how to sort of show with easy. But anyway trees they do, they do get messy because you also have to indicate the branching structure in some way. And this can get messy to do in just imply that. On the other hand, if you if you use some drawing programme, you maybe spend too much time, I mean, if you're well versed in it, you're most welcome to do it.
+
+1:15:26  
+And, and that will be helpful. But I'll try to be reasonable in making things easy for you in the sense that you don't waste too much time of your solution time on typesetting things. But I also want things to be easy for us,
+
+1:15:45  
+to the degree possible to the degree to grave, and also so that
+
+1:15:52  
+you know there is no ambiguity in whatever you submitted.
+
+1:15:57  
+So that you mean one thing that we happen to read out, and
+
+1:16:02  
+that's always a tricky, tricky thing with these kind of
+
+1:16:06  
+home exams, which I really hate, but what can I do.
+
+1:16:19  
+But the main thing also having to do with like,
+
+1:16:23  
+cold understanding or, or, or writing a small snippet in code is you have to make yourself understood and we
+
+1:16:33  
+so
+
+1:16:36  
+if you are with some syntactic detail in an exam, it doesn't count, but the idea has to be right for you to get marks, like positive marks. And
+
+1:16:48  
+do they want to say
+
+1:16:53  
+no, I lost my train of thought.
+
+1:17:01  
+Yeah, when when when you have the feeling that something is,
+
+1:17:07  
+is understanding, maybe the little calculation, and there is the danger that you are with a particular number you write down, it's always good to write explanations.
+
+1:17:18  
+I mean, it can be a strategy to not write any explanations. So and guess the correct answer and just write down the answer. This can work with some problems in your favour. But then on the other hand, if you read the noise, and no explanation, and the answer is wrong, then you strictly get zero points. But if you if you have written a bit of explanation,
+
+1:17:41  
+and we see that explanation makes sense, but there is a typo in the final answer that you've given, then, of course, we are nice and give you You know, sometimes a good amount of mark for a problem. So my solution, my my, my suggestion is, if you understand the thing, then always
+
+1:18:03  
+say what you mean, like give explanations. On the other hand, there is a limit to this, right. So I mean, one other thing that that will upset every grader is
+
+1:18:14  
+if you don't know a solution, but you just write a long waffle.
+
+1:18:19  
+Hoping that the teacher will find something in the right direction in it and give points. So this may work in your favour. But it may also just upset the grade, the grade that especially if one spends a long time trying to find an idea and what was written. But if they're really in the end of the day is no idea. This, it doesn't work in your favour. So the usual sort of student
+
+1:18:42  
+things of course, apply here you have to be
+
+1:18:48  
+the best is if you know your thing. And if you want to be very strategic in how you write down answers. This
+
+1:18:55  
+may work
+
+1:18:57  
+against you if you overdo it, but if you do it sort of in good faith, and frankly and honestly, then, then writing explanations will work in your favour. But what else can I say?
+
+1:19:11  
+So in problems that certainly require explanations while I put it in the problem statement, you know, don't just give an answer but explain which means write one or two sentences. What is your argument while you think the answer is correct?
+
+1:19:26  
+There may be some cases where it's just a yes no answer or you know, give a particular number you don't need any explanation. Then that will be clear from the
+
+1:19:49  
+book. Okay. Is there something
+
+1:19:58  
+else
+
+1:20:05  
+If no then maybe I'd stop here. I'll put the lambda calculus things somewhere, some examples
+
+1:20:15  
+and then I wish you good luck.
+
+Transcribed by https://otter.ai

@@ -1,0 +1,1477 @@
+0:13  
+Very good.
+
+0:26  
+Okay, so we do encoding data types in,
+
+0:33  
+in this system polymorphic,
+
+0:36  
+lambda calculus,
+
+0:40  
+also called system math. So what happens?
+
+0:44  
+It turns out that you can code up a whole
+
+0:47  
+lot of things here. So, I will do two main examples, which are the Boolean type
+
+0:54  
+and natural numbers.
+
+0:57  
+But actually, you can also code up tuple types here quite easily.
+
+1:03  
+And, in fact, any kind of interesting user defined data types, like various sorts of trees etc can be
+
+1:11  
+coded.
+
+1:17  
+Let's see how this can be done.
+
+1:20  
+These encodings go under the name of church encoding or in predictive encoding, if you see somewhere in the book, that's exactly this.
+
+1:29  
+So, one of the main things that we need to do with with Boolean is in a programming language, well, we need to have a type of Boolean around.
+
+1:39  
+And then it's important to have a constant for truth that I call TT here a constant for false.
+
+1:47  
+And some way of looking at the Boolean and making some decision based on it that you typically call if then else.
+
+1:54  
+And everything else that you may actually want to do with Boolean is can be coded up through these things, right? Because,
+
+2:04  
+say, logical and for example, or logical or, or negation, you can write down all of these through
+
+2:12  
+if then else. So for example, if you want to say not B, of course, it's the same as to say if B, then false. Else true, because that just flips the truth value.
+
+2:25  
+Why is this? Sharing properly?
+
+2:32  
+You're not seeing what I'm showing, right? No,
+
+2:36  
+that's not good. Why is it doing this to me now? Okay, try again. So this was the only slide that I managed to show.
+
+2:45  
+I want to talk about Booleans. So,
+
+2:49  
+and I said, we want to have around at least a pipe for Booleans. If I want to work with Booleans, and then the constant to unfold. And if then else, don't look at the right hand sides here yet at all. So I'm just saying, What is sort of the minimal infrastructure that I need to have around in order to programme with billions? Then the last thing I said was,
+
+3:13  
+in the case of
+
+3:15  
+negation, for example, or not, this is the thing that you can easily write up with if then else, because
+
+3:24  
+you would say something like, not B is the same as if B,
+
+3:29  
+then false else true. So just by picking suitable branches for the if, then else, you're done.
+
+3:36  
+Now it turns out,
+
+3:39  
+and Firstly, it looks like a rabbit out of a hat. But actually, there is a bit of a method behind it. That,
+
+3:46  
+of course, these things are not present in the polymorphic, lambda calculus. As such, we don't have a primitive type called bool. We don't have any constant like this given, but we can call them up. So it turns out
+
+4:00  
+the Booleans, you can code up with this type. Yeah, it looks maybe a bit crazy. So it says it's the type of
+
+4:12  
+all functions that work at all types x, and take an X and give an X, sorry, take an X, take another x and give back an x.
+
+4:24  
+Now, if you think how many such functions you can actually write, maybe there is only two because
+
+4:31  
+what can such a function do that works on any type x takes two arguments of type x and returns a value of type x.
+
+4:42  
+And you know nothing about the type x you can't use any particular operations like you don't know it's a character. So you cannot apply character operations. You don't know it's an integer. You can't apply integer operations, you know, nothing. Someone gives you two elements of x and you're supposed to produce an element of x.
+
+4:59  
+What
+
+5:00  
+Can you do in such a case?
+
+5:05  
+Well, there isn't a lot is there,
+
+5:09  
+you can either take the first argument, then throw the second away. Or you can take the second argument that throw the first one away. And then you return what you kept. What else can you do? And this maybe indicates why this is a good idea, because a Boolean type should have two elements. And here is a complicated type that actually only has two elements, right? Take two arguments, keep one of them, there is two possibilities. And we exploit this fact. And it turns out that these works people.
+
+5:39  
+So I need two elements, then I just define them in some way. I define true and false, where I say two is the one that keeps the first element. So that one should be good, right? takes something that I call t here.
+
+5:57  
+These sort of hidden, actually, for two brands, and F is for false brands, if you if you wish, but but they're just variable names. That sort of it says keep the true branch. False, is similar, but it keeps the other one.
+
+6:10  
+Maybe better, don't think through bronze and Postgres, just think, think two things, return one of them.
+
+6:19  
+And then if then else actually turns out, and that's more complicated, you can code up with,
+
+6:27  
+with something like this.
+
+6:30  
+Yeah.
+
+6:32  
+If the nails has to take
+
+6:35  
+three arguments, one of them has to be of type Boolean, the other ones have to be of whatever type of equal types. And it has to give us something of exactly the same type. And then it turns out, you can apply B to t. And then here's the intuition.
+
+6:50  
+The T is really kind of the true true brands, and f is the false branch and things will work out beautifully. We'll see this, but first I have to justify that this kind of definition is good at all. So let me try to show to you the TT FF and it he actually have the types that we intend for them.
+
+7:14  
+So let me try to do this, then I have to share differently Just a second.
+
+7:30  
+Share the whole screen.
+
+7:40  
+I just need some space for you.
+
+7:43  
+Good.
+
+7:46  
+So let's think why is TT of the good point at all?
+
+7:52  
+TT has to be a five Boolean right?
+
+8:10  
+TT is.
+
+8:24  
+Tt is this thing
+
+8:28  
+is actually this thing lambda t.
+
+8:42  
+And we want to show that this is of type Boolean,
+
+8:50  
+Boolean, or really, this type
+
+8:55  
+for all x, x, x arrows x,
+
+9:02  
+isn't it?
+
+9:04  
+Now how to prove such a thing? Well,
+
+9:09  
+I've got my rules. There is the rule for lambda. But that only works when I have a function space in the tight but here I have a fraud. I first need to
+
+9:17  
+be using the generalisation rule, sort of backwards because I work my way up from conclusions to premises.
+
+9:26  
+So let's see.
+
+9:28  
+I have to write Thursday, lambda
+
+9:34  
+has to be of the type x arrows x arrows x
+
+9:43  
+where
+
+9:44  
+I've replaced the bound variable x by a free variable x, which is an OK, application of the generalisation rule,
+
+9:54  
+because it says that as long as x doesn't apply in the few variables of God
+
+10:00  
+Math, I can I can just go from this to this.
+
+10:05  
+And if my ex is among the three variables of gamma, then I better again use alpha renaming I just change the bond variables for something more suitable, which is always possible.
+
+10:17  
+Okay.
+
+10:19  
+So then what is the next step actually that this was a good place to be?
+
+10:27  
+The next step should be the rule for lambda,
+
+10:31  
+which is this. So I say, okay,
+
+10:35  
+in a context where t is of type x, I better show that lambda f p
+
+10:43  
+is of type x x.
+
+10:47  
+Yeah. And then
+
+10:50  
+I apply this one more time. And now I extend the context one more time, I say in a context where t is of type x,
+
+10:59  
+and f is of type x
+
+11:03  
+the body of the lambda which here is only T has to be of type x,
+
+11:09  
+you see what is happening. So, if here is the lambda bound variable,
+
+11:16  
+In this step, it's made a free variable push to the context,
+
+11:22  
+then t contains f freely. And the type of T has to be the return type of this function, isn't it?
+
+11:30  
+And then, am I done? Well, yes, because T is a variable and it actually occurs in the context. So, by this rule here, I'm actually finished. So, this is the proof that actually TT to our constant for truth.
+
+11:56  
+He's a Boolean. And you can easily imagine that instead instead of T everywhere, I would have had F in these places, here, here, here, here, which is actually the definition of false then the proof would have gone through exact the same way.
+
+12:18  
+Remember that false is defined like this.
+
+12:23  
+Yeah. So, for
+
+12:27  
+FF,
+
+12:29  
+just replace
+
+12:35  
+with
+
+12:37  
+above.
+
+12:41  
+Okay,
+
+12:42  
+that's easy.
+
+12:44  
+But even else is a certainly more in so let's let's that example as well, because that kind of explains what is going on.
+
+12:57  
+Okay, what do we want to say?
+
+13:01  
+if then else is this thing here? Now I'll need a bit more space lambda
+
+13:08  
+lambda t
+
+13:12  
+dt.
+
+13:15  
+So, this whole thing is what we want to call if the nails
+
+13:21  
+it has to live in. What is the good time for for for if the nails for if then else we want
+
+13:30  
+that it is a function that for all x
+
+13:34  
+given a Boolean
+
+13:37  
+given
+
+13:41  
+the value of type x, given another value of pipe x gives me back something of pipe x.
+
+13:49  
+Why?
+
+13:53  
+Well, because
+
+13:57  
+that's what if then else does it takes it should take three arguments.
+
+14:02  
+The first one is the guard branches about the two branches is reasonable to require that they are the same but they can be anything so that's for all x. And then what comes back Of course, should be of the same type as as both of the branches. So now let's see if we can take that one. Again. The first step is just generalisation.
+
+14:24  
+So we have to say
+
+14:35  
+just this
+
+14:45  
+and then I have a whole lot of lenders so now I need to apply the lamda rule three times.
+
+14:51  
+Let me do it one by one anyway for clarity, although we could perhaps
+
+14:56  
+jump ahead ourselves and apply three boards at once.
+
+15:00  
+That's maybe harder to.
+
+15:02  
+So first I say in the context where p is Boolean, the rest the body
+
+15:09  
+has to be
+
+15:12  
+has to be a function from x to x to x.
+
+15:23  
+Okay, then we throw t also to the context, then we have something like
+
+15:30  
+t, x
+
+15:33  
+yields lambda f, b, t, f is
+
+15:40  
+x Finally,
+
+15:43  
+know something must happen at some point when not yet something very interesting.
+
+15:49  
+The blue
+
+15:52  
+t in x and then also we have to assume F is in x
+
+16:00  
+and then we conclude
+
+16:03  
+the T
+
+16:06  
+will have to be in x. Now, it gets a bit interesting because this is an application
+
+16:12  
+isn't it?
+
+16:14  
+So, let me give this thing here name because it's a long context. So I call the whole thing gamma.
+
+16:22  
+I don't want to copy it all over the place
+
+16:27  
+in the context gamma, then I need BTF is of type x. So, how do I achieve this?
+
+16:34  
+Whoa, what is happening?
+
+16:43  
+Well, I have to in the context gamma, I have to type bt on one hand,
+
+16:51  
+isn't it?
+
+16:53  
+And F on the other hand, so, let's not write the types yet.
+
+16:59  
+Because bt is applied to F here, isn't it?
+
+17:12  
+Well actually, for if there is not even so much choice about what its type is because in the context gamma we know that f is of type x. So, maybe we just use this this is the variable rule. If this is the case, then B to be applied to T must be a function from x to x
+
+17:30  
+Okay, then I need to type
+
+17:35  
+in the context gamma i need to type B
+
+17:39  
+and in the context gamma I also need to type D
+
+17:47  
+need more space sorry,
+
+18:02  
+he has to be of type
+
+18:05  
+x
+
+18:08  
+and B then So, T is already in the context gamma with type x. So, here we also done
+
+18:16  
+but that means that V will have to now be of type x arrows, x Arrow x
+
+18:25  
+Yeah, because the input type is x
+
+18:31  
+and the return type is x Arrow x. Now, how to achieve this in the context we have something quite different for for B we know that these Boolean
+
+18:41  
+So, let me reclaim the space.
+
+19:10  
+Yes.
+
+19:41  
+Okay. So,
+
+19:47  
+where could that come from? Well,
+
+19:53  
+we are actually not in such a bad shape because, hey, from the context we know that B is of this
+
+20:00  
+Type,
+
+20:01  
+v is a Boolean.
+
+20:06  
+But Booleans word just after all, the type for all x, x arrows x that x. So if I instantiate
+
+20:18  
+apply the instantiation rule at this point, then whatever,
+
+20:23  
+x is good for the capital X in here, so therefore, I can also take this particular one, which is the free variable that was invented at this place. And this completes the proof.
+
+20:35  
+So, we actually need to use that the INT internally or the actual meaning of bool is, is these polymorphic functions.
+
+20:44  
+So, morally,
+
+20:46  
+B can only be either
+
+20:49  
+projection to the left or projection to the right. I mean, it's one of the two selectors between two given arguments. And here we exactly apply it to choose between the two given branches. So, that's that's the trick.
+
+21:05  
+Okay, then, does this work correctly? I mean, can we really get the behaviour that you have for Booleans? So these are the proofs sort of fully spelled out in one go without explanation.
+
+21:20  
+I've written a set of x. Okay, but yeah, anyway.
+
+21:25  
+Now let's check that it works the correct way. So
+
+21:30  
+if then else, for example,
+
+21:36  
+let's check that it does the right thing. If if the actual guard is true, so what happens?
+
+21:44  
+So let's suppose the actual guard is true. And then there are some branches called them you want v.
+
+21:50  
+Yeah, you'd expect that this thing should compute to the branch you. And I should not even need to look inside v that should be somehow be the idea with announced let's see if it works. So if then else, by definition is this thing, we're applying it to TT, u and v?
+
+22:08  
+Well, this is a bit theoretics, because I can see a lambda abstraction applied. So at this place,
+
+22:17  
+in one step, I get to the form where the parameter has been replaced by the
+
+22:25  
+by the actual argument in the function body, which is this guy. So the result is this.
+
+22:33  
+Yeah, this part here simplifies to this, and u and v are untouched.
+
+22:40  
+They're the same. And then I can repeat. So here, I've got the function that is applied to u and v is just one more thing. So I plug in u for T, I get this
+
+22:54  
+as the leftover of this body here, so to say. And then again, I've got a lambda that is applied, which means for the place of f, I need to put VI
+
+23:06  
+and then the result is this. Okay? It looks like I didn't get to you. But hey, TT is not a variable or constant. pt actually is a selector. So let's write out sort of in full detail with TD ease. Of course, I could have written it out already here. But that would have simply made the whole thing a whole lot more unreadable. Let's write out what T is T T is this thing. So again, there is a lambda abstraction applied to something. So you goes for T, and I get this thing.
+
+23:40  
+And then I have to plug V, for F, because what is left over
+
+23:47  
+is again, sorry, is again,
+
+23:50  
+today, nothing works is again, a lambda, the bodies EU, the EU doesn't contain f,
+
+23:57  
+u is something completely different from from this bound variable f here, right?
+
+24:04  
+And we plug V for you nothing happens, the result is just you, which is exactly the right behaviour, if then else.
+
+24:13  
+And then at fourth, it behaves analogously. But of course, it picks out the other brands.
+
+24:19  
+So Booleans are this particular polymorphic function space that contains exactly
+
+24:27  
+two functions. And then what if then else does, it just takes the given function and applies it to two branches? And of course, it's just picks one of the two branches, that's the nature of it.
+
+24:42  
+And that's all that there is to be said about bool true or false if and else. You also saw these type derivations.
+
+24:54  
+Yes, where I didn't do that sort of last generalisation step here. So that's the difference.
+
+25:01  
+Otherwise do the same.
+
+25:04  
+And then as I said, anything else that comes to your mind you can define like not obviously is is a function
+
+25:11  
+with the lambda.
+
+25:14  
+And the definition is, whatever is given, plug it into the guard position of his toenails, and just give false into as branches and the what the whole thing does it swaps the roles of true and false right true becomes false false becomes true.
+
+25:29  
+The short circuit and
+
+25:33  
+that, in a good case only looks at
+
+25:37  
+the first conjunct is this. So, it takes two arguments B and B prime.
+
+25:43  
+It does if then else based on D. Yeah, if P is false, then already what is returned is false.
+
+25:52  
+Because if P is false, it doesn't help whether B prime is false or true. I mean, the end has no chance of being true anymore. We can already at this stage say false. Otherwise, of course. So if p is true, then the truth value of B and P prime is decided by B prime. So depending on what the prime is
+
+26:12  
+the result this is correct. But you notice that in case this false, you don't really even need to look at the prime. So this is the is the branch of if then else that is actually not touched. And if you do outermost reduction, you don't try to simplify the prime because it's it's sort of erased before we even get
+
+26:32  
+on or is completely similar. So if the first disjunct is true, then
+
+26:40  
+we just say true. Otherwise, we return the second.
+
+26:47  
+How does it feel?
+
+26:54  
+Yeah,
+
+26:56  
+it is obviously trickery. Right? So I mean, how on earth did people invent this? And this requires some insight. And it was it was a very clever move. But then once you've shown it, then maybe after that
+
+27:12  
+it's not so complicated anymore, once you sort of
+
+27:17  
+adjusted yourself to this, but then you might ask, okay, yeah, but this seems to be like a one off case, what do I do for something else? What do I do for pear types? Or tuple? types? Or, or lists or the Option type? Is there some system behind it? There actually is, I won't show you the full system.
+
+27:34  
+But
+
+27:36  
+I'd like to show another example.
+
+27:49  
+And the exam is of natural numbers, it turns out, you can you can code up those as well.
+
+27:56  
+So it'll be a bit of exercise. And actually, I'll show you more detail maybe after a short coffee break, but let me comment. So the tick seems pretty similar. So the natural numbers some
+
+28:10  
+bizarre
+
+28:12  
+like you might have for some for all quantified thing
+
+28:17  
+then you can define zero
+
+28:20  
+which is a bit similar to two in the sense that it is between is and the first
+
+28:29  
+S is for successor and you can make all nutana one successor successor one yeah. So, for example is a sort of successor
+
+28:42  
+sort of zero
+
+28:44  
+plus 103 times you can make any number in this way and then it turns out by some,
+
+28:51  
+but a way of
+
+28:53  
+being successor here is this and this are more mysterious
+
+28:59  
+than coding some false work and indeed it is a bit maybe tricky to understand at first why that is not is not by any and if you think this is crap, then I agree with you. It may be
+
+29:16  
+and then what to the programme would naturally be some form of recursion
+
+29:24  
+would allow you to do things like you say, you know, how do the functions from naturals typically goes by well my function foo with something and my function foo out of thing plus one is something that anything and then you go by recursion, this recursion can be
+
+29:44  
+down by by this kind of combinator that is here called fold.
+
+29:49  
+Fold, three art
+
+30:04  
+Now,
+
+30:06  
+the second argument is the base case, which says What do you want to do in the case zero? So for example, you expect that fold set of u and v would be you, because I'm applying my combinator are my How are the function is that here to zero. So, the second argument is just for what you want to do in the zero case,
+
+30:27  
+the set, the third argument is for what you want to do in the case, when the first argument is successor of something. And then the idea is you do something, whatever we here, that's specified in the third argument, applied to whatever was the result of recursion applied to, you know, the argument was smaller. So So here, I'm applying fold maybe to eight, to suppose t seven, S of t is then eight. And this reduces to
+
+31:00  
+whatever fold gives you on seven, because T then would be seven.
+
+31:06  
+And, yeah, this is the result of the recursive call, and v is just some function that does whatever to the result of the recursive call and gives you then something back so you can for example, programme, I don't know addition or multiplication and with with subtleties, the factorial function in that way, for example, or is that something that Prime
+
+31:30  
+no more complicated way?
+
+31:33  
+You reduce programming with natural numbers
+
+31:36  
+to do things called folds.
+
+31:39  
+Okay.
+
+31:43  
+How is that?
+
+31:47  
+Are there questions
+
+31:49  
+about this?
+
+31:52  
+I can see in the chat you say I've been lagging um, this is true. And this is the unfortunate
+
+32:00  
+connection because the proper one is down and I'm using some poor judgement.
+
+32:12  
+Then
+
+32:14  
+we go complaints.
+
+32:30  
+Can you say something just for me? If the connection is working at all?
+
+32:37  
+We're here.
+
+32:39  
+Okay, but the lagging is?
+
+32:43  
+Is it the voice and don't synchronise, it just stops and doesn't go on at all.
+
+32:49  
+Sometimes
+
+32:51  
+the sound just cuts off and the video freezes.
+
+32:58  
+Yeah, unfortunately.
+
+33:02  
+I've tried to play a bit during the next five minutes seeing and use some different settings, but I'm the main network
+
+33:10  
+host
+
+33:12  
+does not function.
+
+33:18  
+Okay.
+
+33:20  
+After the break, I would want a bit more about lecture numbers and then a bit about version and that will be actually
+
+33:29  
+let's take Let's take a short and we'll say 12 What is it?
+
+33:35  
+45
+
+33:39  
+Okay,
+
+43:38  
+Okay Sorry, I'm plagued with it. I think I'm on a different network now, which might also be unstable, but hopefully better.
+
+43:49  
+Is it lagging at this moment as well?
+
+43:52  
+No, it's good.
+
+43:54  
+It's good.
+
+43:57  
+So sorry for the delay, but I think it
+
+44:01  
+maybe it's a bit better now.
+
+44:10  
+There's really very little I can do about this.
+
+44:12  
+Let me share again.
+
+44:34  
+Okay, you should be seeing something No, I hope.
+
+44:40  
+So that's where we stopped natural numbers.
+
+44:43  
+So, what happens in this encoding in particular is
+
+44:48  
+as I said, So, to encode the particular number.
+
+44:53  
+The idea should be that
+
+44:58  
+this is of course,
+
+45:00  
+Um,
+
+45:02  
+basically s s s apply to set
+
+45:42  
+thank you
+
+46:22  
+to do something.
+
+46:43  
+Thing is apparently that they have every possible technical failure.
+
+47:04  
+Okay, in your pride
+
+47:11  
+Yes, I wanted to say, that's your number like three, of course,
+
+47:16  
+you can write it down as capitalists apply to capitalists apply to capitalists
+
+47:23  
+apply to set.
+
+47:27  
+And then you can write it out what it means by definition, which is in terms of,
+
+47:34  
+you know, writing out as like this writing outset like this, a whole lot of simplifications will happen. So,
+
+47:44  
+you can define it like this, but if you simplify using our beta reduction thing, then it actually becomes better. And it obtains this form.
+
+47:56  
+And namely, this, where in the particular case of three, we just do get lambdas, that lambda s, and the S three times
+
+48:07  
+supply present, and these are smaller systems, small sets.
+
+48:12  
+So, these are just variables, whereas a capital letter things were the ones that we saw up here.
+
+48:20  
+Okay, so, this sounds like some infrastructure, it may be a bit mysterious, why does the right thing So, we can check a few things.
+
+48:28  
+But the technique then how your programme with this would be basically the following. So, for example,
+
+48:34  
+for tradition, we know what we want, right, we want that, when we add together
+
+48:41  
+say
+
+48:42  
+and and then
+
+48:47  
+then in specific cases, some particular things must happen, right. So, for the zero case,
+
+48:56  
+we expect that
+
+49:03  
+we expect that
+
+49:08  
+what comes out would simply be the second number, right, because if you add together 01 from number M that should be m. So, we expect
+
+49:16  
+that
+
+49:18  
+these are equal but this simplifies to in some number of steps to m. Similarly, if you have additional say a successor of n, and then then we expect that this should be the same as what is it? Maybe something recursive? Yeah. Let's suppose we don't yet know how to add together SN and then but we already know how to add together n of them.
+
+49:48  
+Just like making a recursive call,
+
+49:51  
+then how should I get the wrong result of adding together and in and then to the result of adding together Sn Sn and then we'll have
+
+50:00  
+Of course, I just need to add one to the result.
+
+50:04  
+So, this is like good specification, what we might want to have. And then when you look at the form here, this is very similar to what fold always achieved for you. So, there is some base case. So here m, and there is some step case,
+
+50:25  
+where you are applying some given thing to the result of the recursive call, which here perfectly happens, right. So, if you proceed from this idea, then we see that we can write down
+
+50:39  
+addition as something that takes in
+
+50:45  
+a number
+
+50:47  
+that's the first summoned and other number the second summoned on what comes back is the following is this function that goes by recursion over the first summoned in the base case returns M,
+
+51:01  
+which is this here.
+
+51:03  
+So, when n is zero, what comes back is M. And in all other cases, what we need to do is we need to add one, so applying successor to the result of the recursive call.
+
+51:16  
+And this then becomes programming technology because when you need to do something else, then you need to sort of apply the same principles, you simply need to think what is the correct recursive definition
+
+51:29  
+of things. So, let me do one more let me do multiplication. So, for multiplication you want
+
+51:37  
+recursively, you can also do it by recursion in the first argument. So, there are two factors. Let's, let's look at cases for the first, if I multiply together zero when some m, what do I want? Well, surely zero times anything should just be zero. So that's what I want back.
+
+51:54  
+Um,
+
+51:57  
+what about the sort of step case of recursion. So when the first factor is something of the form s n,
+
+52:08  
+then the second is a general M.
+
+52:11  
+So this is like multiplying together n plus one and n.
+
+52:15  
+And I need to do it by I'm allowed to use multiplication of,
+
+52:21  
+or the result of multiplication of n and m, because that's what comes back from recursion. And now I'm allowed to apply something to it. So what could it be? So how do you get from n times m to n plus one times m?
+
+52:38  
+Well, multiplication is nothing else than repeated addition, you need to add em one more time to the result. So we can formalise this as
+
+52:53  
+add
+
+52:57  
+to this thing.
+
+52:59  
+And that will be
+
+53:03  
+and then you can capture it. So once we trust that fold does the right thing
+
+53:10  
+i can
+
+53:13  
+i can get for multiplication what I want, because what is multiplication takes in two numbers, the first factor the second factor, then I fold over the first factor. So that's the one that I analysed and recurse on, I look at two cases if the first factor is zero, but has to come back to zero. In the other case, whatever comes back when I applied to,
+
+53:37  
+you know, when I make a recursive call,
+
+53:40  
+the way that I need to adjust what comes back from the recursive call to return from the main call is I add to the result one more time, which is this guy.
+
+53:53  
+Of course, I haven't yet justified to you why by fold works the correct way that would be to play with these definitions. And to see that really, this kind of behaviour
+
+54:05  
+is achieved at all. And that's not so clear, right?
+
+54:13  
+Okay, then there is a final example that I wanted to give here. So for example,
+
+54:20  
+we can write a test of whether a given number
+
+54:25  
+is zero.
+
+54:28  
+So this also takes two cases, maybe I'll write them here. So is zero.
+
+54:33  
+I can apply to either zero, or I can apply to some single the form s n.
+
+54:44  
+And what should I answer?
+
+54:54  
+Well, if I'm in the base case, then I should say sure the number is zero. So then I want to answer
+
+55:00  
+All right, so you put the wrong side.
+
+55:10  
+And in the other case, I want to insert false. So any number of the form successor of something clearly isn't zero. And that should be the definition. And it is actually, although no real recursion happens. So you don't see any recursion here in the staircase,
+
+55:28  
+it is still actually of the form of a fold. Why? Because the number comes in, that's the one that we fold on. In the base case, or the zero case, we say true.
+
+55:38  
+In the other case, I'm allowed to say something based on the result of the recursive call. And what I do here, I make the recursive call. But I don't use it in any way I just say no matter what it is, the outcome here is false.
+
+55:54  
+You can imagine that you could do more interesting things, maybe you could write a programme that tests whether the number is
+
+56:01  
+is even and odd.
+
+56:04  
+And then actually, you have to look at whether the previous number was even. And you have to flip that bit. So that properly requires a recursive call, but this one doesn't.
+
+56:16  
+Okay.
+
+56:19  
+So let's maybe play a bit here and
+
+56:24  
+see some of these things. Why why, for example, this one doesn't have the right type or why these recursion behaviours
+
+56:33  
+occur.
+
+56:35  
+Nothing worth highlighting doesn't work, nothing works.
+
+56:43  
+So
+
+56:45  
+successor, for example, why does it have the right type? Maybe I'll do that one. So, this is a somewhat more complicated situation than what we saw before.
+
+56:57  
+So, successor has to take us from net to net that's what I want, but but it really so
+
+57:12  
+successors defined like
+
+57:24  
+this.
+
+57:27  
+So, this whole thing here is this capital S for successor
+
+57:33  
+and then we want that the result of course is net to net
+
+57:50  
+so how on earth would I derive this?
+
+57:55  
+Well, it's a lambda and here is a function space. So, I can actually apply the rule for lambda, it will say that if n is of type net, I must be able to show that the body here which is all of the rest
+
+58:11  
+is of type math.
+
+58:14  
+Well, at this point, I really have to look at what the type net is. So not actually is more specifically this time for all x x Arrow x x x
+
+58:27  
+x.
+
+58:31  
+So good then we can use generalisation
+
+58:36  
+and I just need to show that 4x I can show that this thing has the correct point
+
+58:51  
+okay, why does he know I have a lambda again.
+
+59:12  
+So, that is the parameter it has to have the argument type of the function and the body has to have the return type of the function. So this thing here
+
+59:28  
+right, and then
+
+59:32  
+this is a lambda again. So this thing is all good in the context where n is not Zed is x, and S is x and O's x.
+
+59:42  
+I can show that as supply, and Zed S
+
+59:48  
+is of type
+
+59:51  
+x.
+
+59:58  
+So let's see. Maybe that's again
+
+1:00:00  
+a point where it's useful to actually the context will not change anymore, I would call this thing gamma not repeated anymore.
+
+1:00:13  
+So, in this context, I need to show that s
+
+1:00:20  
+some type and Enza this also has to have some type.
+
+1:00:31  
+Now, the type of se is fixed in the context gamma, we see that the type of S has to be x arrows x.
+
+1:00:40  
+So there is very little I can do interesting here.
+
+1:00:46  
+But this here is then what so if S is a function from x to x, it returns x, then the argument also has to be of type x
+
+1:00:57  
+from where should that then come.
+
+1:01:01  
+So, of course, I will run out of space as always. So in gamma, I need to type enset.
+
+1:01:11  
+And in gamma, I also need to type
+
+1:01:21  
+the type of this again is is fixed
+
+1:01:25  
+in gamma, so there is little I can do.
+
+1:01:30  
+But then ends up therefore has to have the type
+
+1:01:34  
+x arrows x to x.
+
+1:01:40  
+Yeah, because
+
+1:01:42  
+this is an application, this thing here of n set to s.
+
+1:01:48  
+So if this is the return type, and this is the argument type, the function type has to be this one from the argument type to the return type can be anything else.
+
+1:01:59  
+And then
+
+1:02:01  
+what that's an application again, so I need to type in
+
+1:02:07  
+and I need to type zet
+
+1:02:10  
+that has type x in this context, I can't really choose anything else to say.
+
+1:02:17  
+But then n has to have the type
+
+1:02:21  
+x arrows x arrows x
+
+1:02:25  
+to x.
+
+1:02:29  
+That's the perfect place to to to run out of space again.
+
+1:02:34  
+You can laugh at me,
+
+1:02:37  
+I can laugh at myself.
+
+1:02:52  
+This time, I'm less in writing. So I know what I need to do. Okay.
+
+1:02:59  
+Something funny happens here. So this one is in the wrong place.
+
+1:03:06  
+Okay, so how do I get there? Well, luckily, I know that enemies have typed Matt, according to the context gamma.
+
+1:03:13  
+So I can write in gamma x, you know, Ben is of type net, but not your C is for all x, x arrows x x x.
+
+1:03:26  
+x.
+
+1:03:28  
+So by specialisation, I can choose the for all bound x actually to be the free x.
+
+1:03:36  
+And that is exactly then there is nothing else to worry about. So maybe I should move things around a bit.
+
+1:04:08  
+So here
+
+1:04:11  
+that's the full proof.
+
+1:04:16  
+This is how it works.
+
+1:04:18  
+Now, why is that? Why do we have the right behaviour, maybe we could do a bit of that as well.
+
+1:04:26  
+Or not.
+
+1:04:33  
+Maybe I'll leave it
+
+1:04:36  
+as this okay. So that is a nice exercise to
+
+1:04:41  
+to,
+
+1:04:43  
+to try to, for example, prove the second one that this one really simplifies here. What you need to do is
+
+1:04:50  
+you have to take the definition of fold First of all, and start simplifying.
+
+1:04:55  
+And when you get far enough, it's maybe also useful to to actually
+
+1:05:00  
+Look at how St. Point, plug that one in
+
+1:05:04  
+and simplify further.
+
+1:05:07  
+And then you can actually get
+
+1:05:10  
+to this place.
+
+1:05:12  
+Which is,
+
+1:05:14  
+yeah, maybe a bit too much to do right now, I think it will take at least 10 minutes if I play slow. Okay.
+
+1:05:22  
+So that's the game.
+
+1:05:24  
+And somehow the idea is the same as with Booleans. But it's a bit more difficult to, to maybe see why this is the right time. But maybe intuitively, I can try to motivate it. So why do we think this type has the right number of elements, which here should be like, one function for every possible natural number? When you think of this function space, what is happening here?
+
+1:05:49  
+Anything in here is a function that works on all x, regardless of x. So you can't really look at values at all, you can just copy them around, pass them to other functions, throw them away, duplicate them do stuff like this. So So what functions are possible at all? Well, one possibilities, you're given these two guys, an element of x and the function from x to x, and you need to make an element of x, the first thing you can do is just throw away the function, just use the element does actually the code for zero, it does exactly this.
+
+1:06:22  
+And then all other cases, what else could you do? Well, here is this function around, that doesn't do much else. Other than, you know, it's a paid, you can see what it what it does, in general,
+
+1:06:34  
+but surely takes an element of x to an element of x. So I can start with this element of x that I'm given, and I can apply this function to it some number of times, any finite number of times, and then I get the next and that is then the idea. So any natural number can be represented by a function that takes two arguments, it uses the first argument as the seed. And then, you know, as big as the natural number is this many times it applies the second argument to it, and then returns the result. And, you know, if you think about it, for five minutes, you can convince yourself there is no really no other functions you can write. And that is exactly the trick here. And that's,
+
+1:07:20  
+you know, it doesn't very well justify why this is, this is a bit more complicated to see, but it just doesn't justify very well, this fact that and that's your number can be encoded like this, you know, an element of x comes in a function from x to x comes in, and you do one of these natural numbers, many things that you can do, namely, take the second function applied, and times to the first guy.
+
+1:07:48  
+And then accordingly, fold. Just given a number does literally this, it, it takes two things, you an element of x v, the function from x to x, and it just literally applies
+
+1:08:03  
+the function as many times to the given element as this natural number tells you, which is exactly the ration so it makes as many recursive calls, as this guy tells you on the base case.
+
+1:08:18  
+Okay. Now one final topic. Let's get over this. That's two more slides is
+
+1:08:30  
+how do you get general recursion into the lambda calculus?
+
+1:08:35  
+Well, by General recursion, I mean something like lead rec of F sharp
+
+1:08:40  
+general recursion is the Turing complete thing, which typed lambda calculus is in general recursion allows you to write non terminating functions.
+
+1:08:51  
+So it basically allows you to write infinite recursions are recursions that turn out to be infinite as you compute and also why loops where there is no guarantee that the condition will ever be true. So why loops also potentially non terminating, so clearly, because because general recursion
+
+1:09:17  
+brings in non termination, stronger malice. it contradicts strong normalisation that we had in typed lambda calculus. So in typed lambda calculus, you can't code up general recursion.
+
+1:09:30  
+You can throw within this primitive, and then you destroy strong minimization. And that's what you can do. But the different approach, of course, is throw away types. In an untyped case, actually, you can do general recursion, then all of the type checking is off. We are in untyped, lambda calculus, you don't have any of that. But actually, you can encode general recursion. So as soon as you let go of the discipline of typed lambda calculus, you are in some sense on your own
+
+1:10:00  
+Yeah, then you know, the,
+
+1:10:10  
+the control by the class teacher on you is gone. Yeah, nobody checks your times.
+
+1:10:16  
+But this means you're free, and you can do more than what you could do before.
+
+1:10:20  
+So here's a trick from where you can get general recursion, I previously told you about these sort of nonsense terms omega that go on forever, but they are nonsense from the point of view of pipes. But they are very good thing from the point of view, or if you actually on purpose, want to have recursion. So, so this y f here, for any F
+
+1:10:42  
+is kind of a modification of omega, where instead of just saying lambda x, x x apply to lambda x x x, there are these little F's plugged in, you can see self application of x to x as before, but now that is the F into places, why f has their interesting behaviour, that not only does computation go on forever here,
+
+1:11:06  
+in general, or at least, this is one of the possible reduction strategies Delta knows.
+
+1:11:11  
+But it actually produces something while it goes on forever. Remember, when you read when we have omega,
+
+1:11:18  
+so
+
+1:11:19  
+omega was a simpler version, omega was
+
+1:11:24  
+lambda x x x applied to lambda x x x, omega had the property that if you start simplifying, it just produces itself. So it's not very interesting.
+
+1:11:39  
+This one produces something. So why applied to any F is this thing by definition, if you think what happens when you simplify the outermost radix, namely, this application, sorry, this lambda abstraction applied to something,
+
+1:11:56  
+what happens is you keep the body for the two occurrences of x.
+
+1:12:02  
+The parameter, you put the argument, which is this guy, as the result, you get this,
+
+1:12:11  
+which is exactly what you had before, but there is one extra F in front,
+
+1:12:15  
+then with this F in the general case, so for example, if f is in variable, you can do anything. But why F, you can reduce again, following by exactly the same thing that we did. So you get another f outside, and yet another F, and yet another F. So it allows for these non terminating reduction sequences, of course, for specific F's, for example, if some if the nails, and sometimes the guard is true, of course, it's possible that
+
+1:12:41  
+you don't look at one of the branches, which then is a recursive one. And you can actually get out
+
+1:12:47  
+of the recursion. But, you know, the outermost strategy gives you this.
+
+1:12:52  
+So this Why is not possible. You don't have it in simply typed lambda calculus, you don't have a polymorphic type lambda calculus either. But the untyped lambda calculus is there. And then with this, you can actually write any function you want. Not following structured recursion, which says, You know, I don't know for a number, I always can only make a recursive call on a strictly, you know, on the predecessor number, but something that allows you to use recursion in whatever way. So here I use it to define the factorial function, which actually, you could also do with structural recursion
+
+1:13:27  
+using fold, which is allowed, but if you want to do it with general recursion, what is the trick?
+
+1:13:34  
+Well, the trick is, if you want to obtain a turn f such that f would reduce to h f, in some number of steps, for some fixed air for some fixed age, then you can just define F is y h.
+
+1:13:54  
+Great. So then one of the things I could do, I could abstract what is going on in the definition of factorial.
+
+1:14:01  
+So
+
+1:14:03  
+the recursive definition of factorial
+
+1:14:17  
+is this.
+
+1:14:19  
+Yeah.
+
+1:14:20  
+factorial prime is
+
+1:14:31  
+great right thing now.
+
+1:14:35  
+Yes, factorial prime abstracts out what is happening in the factorial, which is you do a test on whether you're given number is greater than zero in the base case. It's one the result of the factorial otherwise you make a recursive call.
+
+1:14:50  
+Yeah.
+
+1:15:04  
+There's something I badly don't like
+
+1:15:10  
+okay, yes
+
+1:15:37  
+then we have to define factorial as perfect.
+
+1:15:42  
+Let me rewrite it here
+
+1:15:53  
+I should rather want to say something like factorial is
+
+1:15:57  
+why applied to
+
+1:16:04  
+and then you have to abstract out from
+
+1:16:08  
+from the factorial definition respect prime. So, it will be Wirefly lambda fact prime, and then all the rest of lambda n
+
+1:16:19  
+greater than 01
+
+1:16:22  
+n times factorial prime and n minus one.
+
+1:16:30  
+So, this line is not completely okay,
+
+1:16:33  
+it should. So this is kind of a specification of what we want, but in the end, we need to abstract out the fact prime here from another with another lambda. So, if you do this, and then you start reducing factory for any given t,
+
+1:16:48  
+then you will see that it actually
+
+1:16:53  
+will reduce to this. So that, and that is precisely the behaviour that you would expect of your recursive factorial. programme. Right.
+
+1:17:05  
+Okay, um,
+
+1:17:09  
+I think we're done with time and everything
+
+1:17:16  
+are the questions about either natural numbers, or, for example, this recursion thing.
+
+1:17:29  
+I won't ask you to invent these coatings by yourself, there is a method behind coming up with these. So for example, you can really systematically also work out what's the way of coding up threes, or less or option or, or pairs or triples. But
+
+1:17:50  
+rather, I want to get across the message that
+
+1:17:54  
+similar to maybe Turing machines, if you've seen them in discrete maths or wherever, are kind of the universal
+
+1:18:02  
+computation paradigm for imperative programming that you can reduce everything to by complicated coding, then the same is actually the case for functional programming and lambda calculus or lambda calculus kind of the same for functional programming as our Turing machines for imperative programming.
+
+1:18:23  
+Of course, in real implementations, you don't go down all the way to say
+
+1:18:30  
+polymorphic lambda calculus with this complicated coding for data types. There are many reasons not to do it having to do with efficiency, for example.
+
+1:18:40  
+But in principle, this is doable. And what you typically do is in compiling functional languages is that you have a small core
+
+1:18:49  
+A variant or a small extension of lambda calculus and everything else that you have in in your language is compiled down to this little core. And that is actually the the thing that needs to be executed in a virtual machine of sorts. And everything else is compiled away before you before you get to,
+
+1:19:08  
+to,
+
+1:19:11  
+to running
+
+1:19:13  
+anything.
+
+1:19:15  
+Yeah.
+
+1:19:21  
+Okay.
+
+1:19:26  
+Let's fix the typo on this slide. And I put the new version up
+
+1:19:31  
+and
+
+1:19:33  
+I think I'm done here.
+
+Transcribed by https://otter.ai

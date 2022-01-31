@@ -1,0 +1,2080 @@
+3:40  
+Hello
+
+3:45  
+welcome to this lecture
+
+3:49  
+Let me check that everything is well with a sound can some of you tell me that?
+
+3:57  
+You can hear me because I get some feedback but that cannot be fully Yes, yes.
+
+4:03  
+Okay, very good. So we can we can continue like last week if, in a live lecture if there is something the best is perhaps that you simply interrupt me and ask.
+
+4:16  
+While I'm not sharing the screen, it's easier for me to see raised hands while I'm sharing the screen both full screen because I have two windows and it's very difficult for me to notice hands.
+
+4:30  
+So what's the plan for today? Last week, we've covered what in F sharp, I gave you some very basics of the language
+
+4:39  
+on the first time and then in these pre recorded lectures for Thursday,
+
+4:44  
+I told you
+
+4:46  
+about lists in particular how you programme with lists using pattern matching and recursion, mostly recursion in various forms. We'll go back to this. I emphasise that some functions are polymorphic
+
+5:00  
+Like,
+
+5:02  
+finding out the length of a list works the same whichever type the list is over. So finding the length of a list of integers works exactly the same way as finding the length of a list of strings, or finding the length of a list of functions etc. So this was polymorphism, that you can have very general types, you just write the code once.
+
+5:25  
+xml will figure out sorry, F sharp will figure it out for you.
+
+5:29  
+That programme admits this very general type. And when you apply your function to give an argument, then based on which type of argument you've provided, the correct specialisation of the function is used.
+
+5:44  
+And then I also emphasise higher order functions, which means another kind of modularity mechanism or reuse mechanisms that the reason F sharp,
+
+5:55  
+high order functions mean functions can take other functions as arguments. And the way that you use it is
+
+6:05  
+if you find in your code, a pattern, where
+
+6:11  
+part of the
+
+6:13  
+code is changing, the rest is not.
+
+6:16  
+The part of the code that is changing from application to application is actually something that depends on some input, so it's a function, then you can actually produce a function that takes another function as input. So
+
+6:30  
+these different things that can be substituted to your code can be provided into your code can be provided as arguments. So what will happen today is I'll show you a tiny bit more about lists just to repeat, and emphasise some points regarding
+
+6:48  
+direct recursion versus tail recursion, and complexity issues. Then we look at user defined data types on two examples. One is trees. In particular, we do know trees, but you could also do leaf trees, you could do many other types of user defined data types. I'll also show you another type, which is more sort of a database nature, if you wish,
+
+7:11  
+a type of a person implemented as a data type.
+
+7:16  
+I'll tell you something about one specific data type option,
+
+7:20  
+which is actually provided to you in the basis environment of F sharp, this one is very useful
+
+7:27  
+to model
+
+7:29  
+functions that are not everywhere defined functions that are naturally partial, like maybe head and tail of list.
+
+7:36  
+Last time, we saw that head and tail, know as they are normally defined, can give you an error during the runtime because of a missing pattern, or incomplete pattern matching. But there is a different way where you do not get a runtime error. Or rather, you do get kind of an error, which officially is from the system point of view is not an error. And it's something that you can actually handle nicely. And then finally, I'll show you exceptions, which is like apart from incomplete pattern matches, and the option type a third way of dealing with special situations or undefined at best. So that's the plan for today.
+
+8:16  
+Any questions about this, then I'd like to go
+
+8:21  
+if this will be fine. One by one through the topics first one day an example of of, of lists.
+
+8:28  
+And then we talked about trees
+
+8:32  
+as a user defined data type and and person
+
+8:36  
+and some key programming and the option data type. Then finally, exceptions. Now I need to share my screen to make this work.
+
+8:46  
+Just a sec.
+
+8:50  
+I think I want to share
+
+8:54  
+all of this is that's good.
+
+9:02  
+Can someone tell me that you see it all? Well, including all lines like on the screen?
+
+9:13  
+So if you don't shout, I assume it's well, because now I can't see the chat anymore.
+
+9:19  
+That's good.
+
+9:21  
+So what kind of things would you
+
+9:26  
+deny the lower part of the beta or the video, I showed you things like putting two lists together by concatenation, which is also called append. I showed you a few other things like if you had a list of
+
+9:40  
+over some numerical type like integers, you might want to sum all elements of a list or maybe take the product of all elements of a list
+
+9:48  
+with something that works for all lists.
+
+9:51  
+List of any type three would be finding the length and then there were a few other examples
+
+9:57  
+and they also showed you some
+
+10:02  
+Some higher order functions in particular to that were called fold and fold back, that give you a very nice cryptic, concise way of writing down recursive definitions
+
+10:13  
+where the recursion actually is hidden into the higher order function.
+
+10:18  
+And
+
+10:20  
+what you seem to be seeing is kind of straight line code. But of course, the recursion is hidden then into one of these
+
+10:29  
+one of these combinators?
+
+10:35  
+Yes, let me do just to sort of repeat or rehearse a bit more on this to one more example of Lisp programming where I explain exactly these things.
+
+10:45  
+So
+
+10:47  
+I'd like in particular, be interested in defining the reverse function on lists. So the idea should be something like this that if you
+
+10:59  
+are asked to reverse a list, say
+
+11:02  
+379, perhaps
+
+11:11  
+the answer that should come come back should be 973. So the same elements in the opposite order.
+
+11:21  
+Sounds very simple.
+
+11:25  
+There are various ways that you could imagine that this kind of algorithm works.
+
+11:32  
+Maybe the one that is
+
+11:34  
+that is more customary to you from imperative programming would would essentially be a loop or a programme with an accumulator. You could think, for example, that you're sorting a pile of sheets of paper. So you've got a pile of paper on one side of you, and you just want to see the sheets in the opposite order. And the natural idea is to take from the top of one pile, you move to the other pile, then the next one, the next one, the next one,
+
+12:04  
+the first pile you had will be completely empty at the end, whereas the second one will contain all the all the paper that you've had, but in reverse order. So that works with accumulation. And we can actually write it down using using also the F sharp hydro function.
+
+12:22  
+Fold.
+
+12:25  
+But let's first try to do it with direct recursion. So let's just think of the problem of reversing a list.
+
+12:34  
+And I'd like to do it by recursion by just thinking of what cases do I have? Well, I have two cases, the list is either empty, or it's a cons list. And then what do I do in each case, and maybe in the cons case, I would like to reduce the problem of reversing the list to perhaps the problem of reversing its tail or some other smaller part of that list, right? If I do this, then I then I reduce my big problem into a smaller problem that in turn will reduce into a smaller problem that in turn into a yet smaller problem. And finally, the problem will go away. That's the idea of recursion, right? When you do it by structure, like getting smaller instruction. So let's think what a reasonable definition could be.
+
+13:18  
+I want to define this function in reverse this axes is my argument my parent, my parameter, which will take the actual argument values in parameter passing.
+
+13:28  
+First thing I want to do is to pattern match on on this axis. And actually I give two patterns here. One is this is empty. The other is we say this x is consists. It is a cons list, and it consists of a head and a tail.
+
+13:45  
+And for the tail, I use the same name axes. So this is now local scope here.
+
+13:51  
+This part where x and x these are the new local names. So this axes shadows out the outer axes, which was the whole list, this axis here is the day.
+
+14:01  
+Now, what's the empty list the other way around, it's still the empty list.
+
+14:12  
+What's the reverse of x followed by X's?
+
+14:17  
+Well, I want to reorder the list the first thing should be at the very end. The second thing should be penultimate, the third thing should be the third from the end, etc.
+
+14:27  
+So this x should go to the very end.
+
+14:32  
+What? Well, it suffices just to miraculously, already have the result from recursion of reversal of the tail, right? If I already have the tail turned all the way around. The only thing I need to do is to put x at the very end.
+
+14:50  
+I call this operation snop. It takes a list.
+
+14:56  
+A value sorry and produces a new list, with with with
+
+15:00  
+A new value at the end.
+
+15:03  
+How could you define snoc? Well, there is two ways. One is to use append, because knocking Why two axes is the same as x is concatenated, together with a singleton with a one element list consisting of just y. By the way, you eyes it comes knock, anyone guess you can just tell me
+
+15:24  
+read it out loud.
+
+15:28  
+It's called snuck because it's comes the other way around. So it's like,
+
+15:33  
+you add single elements to the list, but not from the front. But from the back.
+
+15:40  
+Yep.
+
+15:44  
+So there is something to think of here, causing an element to a list
+
+15:50  
+actually just takes constant time, because you've got the list, I think how this could possibly be implemented, your list is probably some some pointer data, structuring the memory. And then causing an element to it just means you you, you allocate a cell, where you put first of all the head and then a pointer to the rest of the list.
+
+16:10  
+So access to the front of the list is very quick. And adding one element to the front of the list also,
+
+16:17  
+is constant time.
+
+16:20  
+But this is a singly linked list from every element, you can navigate to the next one, but you can't go backward. Or you also do not have a random access to every element, you just have to walk through the whole list until you find your element. And you cannot in particular, approach your list from the end. So if you want to add an element at the end of the list, how much time is it going to take?
+
+16:45  
+Well, you have to walk through the whole list, and then put down your y at the end
+
+16:51  
+in the construction of an entirely new list, in fact,
+
+16:54  
+so the list is also copied, which is very bad.
+
+16:58  
+So this takes linear time, time linear in the size of axes, the time linear in the number of elements. Does that make sense?
+
+17:08  
+I can maybe also explain it by implementing snoc. differently, just implementing it directly. So how do I book why at the element of a list exists? What do I need to do?
+
+17:20  
+Well, I need to
+
+17:25  
+pattern match on axes. If x is empty,
+
+17:30  
+then all really I need is y. Yeah, that is the new list. If x is longer if it's something of the form x, and the new x is, which is the tail.
+
+17:42  
+What is my resulting list? Well, surely it begins with x. And the rest is just why it's not two x's.
+
+17:51  
+Here, and it's clear that to to calculate the result here, you have to walk through the whole list. Let me just check one thing quickly. We'll stop sharing for a moment.
+
+18:06  
+To be very sure. Yes. All as well.
+
+18:13  
+Okay, we're back here. So this is knocking. And whichever definition of soccer use, whether this one append, or what are this one, which is like
+
+18:24  
+implementation of snoc from scratch. But kind of the corresponding instance of a pen really, if you look into the code of a pen that has exactly the same pattern,
+
+18:33  
+then I can use knock. And this does my reverse.
+
+18:39  
+Let's for a moment think how this could possibly then execute. So we understand. So we're all on the same page about how this thing will come with ever compute. So suppose we want to compute exactly this.
+
+18:57  
+Actually, this is not the right number. The standard numbers are of course, 1742 and 2021.
+
+19:06  
+And then, how do you do such a thing? So what does the code say the code says,
+
+19:14  
+match this, this one is not empty. It's a cons list. So therefore, what I need to do is
+
+19:21  
+reverse
+
+19:24  
+42 2021
+
+19:27  
+and 17. Do you agree? Then in one step, this actually goes to stock
+
+19:35  
+stock.
+
+19:38  
+Reverse
+
+19:42  
+42
+
+19:46  
+what do I need to stock
+
+19:53  
+2021 close to 17 through CDs so
+
+20:00  
+Snap cannot run. This is a strict language, it cannot do anything before I evaluated my arguments. So I need to know what this is, we need to look up the definition of reverse and do some work here, the 17, there is nothing to compute, it's already computed as expression for something.
+
+20:17  
+And then there is this repeats one more time, I need to do snoc.
+
+20:23  
+Let me just first copy everything and then let me develop it.
+
+20:27  
+So we need to do all of this, but then we need to work a bit on reverse 42. So reverse 42 is going to be
+
+20:35  
+snoc of reverse.
+
+20:38  
+Empty
+
+20:40  
+42 on doing with parentheses
+
+20:49  
+here
+
+20:53  
+is that
+
+20:55  
+I can see something but not one. Two participants raised hand. Okay.
+
+21:03  
+Just the silly thing in this view is that I can't really see who raised hand. So can you just speak up the two of you? I would be happy to to explain.
+
+21:14  
+chenier heroes? Can you unmute yourself yourself?
+
+21:19  
+This is the funniest shed ever.
+
+21:27  
+Or I can test that Hitler did nothing wrong. Yep. Yo, and you should be able to speak Yeah. Hey, can you hear me now speaking?
+
+21:41  
+They don't have an idea. Yeah, yeah. I
+
+21:46  
+think oh, something bad is happening somebody already on your computer to see if I can fix it.
+
+22:01  
+This is very bad.
+
+22:04  
+Because I tested sound before starting.
+
+22:10  
+And everything was fine. And actually I had a similar problem yesterday and there is no good explanation for this.
+
+22:36  
+Okay.
+
+22:39  
+I fought quite a bit with this.
+
+22:43  
+Yes, yesterday and the similar thing happened.
+
+22:50  
+So why don't you Why don't you just put your two questions or three in the chat right now and I'll I'll I'll try to answer
+
+23:30  
+Thank you.
+
+23:33  
+Quickly go problems four or five, six from programmes one, maybe maybe not today because you'll have a look at those actually, or you can ask the TA is about those tomorrow. But I'll also be happy to touch upon them say on Thursday, if anything is unclear is Will that be fine.
+
+23:53  
+It's very important that you understand how these are solved. You will also get solutions from me
+
+23:58  
+after the lab classes tomorrow so
+
+24:02  
+you can also look at those but I will be happy to go through these regarding why I cannot hear you this is completely ridiculous because I can see the mic going up and you know that the mic, mic image working properly when you speak but I can't hear
+
+24:19  
+and the sound test the speaker test was fine. Just in the beginning of this session.
+
+24:28  
+My volume is not down. No, I tested it and the speaker spoke
+
+24:35  
+wrong output device most probably yes. But what can I do about it? Hardly anything.
+
+24:45  
+The speaker system is correct. So um, there's really very little I can do.
+
+24:52  
+Okay, um,
+
+24:54  
+I'll have to continue here but I'll try to keep an eye on this.
+
+25:00  
+All these hands in some way, there is very little I can do.
+
+25:13  
+Yes. Okay. share screen.
+
+25:24  
+Right? Where are we. So this is what is going to happen, there is only one last step to do reverse, reverse empty, just empty. So we get through some stages like this,
+
+25:34  
+isn't it?
+
+25:40  
+You see, so far, we haven't really computed a lot, but everything is kind of ready. Because now what we need to do is to put 42 at the end of Mt two to 2021, at the end of whatever we get, and 17 at the end of whatever we get then so it goes in small steps now, like, the entire thing goes to
+
+26:03  
+just 40.
+
+26:06  
+And then we get
+
+26:08  
+the next stage, we do get
+
+26:15  
+what do we get? We will get 42 followed by 2021.
+
+26:21  
+And then finally, we do get
+
+26:24  
+this,
+
+26:26  
+which is what we want.
+
+26:33  
+Yes.
+
+26:35  
+So it looks quite reasonable, it looks linear. But actually, it's not. For the stupid reason that while this stock goes quickly, yeah, I'm at the end, I'm just putting 42 there. Here, I walked through the list consisting of just 42, which is also kind of fine. Here, I need to put down 17. At the end of this thing, I have to walk through a list of links to
+
+26:57  
+if the list would be longer than the next page, I have to walk through three elements, then four elements, then five elements. So it's something like one plus two plus three plus dot dot dot plus n,
+
+27:09  
+which is size of order n squared. So this is quadratic complexity, not because so much of reverse, but because of this knock here, which is expensive for us to see this.
+
+27:21  
+But this is what the directly recursive programme that
+
+27:25  
+I told you last time that there is a concise way of,
+
+27:35  
+of writing down these direct recursions by basically capturing the pattern of what is happening, the base case and the recursive case, as arguments to a higher order function, fold back. So fallback is fundamentally for taking a list of A's into a B. So here, specifically, we take a list of A's back into a list of A's. So here's specifically B is also a list of A's but could be something else.
+
+28:04  
+Then this guy here is a gadget
+
+28:07  
+that we have to provide as an argument to fall back. And it's something
+
+28:12  
+that takes the current list head at which I'm looking for the you know, the head of the list and pattern matching against it takes the result of the recursive call
+
+28:22  
+and produces me produces for me the result of the main call.
+
+28:29  
+Yeah, what does it have to be in this particular case? Well, here the pattern is this. So from x, and from reverse x axis, which is the result of the recursive call, how do we put the result together? Well, we just snuck them.
+
+28:44  
+So in here, I needed to place curried function, I'll answer you in a sec, that takes
+
+28:51  
+an x, then a y's that stands for the result of the recursive code. And all I'm saying that in this case, corresponds, then to the second line here in the pattern match, all I need to do is to stock them together.
+
+29:04  
+This argument is the least that I'm actually reversing, and this argument. And for a particular funny design reason this is given as last year, not this is the second.
+
+29:14  
+This is what do I do in the empty case, and in the empty case, I just return empty. So this is an alternative definition and runs exactly the same way. So now I can reverse lists. So for example, I can reverse the list one to 10.
+
+29:32  
+And this is the list, and it's actually gonna be quite slow exactly because of this quadratic thing.
+
+29:40  
+Maybe in the video, I don't want to demonstrate how it slows down, but you will see when you try 1000 or so.
+
+29:48  
+Right? So
+
+29:51  
+this design is unfortunate here, not so much because it's a bad design, but because of the particularity of this function. So if you do bye
+
+30:00  
+recursion you indeed this auxiliary function snuck in that one is expensive is linear. So if you combine the linearity of snoc with with with the fact that reverse itself also goes through the list once, then you get square complexity.
+
+30:16  
+a completely different idea is to work with an accumulator. And that's also a nice occasion for me to show you how
+
+30:26  
+nested scopes work. But let me first check what the question was.
+
+30:33  
+Do I really have to stop sharing?
+
+30:40  
+Is the reverse outcome wrong? 1742 to 2021, reverse is blah, or am I losing it?
+
+30:49  
+Did I do something wrong?
+
+30:59  
+At which place? Did I make a mistake?
+
+31:13  
+That was correct.
+
+31:24  
+I'm making a mistake somewhere, right? Is it 2021 is here, here.
+
+31:38  
+The mistake is here. Sorry. No, I can see them.
+
+31:45  
+Thanks for spotting That was good.
+
+31:50  
+And now it's in an all these other places.
+
+32:02  
+I just wanted to step it for you. You also can do debugging like things here. And later, I'll show how to programme them. But the key here is just to really get the feeling but see the problem is I'm not as good as the computer.
+
+32:17  
+Let me share this with Id share
+
+32:20  
+of no fix this.
+
+32:25  
+So what's this better than mistake originally was around here. So here 42 and 22 to 2021. We're in the wrong order. And that then percolated rest. Yep. Very good that you noticed. Thank you.
+
+32:42  
+We can perhaps ask the machine to check to be sure.
+
+32:49  
+Yes.
+
+32:52  
+Now,
+
+32:54  
+here's a different way of doing it, as I said by an accumulator. And it's a good,
+
+32:59  
+good place for me to explain to you how also to work with local scope.
+
+33:04  
+So let me define reverse a four accumulator. So it's the same function, but just implement it slightly differently. And actually, with a better complexity here, in this case, just because of the particularity of the function,
+
+33:18  
+what I will do is, I will define reverse a,
+
+33:23  
+actually without using recursion, but I use a local function called reverse prime, which is defined recursively. See, the outer one here doesn't have rec, this one does have rec, I can of course, always put rec just in case. But you shouldn't really when the function is not recursive. Now, it's not a mistake to always say rec.
+
+33:48  
+So what's this reverse prime.
+
+33:52  
+Reverse prime takes two arguments, it takes one argument called act, another one called axes. So this one is the This one is the outermost axis, that's the one that I'm really taking care about. These axes here, I'm using
+
+34:07  
+reusing the name because I'm, I'm defining my local name, and this one will have its own parameters. So the scope of this exercise will be this part, which is the definition of reverse prime.
+
+34:20  
+And the idea here is, I want to define how to reverse a list exes. If I've already reversed something, I've already done part of the work. This is like when I move papers, pieces of paper sheets of paper from one pile to another.
+
+34:38  
+There is there, you know there is what's left over the original point. This will be x's in the recursive calls to this function. And there is what's already piled up in the new pine, this will be the act the accumulator. And the idea is when the original pine sort of has exhausted itself is empty.
+
+34:58  
+Then you just return the value.
+
+35:00  
+Have the accumulator, which means you've completed the reversal.
+
+35:04  
+Yeah.
+
+35:08  
+I'm using a slightly imperative explanation here because I'm saying there is a pile and this pile changes, and there is this other pile. And this also changes from the point of view of F sharp, it's not quite like this. It's more like, I call reverse with some act at some axes. And this results in a recursive call to reverse prime with some other act, and perhaps with different axes as well, well, here, the call is with this, and the video says to call this so let's see the cases.
+
+35:38  
+When I've been thinking productively here, because this is basically an implementation of a loop. When I've expired, sorry, exhausted my original pile, then everything is in the new pile and already reversed. Yep.
+
+35:53  
+If whatever is left of my original point,
+
+36:04  
+is,
+
+36:10  
+is is of the form head on Sunday, the head is x and detainees axes.
+
+36:16  
+Then what do I need to do? Well, I should, I should just repeat the procedure with some new parameters, or with some new arguments. So x axis is currently my sort of version of the original pile. Next time, it's actually so I'm removing one sheet from there, where do I put the sheet, I put it to the sheet of the new pile, the accumulating pile,
+
+36:40  
+and right now is at the top. But if I take more elements out of my original pile or list, more things will, will will, will we pile up on top of that? Yeah.
+
+36:53  
+And, and that's the definition of this function with the accumulator. And all that I need them to say, to complete the definition of the main function reverse a is to say,
+
+37:06  
+to get going, I have to take this auxiliary function reverse prime, and I have to apply to these two arguments, x is the least that I want to reverse. And mt is the original,
+
+37:19  
+or is the starting accumulating Pilar at the beginning in the new part, there is nothing.
+
+37:26  
+And mysteriously, this is nice, because it's happens to be linear here in this case, and the fundamental reason is, this programme needs snoc, to put something at the end of a list, which is expensive.
+
+37:40  
+This one uses comes to something at the beginning of the list, which takes just constant time. And then the whole programme, reverse a is linear, also reverse prime is linear. In the given list, reverse prime is linear in the sum of the two given list.
+
+38:01  
+This true,
+
+38:03  
+no, just just a second list,
+
+38:06  
+right, similar to how you could code direct recursion with fold back, you can code this thing, which is tail recursion with fold.
+
+38:17  
+And fold takes, again, a number of arguments, fundamentally, I'm trying to send a list of these into a B. Here B is also a list of A's. And these are the two cages that are used to do this two bits of information.
+
+38:31  
+B here you have to think of as the return value, but it's the same thing as the value of the accumulator, or the type of the accumulator. Sorry. So initially, it's empty. And the thing that we need to do at the recursive step to to produce the new accumulator is is is basically just cons. Yep.
+
+38:56  
+Huh, can we execute this one as well, I'm afraid I have to do this. But this will be the last thing that I will do in this class, sort of so explicitly. Let me see what that can be used hardly anything I suppose.
+
+39:14  
+What's happening?
+
+39:18  
+We're seeing this list.
+
+39:22  
+With reverse a.
+
+39:26  
+Well, first of all,
+
+39:28  
+it all reduced, it's actually not using diversity anymore. That's when it's not recursive. We will do it with the reverse prime. And we use it with these two arguments.
+
+39:40  
+Now, this is kind of our original pile of sheets, and we will gradually move things over here. So to say,
+
+39:47  
+in kind of imperative thinking, this these are the two variables that will change in our loop. Here nothing changes. We just make new recursive calls with new arguments.
+
+39:56  
+Let's see what happens. So
+
+40:02  
+The pattern match always, when you have a call of reverse prime is on the second argument, which here is this thing. So this one is of the form x axis,
+
+40:14  
+which means that I have to
+
+40:19  
+the whole thing reduces to reverse prime of,
+
+40:24  
+maybe I should make it
+
+40:26  
+sort of very explicit, I have to put 17 at the beginning
+
+40:31  
+of the original accumulator, which is this, right. And what is left is 42 2021. Yep.
+
+40:41  
+And then the next stage,
+
+40:45  
+I still pattern match on this one, it's still a conscious thing. And it said 42, we'll move to the beginning.
+
+40:54  
+So you get this.
+
+41:06  
+And then I have to make a pattern match on this one. And this one is actually of the form to 2021 followed by empty. So the remainder is empty, or the tail is empty. But I need to put 2021 in front of this thing.
+
+41:24  
+Now, I'm in the interesting case, where x is in my neck in my new recursive call to reverse prime is empty, which means that the recursion is finished here. I'm at the base case. And I just have to return the accumulator, which currently is
+
+41:42  
+the correct thing.
+
+41:47  
+I've written in the different syntax, but that's just the same as 2021 42.
+
+41:57  
+Let me check how you're doing.
+
+42:07  
+Yes. Any questions or any discussion here?
+
+42:13  
+Yes.
+
+42:19  
+Okay, so there is there is a lot of interesting questions.
+
+42:24  
+But I can't read them out while sharing. Maybe I can partially.
+
+42:29  
+Do you mind if your names are visible when you ask questions, or you don't?
+
+42:37  
+See No, since I cannot hear what you're saying. I'll do this anyway.
+
+42:42  
+Let me share my screen.
+
+42:49  
+Ah, I did the wrong thing.
+
+42:57  
+This is unspeakably see.
+
+43:01  
+Okay.
+
+43:08  
+I have to do differently, how to like this.
+
+43:12  
+For the moment, I'll just share my
+
+43:21  
+constancy. Other things while I'm doing this.
+
+43:24  
+Why not?
+
+43:27  
+Check. Yes, please. Okay, now you will see my Emacs buffer. I hope.
+
+43:34  
+I can see your questions, and there are a lot.
+
+43:40  
+And some of them are important.
+
+44:00  
+So there's a question, is there an efficient way to do the opposite of attending to the front of the other list? So the question is that we create some space for myself.
+
+44:19  
+think the question is basically this. So instead of something like smoke, you know, x 1x, two, bla bla,
+
+44:30  
+Excel.
+
+44:31  
+So why
+
+44:35  
+could I possibly not write simply something like maybe,
+
+44:41  
+maybe this
+
+44:48  
+as a first try, but this is completely impossible? Because you see, cons is a thing that can take an element and the list to a list, but here I'm in the opposite situation.
+
+45:00  
+So I'm given a list and an element in that order, and I want to make a list out of them. So this just doesn't work.
+
+45:07  
+The, the reasonable thing that I can do is to say that this is append of the singleton list, why and then it has the correct result, because this one will compute to
+
+45:20  
+what you want, namely, this.
+
+45:24  
+so naive, you can't.
+
+45:29  
+And really, data types, recursive data types, like lists, they are.
+
+45:35  
+I mean, they're biassed in the sense that one end is easier to access than the other.
+
+45:41  
+This is not to say that you can't have fast access both to the front and to the end of the list. But then you need to use a different clever encoding of the list data type, which is actually possible there is something called difference lists. Which is an idea, which is a trick to exactly get fast access, both to the front and the back of the list in constant time.
+
+46:04  
+But I can't show it right now.
+
+46:08  
+Someone said there is least append Indeed, this is what I'm using. But this indeed is linear in the first argument. So when you append together to for two lists, you need to walk through the first one.
+
+46:23  
+The second list may be long here, it's just one element, but in general may be many. But you don't need to walk through it to perform the concatenation, right?
+
+46:34  
+Because all you need to do is to comes the last element of the first list to the whole of the second list. And you don't need to look into it any deeper for calculating
+
+46:45  
+concatenation. So it's linear in the first argument constant in the second.
+
+46:50  
+But unfortunately, snuck has the first argument complex than the second one trivia. One said yes, someone has said exactly correct.
+
+47:02  
+I thought less has a one access to front and back. That's not true. So for that, you would really need
+
+47:10  
+sort of doubly linked list where on the top level, you can have quick access to the access to the both and the front.
+
+47:21  
+What else is there lists cannot be F sharp list cannot be appended in place, indeed.
+
+47:30  
+But partially.
+
+47:32  
+So what is actually true is that if you concatenate together two lists,
+
+47:42  
+both of which are long, maybe this one is n elements, this one is m elements,
+
+47:48  
+when it's sort of half in place, in the sense that you never need to copy the second list. But you basically recreate
+
+47:57  
+cells for all elements.
+
+48:02  
+In the first place, if you want to think in terms of how things are in the memory, does it make sense.
+
+48:08  
+Because think, these two lists are somehow laid out in the memory, I need to walk through the first, then I put the pointer to the beginning of the second, I don't need to touch it, I can also leave it there. And then I recreate the pointer structure, you know,
+
+48:23  
+a sequence of n cells, the first one pointing to the second, third, fourth, the last one pointing to wise. So I've, I've,
+
+48:31  
+when I'm, when I've done this, I basically recreated axes, so I've duplicated axes, and got wise.
+
+48:40  
+So after I've done the append,
+
+48:44  
+so when i was when i before had x is once in the memory wise twice, then morally, what y is, is once in the memory x is is twice, but
+
+48:55  
+if x is no longer used anywhere else, except in this append, then the old copy of x is will be garbage collected automatically. So this is the bonus of functional languages like F sharp and others.
+
+49:08  
+You cannot do your own memory management unless you do tricks. So programming with references is one of those. But
+
+49:17  
+the good news is, you know,
+
+49:20  
+you're not given the rights to do something but then also you don't get the responsibility. So if you're not given the rights to do your explicit memory management, then well the system should take care of it. And that's it. So uh
+
+49:32  
+so that's a good thing.
+
+49:47  
+Yes.
+
+49:53  
+Okay. I think I think I'll continue with their regarding
+
+50:00  
+vigoroth in Hawaii, I cannot hear I, I really cannot tell you and I think it is it is not so much an issue with.
+
+50:11  
+With my speakers, there is surely something else wrong in the configuration that is that is badly wrong.
+
+50:18  
+I will find it out in time.
+
+50:22  
+So let me stop sharing for a moment and then share differently.
+
+50:39  
+Okay, so this was less, you can work with these things. And that's really nice. Maybe just a quick illustration of reverse a then just for you to get the field. So reverse a applied to some,
+
+50:54  
+some some given list, of course, doesn't give you so much information. But
+
+51:02  
+the result will be the same as before, but one of the things I could do for you is to
+
+51:15  
+is to actually show for you reverse prime.
+
+51:19  
+Currently, it's a local function. So the way that I've written my code is that only reverse a has access to reverse prime, because it's one left. So this one defines a top level name, this lead here, indented defines the local name, I could also write in, but if I use proper indentation,
+
+51:40  
+F sharp, we'll see. And that's sort of typical to many functional languages, you try to minimise the number of parentheses.
+
+51:48  
+And then one way to deal with this is to make sure you really use your invitation strictly this lead. And this thing match up and I don't even need to write the in the keyword is legal syntax. Although the aim is morally there.
+
+52:01  
+One thing I could do would be to lift
+
+52:06  
+reverse to the top level. Here, it's actually very easy to do of course, I will need to reload the file.
+
+52:12  
+I think all I will need to do is this, this will be fine.
+
+52:17  
+And
+
+52:19  
+then what I also need to do is this. Now reverse prime is a top level function defined recursively. Reverse A is a non recursive function defined via a recursive function reverse prime, which was top level
+
+52:36  
+load,
+
+52:38  
+or
+
+52:45  
+Okay.
+
+52:52  
+Let's see if we've got the reverse prime available.
+
+53:03  
+Hmm.
+
+53:05  
+Maybe a good idea is to save five. So let's repeat.
+
+53:13  
+Now we're in good shape. Now I can I can demonstrate you how it works in the presence of an accumulator, right. So the idea here is x is something that is not yet reversed. ec is something that was already reversed. So it's already in the correct final order. And now let's see how they work together on here, of course.
+
+53:38  
+So what are some numbers?
+
+53:42  
+Let's say what are some strings?
+
+53:54  
+Do you see I made a mistake, which is the mistake No, you cannot tell me Of course.
+
+53:59  
+Unfortunately, correct the mistake. The second
+
+54:04  
+mistake is writing a comma instead of a semicolon, which we can give you a lot of headache if you can't read their messages. So this part is the accumulator. This is a list that I still need to reverse.
+
+54:19  
+And in that course, it will pile up in the accumulator. So to say in the accumulator will be returned. And the result is Hello, world. Here I come sorry, but it came in the wrong order, because I didn't think of it properly. So hello, world is already sorted.
+
+54:38  
+But this list, I reverse, and I add one by one elements from here, here.
+
+54:45  
+So my mistake was to forget which way these things go, but you see clearly how their community works. Okay.
+
+54:52  
+No data types list. Here's a secret list. Actually, we're a data type. So characteristic to a data type.
+
+55:00  
+Is that it's a mix of things of different character. So there are two kinds of lists, for example. So this is two different characters, the empty list, and cons list.
+
+55:13  
+In some languages, like C, there is union types for this. So I mean, you can, for example, have a union of,
+
+55:23  
+I don't know what, of a numerical value of some numeric type and the numerical value of some slightly different type, maybe in some floats or something like this, you can store a thing in this union type, you can store an int, and you can extract the float, and C will tell you nothing. And you don't even get back the same integer turned into a float. But you just get something that corresponds to the same byte representation or word representation as the given integer. So the float that you get will not remind you of the integer at all.
+
+55:54  
+Because you can use words differently to represent the different types of numbers here,
+
+56:01  
+this kind of mix up will will never happen, because you will always tank
+
+56:06  
+the value that you have in your union, so everything will know what it is. So at least we'll know whether it's empty or cons. Here's a different example.
+
+56:15  
+I'm defining persons, I will have two different types of persons, I think it has to do something with a university Handbook, or sorry, a phone book or something phone directory. So you have students that have just a name. For the teacher, in an old style, Danish university
+
+56:35  
+will have a name, but it will also have this internal phone number, which is four digits, and something else will go in front of it. So that's the difference of students or teachers, those that do and those that don't have landlines. So no one uses them anyway.
+
+56:52  
+Now there's two different ways of actually making
+
+56:56  
+persons. So I could, for example, say student Joe.
+
+57:05  
+And F sharp will tell me this is a perfect person.
+
+57:10  
+But I can also say I like teacher,
+
+57:15  
+pepper,
+
+57:19  
+and some phone number, let's first we think correctly, this is not the right way to do it, because feature
+
+57:27  
+is a tank, but really is a function that you know makes persons for me in a recognisable way, taking some argument is a two place function here, but the functions are given as a tuple, not in a curried way. So what I wrote is not correct. And you should be aware that you really need to do it like this.
+
+57:51  
+You should apply teacher to the pair of Peter and 5083.
+
+57:58  
+In a pair, you use a comma in a list, you use a semicolon in a pair, you do not need parentheses, in general, but here you do, because otherwise, F sharp would parse it incorrectly, it will try to form if I skipped the parentheses, it will try to form the pair of teacher, Peter, and 5083. And of course, that's not possible. Because Peter Peter was not the correct thing in the first place.
+
+58:25  
+Right? So what does it give me? Well, it
+
+58:30  
+gives me a possibility
+
+58:33  
+to
+
+58:35  
+make different things to be of the same time. So here's students and teachers, students are morally just names, teachers are pairs of names and the teachers.
+
+58:45  
+We used to say a list had to be made, or things of the same type. But now I can put students and teachers into the same list. Why? Because very late neither students nor teachers, they're just persons. I mean, as soon as you've tagged news, with a tag student names is no longer a name or a string. Nils is then a person. Similarly, as as soon as you've tagged the pair, Peter 5083, with a tech teacher, or apply the function teacher to it,
+
+59:20  
+it actually becomes a person. And now this thing is just a list of
+
+59:25  
+persons.
+
+59:27  
+I think it's already in the global scope, because
+
+59:33  
+Have you defined it here with a global lesson loaded the file, and you can see this is just a list of persons.
+
+59:40  
+Now, how do you work with data types for these discriminated union types, you define them in this way you give a name to the data type, keyword type, and then you give all cases it's nice to give them in an aligned way. There are also other ways but this is the stylish ways
+
+59:58  
+and you just tell what the tags are.
+
+1:00:00  
+And you say what kind of arguments each tag takes.
+
+1:00:05  
+And once you've done this, you basically have created functions corresponding to these tags. So student is a function for forming persons and teacher is a function for forming persons out of different things.
+
+1:00:17  
+How do I work with this?
+
+1:00:19  
+I can match on these tags, similar to how our match on the tags empty and cons or double colon. So for example, I might define a function that extracts the phone of a person.
+
+1:00:34  
+Yeah, and then I can apply it to people. So I can, for example, do get phone
+
+1:00:40  
+apply to this guy, Peter.
+
+1:00:45  
+Maybe it's a bit silly here, because you see the phone
+
+1:00:49  
+directly on this line. But of course, teacher Peter 5083 could have been given a name someplace else, and you don't see the phone number directly. And you can extract it. But of course, I could have the bad idea to also try to use it on student job.
+
+1:01:07  
+Surely I can't, I mean, there are quite a few swear words here. But But the main point of the error message is the match cases were incomplete. Because what did I do?
+
+1:01:19  
+Ideally, this thing, to not give a runtime error of this character, I should have matched the given argument person
+
+1:01:32  
+against any possible
+
+1:01:36  
+pattern that I can that can arise here, but I've just only used it in one case, actually, for the reason that it's very difficult to find out the phone number for a student because they're not in the database. Yeah, Is it fine.
+
+1:01:51  
+But of course, in principle, I could come up with something like a different pattern match, let me put it as a comment here, which would perhaps say student anything,
+
+1:02:02  
+we just return to some standard thing, like four zeros.
+
+1:02:07  
+And that would be a perfect piece of code.
+
+1:02:12  
+Another thing I could emphasise here, here, it just happened as an accident because it was not like this in the textbook.
+
+1:02:21  
+But in general,
+
+1:02:24  
+you can use names in different roles. And they don't get confused. Here person is a type name.
+
+1:02:33  
+Yeah, it's a constant type person. But at the same time, I've also used it as a variable for a value here a parameter, and that's okay. With these two things live in completely different universes. So there is no way
+
+1:02:48  
+F sharp will get confused about this. We may.
+
+1:02:52  
+And then you might say it's a bad idea. Perhaps we would want to write p here.
+
+1:02:57  
+That would be fine. But there is no problem.
+
+1:03:12  
+Just because I can't hear you, and
+
+1:03:15  
+I can't see your questions. I will temporarily check with your set here.
+
+1:03:32  
+Comma, semi colons. Yes.
+
+1:03:40  
+Indeed, I already said this, but maybe I can emphasise it one more time. And I'll show you I'll show you on an example. I also showed it in one of the lectures before.
+
+1:03:51  
+But I can do it here.
+
+1:03:56  
+commas versus semi colons, commas are there for tuples tuples are types, which have a definite length, you can see.
+
+1:04:06  
+Sorry, tuples are data structures that have a definite length. So the type fix is the length that you have in mind like a tuple of three elements, two elements, four elements to element tuples are called pairs. Zero element tuples are called the unit type.
+
+1:04:22  
+The syntax there is comma. Lists are different from tuples in two aspects.
+
+1:04:29  
+You can put together elements of the same type only, like maybe a list of all numbers or list of all strings, every element has to be a string.
+
+1:04:39  
+But you don't fix the length of a list in the type. So there is just one list type for every element type. And then you allow your list to be of any length and the syntax for lists the semicolon and, and there is real difference. So for example, I can write something like
+
+1:04:58  
+but can I write
+
+1:05:00  
+can do something about telephone numbers,
+
+1:05:03  
+not involving the person type it all here. Suppose I want to make my little database and I want to put it in a list, then I can do it like this.
+
+1:05:18  
+I'm just making it up. So the numbers don't make sense.
+
+1:05:35  
+So that's,
+
+1:05:38  
+that's a mix of different punctuation marks, you see a bunch of commas here, you also see a bunch of semi colons.
+
+1:05:45  
+But actually,
+
+1:05:48  
+for F sharp, let's see what it is.
+
+1:05:52  
+Good, I make a mistake, I hope not.
+
+1:05:55  
+F sharp has a very definite idea what this is, it is a list.
+
+1:06:01  
+But this list has elements which are pairs of strings and integers. And actually, when F sharp shows it to us pretty printed, it has put in some parentheses for us, which are not strictly speaking needed.
+
+1:06:14  
+But that's who's ever taste who wrote the pretty printer. And maybe, yeah, maybe you want to see them for clarity. So
+
+1:06:24  
+you can see that every element of the list has to have the same type here string times int.
+
+1:06:31  
+But the pair type is perfectly okay to mix elements of different types. So we can have pairs of strings and integers. And this type of data structure actually has a name people who call it Association lists or dictionaries. Because the idea is that it is like a small relational database with basically two columns here, four rows, where the first column corresponds to names and second one telephone numbers. And then I can look right look up functions that work with these key value pairs. So given the name, I may want to look up a phone number, maybe I want to work the other way, use the phone as as the key and then look up the name as the value. It's also fine.
+
+1:07:11  
+Let me do another kind of an example of data type.
+
+1:07:17  
+These are trees node labelled binary trees, there's very similar for lists.
+
+1:07:23  
+And this is to illustrate that I can have data types user defined data types defined with a keyword type that work on multiple types, the way that you should read the thing construction here is, I want to define in one go, the type of trees actually node labelled trees for any node labelled type A. So it could be a tree of integers, three of strings to Booleans, a, it could be any type.
+
+1:07:50  
+So the resulting type will be called a tree written down in this order. In some other languages like Haskell, you would write three a, so here, F sharp, and other ml type languages have really funny choice of naming, but this is what it is.
+
+1:08:06  
+And the tree can be of two forms, it can be a leaf, which means it's just a tree consisting of one node, or it can be a branching node. Or say it can be a big tree, which means that the root is a branching node, it has a label. And the two immediate sub trees are also node labelled trees.
+
+1:08:27  
+Actually, two things are happening here. One is that this is completely generic in the type of node labels which are used here. But you can also notice another thing differently from the type of person. But similarly to the type of list this one is recursive. So a tree can be something that is made up of other trees in turn. Does that make sense?
+
+1:08:53  
+Then, leaf and Burr are these Lyft and Uber are these data constructors. In this case, it's not the situation at all that it would always need to be two data constructors, you can have 341 any number you want.
+
+1:09:07  
+Here is two again, like for lists we have different homes.
+
+1:09:12  
+And once you've made these definitions, you basically get two functions leaf gives you a tree right away without taking any arguments. branch
+
+1:09:21  
+is a function that takes an argument but that argument is a triple so morally branch is it's like a three place function takes the root label and the two immediate sub trees and makes a tree out of them.
+
+1:09:37  
+Now here is an example of a tree maybe difficult to see in this notation, but you can imagine right at the root you've got 34
+
+1:09:46  
+then there are two immediate sub trees which are these.
+
+1:09:53  
+Let's go to the left subtree This one has 23 at the root
+
+1:09:59  
+but the immediate
+
+1:10:00  
+Sup trees are already trivial sub trees, they are the leaves, the leaves, and the right hand subtree. Right and immediate subtree is similar.
+
+1:10:10  
+I don't want to go deep into into trees at all.
+
+1:10:14  
+It's just an example of a data type.
+
+1:10:18  
+But I'd like to emphasise at least for once that you programme with trees, in very similar ways to how you programme with,
+
+1:10:27  
+with lists, or even with the same person data type that we had here. So we work with pattern matching. Because if you want to define a function on a tree, then you have to say what this function does if the trees is a leaf. And what it does if the tree is more complicated, so it has a root node and further nodes.
+
+1:10:46  
+So here, for example, I'm defining a simple function by direct recursion, that's sums all the node labels of a tree just goes by pattern matching and direct recursion.
+
+1:10:59  
+So
+
+1:11:02  
+if the tree is just a leaf, when I say zero, there is no values to sum up. Zero is the unit of summation if its branch, and
+
+1:11:12  
+so the branch just indicates this is a complicated tree. So there is a root label and two immediate sub trees, what do I need to do?
+
+1:11:19  
+Well, sub trees are smaller problems than the whole tree. So I just assumed that the recursion can work out the sums of of, of the left and right sub tree TL dr for three left three, right. And then all I need to do is to add to the sum of those two also the,
+
+1:11:38  
+the label here an integer, or a numerical value, no in integer because we say zero here, corresponding to the root node.
+
+1:11:50  
+Just Just to give you one other example, actually, no, maybe we can show you I can show you these things, T one, T one is your three,
+
+1:11:58  
+that's your three, it's really the same one as their, I can sum over all of this, it's maybe a bit difficult to verify.
+
+1:12:08  
+Because these are large numbers.
+
+1:12:11  
+But it's a number, it's the sum of these four numbers. These are the only, you know labels that I have here.
+
+1:12:18  
+I could also, for example, count leaves in a tree.
+
+1:12:23  
+So let's think, again, how do you do it with direct recursion, which should always be your preferred way of doing recursion? accumulation you need sometimes for efficiency purposes, and sometimes they don't even help you. So always prefer direct recursion? I would say if you're a functional programmer, especially beginning one,
+
+1:12:41  
+how do I count the number of leaves? Well, if I'm at a leaf, this contributes one because this is one leaf. Otherwise, if it's a complex tree, so there is an old label, which here I don't care about, so I can throw it away from the point of view, not using it.
+
+1:12:58  
+And then there are the left and right immediate sub trees, I need to take the counts from there and just add them together. Yeah, and then count up
+
+1:13:08  
+to one
+
+1:13:09  
+would be five. Does it make sense? Well, let's count Love, love, love, love, love, that is fine. That's what he's counting
+
+1:13:23  
+What else do I need to do?
+
+1:13:31  
+Okay.
+
+1:13:39  
+Here there is something similar to other examples that we looked at, about
+
+1:13:45  
+taking
+
+1:13:49  
+a tree and forming
+
+1:13:52  
+rather than say something together, then old labels, forming a list of the node labels in a certain order. And the order could correspond to sort of first working first taking the root node label, then walking to the left doing collecting everything there, then walking to the right collecting everything there. So basically enter the T morally at the root and you leave it at the if the if the tree goes downward, then you leave the tree at the at the bottom right, you know, at the very end of the right immediate subtree.
+
+1:14:27  
+Let me maybe show you on an example here pre order
+
+1:14:32  
+T one
+
+1:14:34  
+is for some reason,
+
+1:14:36  
+this order why, because I form a list. First I take the root label, and then I take whatever labels I can collect from the left subtree then I take whatever labels I can collect on the right subtree in the left subtree. I'll start in the similar way I take the root label which is 23. Then the labels from the left hand right but they don't contribute anything here. Then I go to what I
+
+1:15:00  
+Here, which was the right subtree, collect the label 54 from the root, then I go to the left, which has nothing contributes nothing, then I go to the right, which gives me 78, then I go further down to the left and right, but these contribute nothing anymore. That's the final list. Now, it's a good exercise to think how to do it.
+
+1:15:23  
+And you get a kind of an issue with that is very similar to reverse.
+
+1:15:29  
+Because here, if you do it with direct recursion, there will be a part of the resulting list
+
+1:15:37  
+that you kind of are parts of the resulting list that you traverse over over and over again. And that gives you a quadratic complexity rather than linear rather than linear, which is what you should have. But if you programme it with an accumulator,
+
+1:15:52  
+the idea is you're somewhere in the tree, you've already collected the values from everywhere above and to the left of you, and the only ones that there are still to collect are those to the right of you more or less, then then you can write the nice programme that has a linear
+
+1:16:11  
+complexity. I'll jump over this.
+
+1:16:17  
+Just to illustrate, you can also similar to math for lists, you can write polymorphic functions for teams. So while
+
+1:16:27  
+trees themselves were polymorphic, for example, summations still works for trees of numbers. But there are functions that work for any type of tree. Especially you can make higher order functions that work on any type of tree, and sort of capture common programming patterns for trees. One of them is called map three, four, I call it battery here. And the idea is to do something similar to map for lists. So this thing takes a tree. And the function,
+
+1:17:02  
+which is a hierarchy of the function, one of the arguments that comes in is a function. And it applies the given function to every node, all the tree.
+
+1:17:15  
+So let's look at the type of map tree.
+
+1:17:20  
+So it's the function we can't see much of its value, I mean, it's some function. But here's the time it takes a function for sending any type A to any type
+
+1:17:32  
+B for some fixed a and b.
+
+1:17:36  
+And then it takes a G of A's. And based on this function, it's able to produce a G of these intuitively what it should do, it should walk through the tree in some order. Here, it's done with direct recursion. So it works kind of bottom up.
+
+1:17:49  
+And,
+
+1:17:51  
+and applies the given function at every note. So we can we can do easy exercises on this one. So for example, I have this treaty, one that we've seen so many times. I can for example, Mac
+
+1:18:06  
+plus,
+
+1:18:09  
+what is easy, plus 123.
+
+1:18:15  
+And I've increased the node label of every note by one.
+
+1:18:22  
+Yes.
+
+1:18:25  
+I might not like it. Maybe I want to have 17 everywhere. Then I could write the following. I will put here the function
+
+1:18:34  
+that whatever it gets in it just returned 17.
+
+1:18:40  
+And I got the tree of 17. But of course, I could just as well have a tree of highs
+
+1:18:47  
+and it's also perfectly possible.
+
+1:19:04  
+Do I want to do positions?
+
+1:19:15  
+I want to see if there are questions.
+
+1:19:43  
+Okay, there are quite a few questions.
+
+1:19:47  
+Let me share just my Emacs window.
+
+1:20:06  
+Okay,
+
+1:20:17  
+here's a question about person and zeros here.
+
+1:20:24  
+I think I made a very small typo here. And it's good that you noticed it.
+
+1:20:30  
+So the whole thing, of course has to be have a correct claim. So get phone here takes the person and returns an integer, because phones are integers. So it was a bad idea for me to put quotes around the zero, right? Is that okay? So this is just zero.
+
+1:20:52  
+So, why did this happen? Of course, because I put it as a comment, and I wanted to make a shortcut. And then
+
+1:21:00  
+why does lf
+
+1:21:03  
+not need a type definition left for leaf.
+
+1:21:14  
+So you can have data, data constructors or tags that don't take any argument or you can have those that take one argument that can be complicated to in particular, it can be a tuple. In principle, I could, but I don't advise you
+
+1:21:30  
+to say that leaf takes an argument of five unit.
+
+1:21:41  
+But then you see the penalties, then I cannot write leave for some relief, then I always have to write leave empty,
+
+1:21:48  
+which is just a
+
+1:21:50  
+nuisance.
+
+1:21:52  
+Because then leaf will take an argument, the argument can never be anything of interest, it's always the empty tuple.
+
+1:21:59  
+But it's kind of a nicety of syntax that you're allowed to just not have an argument in this case,
+
+1:22:06  
+is direct recursion, just going all the way through and doing calculations on the way back? Yes, you could say these days. So a typical recursive data type is some form of a tree or a tree like structure, with labels here and there.
+
+1:22:22  
+You make calls on smaller parts of the data structure.
+
+1:22:28  
+So as you go down, so to say the data structure, you just accumulate a stack, of course,
+
+1:22:34  
+what is more complicated if this data structure is branching, but anyway, morally, it's there is many calls that you start to go down, and then you'll do the calculations on the way back up. So in the case of a tree, suppose the trees go from the top to bottom, like, not like in nature, but like in computer science, you typically put the root at the top and leaves at the bottom, then you work down the way on the tree, make recursive calls, and smaller and smaller sub trees,
+
+1:23:02  
+you reach the leaves or leaves, the base case will tell what the result is. And then you will calculate the result on all sub trees on the way back up.
+
+1:23:14  
+Could you define what leaves and branches?
+
+1:23:18  
+I can't, they are nothing else, then
+
+1:23:24  
+data constructors, or tags, these under the names of them.
+
+1:23:29  
+They work like functions, in the sense that they are some way to take, you know, to make a three out of nothing in the case of leaf or to make a tree in the case of a no label or to other trees. In the case of branch, or a composite tree.
+
+1:23:48  
+But it's nothing like what I could define
+
+1:23:53  
+no
+
+1:23:55  
+kind of mathematical name for it would be a free construction. So I'm looking, I'm looking for lF and ber, which really are nothing else than like syntactic constructions. I mean, you can see here these are my trees, Burr and lift, don't compute anything. Love is already in its simplest form. It is it and nothing else. Also brands have
+
+1:24:20  
+a node label and two other trees is already a tree. It's not like I apply a branch to three different arguments and then it will still compute something No, it is just a tree. Of course, here instead of 71 eight, like we'll have 70 plus eight and that will simplify to 78. here instead of leaf I could have two complicated trees and they may be compute to simpler trees. But in the end, what you get is just this. So it's kind of a way of General of
+
+1:24:49  
+of making data structures.
+
+1:24:52  
+But these are not like data structures like records that would have a number of fields and every field has a value but
+
+1:25:01  
+They are kind of an ilogger. And an analogue of records, where for every particular instance of your data type, exactly one field has a value so
+
+1:25:13  
+or has an argument. So every chief either leave or brands but not both. Yeah.
+
+1:25:19  
+And then if it's a brand standard is
+
+1:25:22  
+a triple of information, which are the note label and subtrees.
+
+1:25:27  
+Okay, I'm
+
+1:25:32  
+done, stop share share differently.
+
+1:25:46  
+These were
+
+1:25:49  
+trees.
+
+1:25:52  
+Here's an interesting type that you can perhaps play with.
+
+1:25:57  
+Here is a type of what I
+
+1:25:59  
+have what I call positions, it's a type POS.
+
+1:26:03  
+And this is to identify a place in a putative tree. So S stands for the root position in a tree. And l means
+
+1:26:15  
+l apply to some other position is a position that that is given by first going to the left, and then going to wherever the other position
+
+1:26:25  
+goes. Our means first go right and then wherever else. So then I can form because positions like R R, L S.
+
+1:26:37  
+So this is a valid position, and it means
+
+1:26:41  
+it morally indicates or it can be used for looking up a subtree. In a bigger tree, when I first say, I'm actually interested in the, you know, the right immediate subtree of a given global tree. And then maybe I want to go deeper into the right immediate subtree of that. And then I may want to go deeper into the left immediate subtree of that.
+
+1:27:04  
+And then maybe I want to have the root
+
+1:27:09  
+position
+
+1:27:13  
+of the three that I've reached that. So basically estimates kind of stop here, I'm already there. Yeah.
+
+1:27:19  
+And if you've defined a data type like this, all of these will be legal legal positions like S will be and L
+
+1:27:29  
+L, L or S will be
+
+1:27:32  
+an L of m of s Volpi, because I cannot go to the middle, there is no constructor M.
+
+1:27:38  
+And once you've done this, you can actually write the nice function, sub tree recursively, that takes the position and the tree
+
+1:27:48  
+and extract the sub tree at the given position in a tree. And then you could think how it works.
+
+1:27:55  
+Basically,
+
+1:27:57  
+if your position is S for the root position, and you're at the tree, then you just return that tree. That's the base case.
+
+1:28:05  
+If the position says go to the left, and you're given three is has some node label, which you don't care about some immediate subtree, which don't care about some immediate left subtree, then you recursively call subtree P
+
+1:28:22  
+and T one. So go deeper with P in the left immediate subtree, which was T one. And similarly if you're on the right,
+
+1:28:29  
+there are bad cases where you are at a leaf but you still need to go to the left or to the right. These you can model with incomplete pattern matching, that's okay. But here actually show you a different solution, which is to raise an exception. So failed with raises a standard exception called failure. And it also allows you to emit an error message together with it. Still an error if you if you end up in this case, but at least you get some information other than just random swear words.
+
+1:29:07  
+Then
+
+1:29:09  
+this is a very useful data type called the option data type more or less defined like this. But actually, it's already predefined for you. So don't need to redefine it.
+
+1:29:22  
+The idea is
+
+1:29:25  
+thing for example of our person,
+
+1:29:29  
+the data type.
+
+1:29:32  
+This is a good example,
+
+1:29:34  
+where maybe that's not a good example think it is a good example as well, but not as soon think of our lists case. So we previous I previously showed you functions head and tail that extracted the head and tail of a list, but they were done with incomplete pattern matches. And if the given list was empty, you just got a runtime error because of a matching of a missing matching pattern.
+
+1:29:57  
+So the function was not defined for the empty list.
+
+1:30:00  
+But if you actually call it on the empty list, then then the interpreter starts yelling at you.
+
+1:30:06  
+Now what you could do to avoid these things and to actually be able to handle these erroneous situations, one possibility is to use an option datatype.
+
+1:30:15  
+The option data type takes any type A.
+
+1:30:20  
+And the basically unions together with
+
+1:30:26  
+with a special kind of signal value called none. So this one is a tag that takes no argument none. It says no value morally. And there is another tack some to tell you Apart from this, which takes as an argument somebody have type A. So anything that lives in this type must be either
+
+1:30:46  
+a value, or your type of interest, a just marked some, which means this is a good value, it's the regular case, it's not error, or it's this special value none which signifies error.
+
+1:31:00  
+So I can, for example, have none of type
+
+1:31:03  
+the option
+
+1:31:06  
+Sorry, wrong sorry.
+
+1:31:11  
+Maybe it will require
+
+1:31:13  
+it once parentheses here.
+
+1:31:17  
+And then that's good, right. So none is a is an erroneous value, not in integers. But then optional integers, this is how you should think of them, I mean, an integer that may be missing.
+
+1:31:28  
+Whereas at the same time, some five
+
+1:31:35  
+is also an optional integer, it is, it is an option that is actually used, you know, it's a proper integer, it's not an erroneous integer. And once you've done this, you can write nice functions.
+
+1:31:51  
+So for example, instead of the ordinary head,
+
+1:31:56  
+which had the type
+
+1:32:00  
+so what type it had had had had the type a list goes to a, so it takes a list of arrays and gives you an element today, I can define a different function called try head,
+
+1:32:12  
+which takes a list of arrays and gives me
+
+1:32:17  
+you know,
+
+1:32:19  
+a value of type a with a possibility of an error. So it's an optional a, a option.
+
+1:32:25  
+So this one is listed.
+
+1:32:31  
+And that's what I had that. So it's it's like the usual head programme, it says, When I see a list, which is x followed by something else, then the head is x.
+
+1:32:40  
+But now I put the tag sum, which doesn't compute anything, it's just a syntax error wrapped around the actual list head element value. But I can I can write the complete pattern match, because now there is a good thing to write for the empty case. Namely, I say, look, this is a bad situation none.
+
+1:33:00  
+And then some other function that uses try head can pattern match and say, okay, was this a proper list, did it have a head, and this is signified by non you can find it out by pattern matching, or none. And if the list was, was non empty and had a head element, then you can pattern match on some successfully and you can use the Add element for some good purpose.
+
+1:33:24  
+So similarly, we could fix this get phone function by getting it the type
+
+1:33:33  
+that goes from person, I'm not putting the wrong size here. This is a single column.
+
+1:33:39  
+The reason I'm making this mistake is that in some functional languages, colon and double colon are used exactly the other way around.
+
+1:33:46  
+So this one will give me an optional integer now
+
+1:33:51  
+rather than just an integer. And you can see I can very well give a phone even if I'm calling
+
+1:33:59  
+the get home function on on a student, I just say a student cannot possibly have a phone.
+
+1:34:06  
+Let's try this.
+
+1:34:12  
+And I see a student doesn't have a phone, but then maybe someone like teacher
+
+1:34:18  
+I forgotten what the
+
+1:34:21  
+phone calls better was, doesn't matter.
+
+1:34:26  
+Let it be something
+
+1:34:29  
+maybe close this.
+
+1:34:32  
+And then I do get the numerical value, which is 5038. But together with a tax sum, which just says this is a proper value, it's not an error.
+
+1:34:44  
+So that's one way to to do
+
+1:34:48  
+credit erroneous situations by hand using user defined data type.
+
+1:34:55  
+Let me just finish off by saying that there is also a mechanism of
+
+1:35:00  
+of exceptions, I don't want to go deeper into this. Now I'll do this next time. But just to show you an example. So suppose maybe
+
+1:35:11  
+I want to convert,
+
+1:35:14  
+you know,
+
+1:35:17  
+what is it
+
+1:35:19  
+I want to calculate time in hours of a day,
+
+1:35:24  
+in two minutes of a day. So that should be just to take illegal number of hours, and multiplied by 61 way to do it by also signifying that, I don't want to multiply my number of minutes by 60. If the number of hours is smaller than zero or greater than 23, which are not legal hours of a day, then I can read raise an exception illegal hour and provide some extra information, which here is an integer, provided that I've defined the legal hour as user defined exception. And this is an exception, which, when I raise I'm allowed also to provide some information together with the exception, which here will be a number, integer number, which is just the hour.
+
+1:36:14  
+So
+
+1:36:16  
+I can apply minutes to 25. Normally, maybe let's first do something reasonable to three, this is 180. If I apply to 25, sorry,
+
+1:36:27  
+then
+
+1:36:30  
+I get an exception illegal hour.
+
+1:36:36  
+But then exceptions can be caught with the following sort of try catch syntax, I can say try to evaluate this thing. But if this exception arises, with whatever information, just return minus one as the kind of a default.
+
+1:36:54  
+And that's perfectly possible, I do get minus one.
+
+1:37:00  
+But I could also choose to do something else, I could maybe
+
+1:37:06  
+actually capture the the number, then I could maybe return that number, that would also be a possible thing to do here, or maybe return something else.
+
+1:37:21  
+And there is only one thing to say to finish. So here I'm using a user defined exception. Illegal our in some previous code, actually, there was a failed with where was it here. This is just a shorthand if you don't bother to invent your own exception.
+
+1:37:42  
+Type, which can be useful, because you can match pattern match on these different types of exact example, you can use one of the system exceptions, and one of the system exceptions is failure is called failure with capital F. And this one allows you to provide some information with
+
+1:37:59  
+as a string. So pain with cannot continue is basically the same as raised failure. And argument cannot continue.
+
+1:38:09  
+There is an example
+
+1:38:12  
+of this.
+
+1:38:17  
+So here's basically the same programme as before, but I don't use my own exception, that was called illegal hour, but I use the exception failure. So then I don't have to write race failure, I can just write failed with. And this is my error message, which is a string.
+
+1:38:33  
+And I can get exactly the same functionality as before this try catch thing
+
+1:38:39  
+where I do not try to catch
+
+1:38:45  
+the exception the legal hour anymore. I'm trying to catch the system exception called failure.
+
+1:38:52  
+And that is maybe good for now about this part. Let me see
+
+1:38:57  
+about questions.
+
+1:39:02  
+Well, there are
+
+1:39:04  
+some more questions I'm done with,
+
+1:39:08  
+with everything I wanted to show you today. So if you could write something else in the chat, they can quickly, quickly answer.
+
+1:39:31  
+While you can raise your hand.
+
+1:39:35  
+Can I quickly see the first version of pre order again? Yes, let me do it like this that I keep the chat open.
+
+1:39:43  
+So I can see other questions share screen Emacs.
+
+1:39:55  
+I didn't really go through it at all right? So you have to properly think
+
+1:40:00  
+And what happens here and it's not so immediate. And it's quite interesting in the sense that the fast version of preorder, which works with the accumulator,
+
+1:40:10  
+uses an auxiliary function P order prime, I've here chosen to be the top level. But of course, I could make it local to preorder a so no one else will be able to see then apart from the definition of pra, but the interesting part, of course, happens here, right?
+
+1:40:28  
+So maybe we can quickly think what is happening. Morally, the situation is this. So
+
+1:40:36  
+the way the thing works is there is some running sort of tree that you're looking at, that is not yet pre ordered,
+
+1:40:43  
+in the sense that you haven't extracted the node labels yet in the pre order order.
+
+1:40:50  
+And initially, or the, say, the top level accumulator in this initial in the sense of imperative programming, top level accumulated in the sense of recursion, tail recursion here.
+
+1:41:01  
+It's not a recursion, actually, interestingly, but it still uses accumulator
+
+1:41:07  
+is empty.
+
+1:41:09  
+And I gave you the, the intuition that is something that I haven't processed yet.
+
+1:41:15  
+Which morally is, is is with some sub tree somewhere. And the idea is I should have processed everything above and to the left of the given three, and that will be kept in the accumulator, then the idea is, is the following.
+
+1:41:32  
+If you're,
+
+1:41:34  
+why can't I see the chat anymore?
+
+1:41:42  
+Okay, you say thanks. But maybe I'll comment anyway, just take a minute, for those that are interested.
+
+1:41:50  
+When you're at the leaf, then you just return the accumulator. And you should think that I'm at the very end of the rightmost part of the tree somewhere at the bottom right? If the tree is drawn, growing from the top to bottom on a piece of paper.
+
+1:42:09  
+So then everything is already there in the list. Otherwise, what happens?
+
+1:42:15  
+And that's quite interesting.
+
+1:42:18  
+Is the following thing.
+
+1:42:22  
+As you can the right order, actually,
+
+1:42:27  
+do you think it's in the right order, or maybe t, L and T are mixed up? Anyway, let's think about it. So when you have to process, maybe it's post order. And
+
+1:42:39  
+when you have to process the composite t x t L.
+
+1:42:45  
+Dr.
+
+1:42:47  
+Then you first put your
+
+1:42:51  
+root node label in the list in the list that you're building.
+
+1:42:56  
+But then what is the rest, the rest should cover?
+
+1:43:03  
+both
+
+1:43:05  
+the left and the right
+
+1:43:09  
+subtree.
+
+1:43:14  
+And I think the left and the right are mixed up here. Let's see. So what is done here is
+
+1:43:21  
+you have to traverse
+
+1:43:25  
+the right subtree with a given accumulator, and this will give you some new result, which then is used as an accumulator for also processing the left subtree. And I think the way that we can check whether it did the right or wrong thing is to look at again, the one
+
+1:43:44  
+and then what is the whole thing called?
+
+1:43:50  
+Okay, now you can't see what I'm doing too bad.
+
+1:43:58  
+But now you can. So let's look at T one again, T one is this. And if we call the new version of preorder that sort of more efficient.
+
+1:44:07  
+Let's see if it does the P Oh, they're actually the post order. pre order a T one.
+
+1:44:15  
+So it's 34 No, it's good. 3423 5478. So think why, why this is the right thing.
+
+1:44:38  
+But but but but you see here something that is a bit unusual in the sense that is a recursive function.
+
+1:44:45  
+That actually takes
+
+1:44:48  
+some argument and the argument also uses the recursion recursive function again. So it's kind of a nested recursive call.
+
+1:44:58  
+That is, that is happening here.
+
+1:45:00  
+Which is maybe
+
+1:45:02  
+a bit
+
+1:45:04  
+mysterious?
+
+1:45:11  
+Actually, no, I see everything in the code is correct. But I said the wrong thing to you. So
+
+1:45:17  
+that the tree that you process here that you always process is something that is not yet processed. Everything to the right of it is already processed that is in the accumulator. And, and everything above it is processed. So what you have is some tree somewhere to the left of the tree. And the you leave it when you're at the leftmost at the end of the leftmost path. Yeah, so in the accumulator, so the processing with the accumulator starts at the right.
+
+1:45:47  
+So first, you say nothing is in the accumulator. And then yeah, you accumulate basically going from the right bottom and corner, through all the intermediate nodes to the left, bottom and corner. And this is where you actually, and actually, the explanation here is also correct. Just what I happen to say you mixed up left and right.
+
+1:46:15  
+Yeah, sorry for the
+
+1:46:18  
+for the wrong sentence. I said, Okay. But you can play more with this. So the plan now then for tomorrow is you've been assigned to groups and also for the future.
+
+1:46:31  
+You can work on sort of practice problems I've given to you. And I'll keep giving them to you. These are practice problems for which I show you a full model solutions and you can agree with them or invent your own solutions or invent something slightly different, which is often possible. They are not to be handed in. But they are meant as preparations for the actual assignment exercises, which perhaps are sorry, the actual assignments, which in some cases are not so different from what happens in the practice class. But of course, there must be some question on it. Because if you solve everything in the practice class, then there is nothing for us to
+
+1:47:10  
+if you solve a tech everything with THC in the practice class, there is nothing for us to give you a mark for for the assignment.
+
+1:47:19  
+And then I'll publish the
+
+1:47:23  
+first assignment sometime next week, Thursday, I think is the day. And then also in the next sessions, you can also ask about the assignments. But the TS can only give you hints, they can't obviously give you the full solutions of the assignment. But what I really, really recommend is to look at the practice problems, because they should contain all information that you need to do the assignment problems.
+
+1:47:47  
+Yeah.
+
+1:47:50  
+And no, there is exactly there is going to be one Practice set for each week. The the reason why you now have to, and a lot that once is simply that we have to skip the first practice class, but you'll typically every week you get three, four or five problems.
+
+1:48:06  
+For this time, it may look like a lot, and you don't have to do them all. And the problems with recursion are very similar to each other. So what I recommend is,
+
+1:48:16  
+if you solve one and two and you, you, you, you feel confident that you understand about recursion versus loops.
+
+1:48:24  
+You know, don't need to look at the rest. But if you feel you're unsure, play more with recursion, because it will simply it's like an investment of time, it will.
+
+1:48:35  
+It will win you a lot. In the rest of this course everything else will be so much simpler. If If sort of, yeah.
+
+1:48:44  
+You know, if you can do recursion first thing in the morning before before even the first coffee, if you're on that level of confidence, then you're all well set for the rest of the course.
+
+1:48:58  
+The practice sets are not to be turned in No. And I'll publish the model solutions for the for the first two tomorrow night or maybe Thursday morning after after the accuracy group has taken place. So you'll already see the full solutions. And yeah, no grading no nothing about those.
+
+1:49:17  
+For those sorry.
+
+1:49:19  
+Yep.
+
+1:49:24  
+Okay, so now we went over time with questions, but I think this is the protocol for the rest of the course you will, I will follow it. You'll see the zoom links under the zoom tab. It now works. We've all got licences every ta
+
+1:49:38  
+some of the Thursday lectures will be pre recorded, but then I'll tell you about this. But I'll be here at least every Tuesday to sort of interactively ask the answer questions
+
+1:49:50  
+and that sort of thing with his own licence and an E loudspeaker
+
+1:49:57  
+or earphones.
+
+1:49:59  
+Okay.
+
+1:50:01  
+Is everybody happy?
+
+1:50:03  
+Yes, have a nice Tuesday night
+
+1:50:06  
+and then we stop here.
+
+Transcribed by https://otter.ai

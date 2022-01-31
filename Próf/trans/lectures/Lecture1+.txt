@@ -1,0 +1,739 @@
+0:41  
+Right,
+
+0:42  
+so let's continue the course.
+
+0:47  
+Last time I started with F sharp.
+
+0:51  
+Today, I will tell you a bit more. In particular, I'll continue on these topics that I wanted to cover on Tuesday on tuples.
+
+1:03  
+And on multiple argument functions, say particular two plus functions, how do you deal with such a thing in
+
+1:12  
+in F sharp
+
+1:14  
+I now try to share my screen
+
+1:23  
+share.
+
+1:38  
+Yes, that should be
+
+1:45  
+an F sharp, you do not only have the very basic data types like int or float or basic
+
+1:53  
+things also like Boolean or string, you also have composite or compound types. We saw one example of this already, which was
+
+2:06  
+function types. So, for T, the type of input values and t prime the type of output values t arrows t prime is a function type.
+
+2:19  
+But there are other compound types and the typical one of those is is tuples.
+
+2:25  
+You can put together and values of any type in particular of different types. In particular, for example, you can put together two things. So, for example, the following thing
+
+2:38  
+is a tuple
+
+2:46  
+all integers, so I've got an int and an int, two and three. And this type is, is written like this with a star in times in, you could read it
+
+3:00  
+being a tuple is not necessary, the values are of the same type. So I could, for example, put things together, I could say, for example, that My name is darmowe.
+
+3:11  
+And my age is 51. That's perfectly
+
+3:16  
+possible.
+
+3:19  
+Now, what we have is a pair of two different types of string, and integer.
+
+3:25  
+And
+
+3:28  
+these are first class values, you can give them names and you can pass them around like integers or floats or anything. So, in particular, I could also say, for example, let p be two and three.
+
+3:41  
+And then I see the PS two and three.
+
+3:45  
+And I can pass them around, right. So I could perhaps say let q
+
+3:50  
+be the same as P.
+
+3:54  
+and then Q is also a similar thing.
+
+3:57  
+In a tuple is not necessary that you have just two elements, it could be any number. So, for example, let's make a tuple of four elements.
+
+4:08  
+So here's one that is made of an integer, a Boolean, a float, and a string.
+
+4:18  
+You can put together
+
+4:21  
+values of different types into a tuple. Sometimes, of course, you might be given a tuple, and you want to extract the value out of it. So what could be an example of this? So I might be interested in projecting out the first component of a pair? How on earth could I do it? Now P is in my environment. Currently, it is the pair of numbers two and three. I might be interested in that in the first number there. Let's let's call it n. One way to do is the following.
+
+4:50  
+It uses pattern matching. We already saw pattern matching in defining functions.
+
+4:56  
+When you use patterns to describe what arguments
+
+5:00  
+As can possibly be, and then you did case distinction on the possible forms of arguments.
+
+5:06  
+You can actually also use patterns even in these let
+
+5:13  
+in the definitions in inlet expressions,
+
+5:18  
+where you say I want to give things names, so I might be interested in calling the first component of the pair p m, and the other one n and then I can write such a thing, let n equal P.
+
+5:34  
+And let's see what happens, I do get to know that m is three,
+
+5:39  
+sorry, M is two and three, they came out in the wrong order, but correctly, M is the M is the first component of the pair n is the second component of the pair. And what happened here was that I was doing pattern matching.
+
+5:53  
+So, this thing here is a pattern. So I'm, since P is a pair, it must be something of the form m and n. So I can give these different parts names. And I can then
+
+6:04  
+define what the values of these things are based on what p itself is.
+
+6:09  
+I don't necessarily always need to be interested in all components of a tuple, then I could use my,
+
+6:16  
+my wildcard pattern. So, I'm I'm, so it's written underscore, and it matches anything. And the point is, later, you can't use its value. So I could, for example, say something like let
+
+6:33  
+let the string be no, let
+
+6:39  
+underscore, underscore underscore string, v, w.
+
+6:45  
+The idea is, W is a quadruple as a four tuple. And I'm interested in the fourth component of it.
+
+6:53  
+And was it the fourth, the fourth tuple, I have to write the pattern in this form, there have to be four components, but I really don't care about the first three. So then I don't need to give these things names, I can, I can call them all underscore, when this pattern match happens. This doesn't mean that the first second and third component have to be equal, it means each of them individually can be anything.
+
+7:17  
+And then I can extract the string law.
+
+7:23  
+One very important use
+
+7:27  
+of pairs, and tuples, in particular, is that
+
+7:35  
+now and then the function that you're interested in, doesn't necessarily naturally take one argument multiple,
+
+7:45  
+like a function might want to take two arguments. Now, there is no such thing really, in F sharp as multi argument functions.
+
+7:58  
+You have to fake it in one way or another. There are exactly two ways of doing this.
+
+8:03  
+I
+
+8:06  
+have covered both in the next few minutes. But here's the first one. So you can define a two plus function as a function that just takes a pair as an argument.
+
+8:18  
+So instead of taking two separate arguments, we say there is just one argument and that's a pair.
+
+8:24  
+And if you do it like this, then then
+
+8:29  
+you get syntax that is very familiar to you from a number of languages, like you have multiple arguments in a row when they are even enclosed in parentheses like here. So for example, I might want
+
+8:44  
+to introduce
+
+8:46  
+addition, while it's defined as an operation, maybe I want to give it my own name, then I can say let's add
+
+8:54  
+my own version of function
+
+8:57  
+of or the function of addition.
+
+9:00  
+In the following way, let add of a given pair be
+
+9:06  
+x plus y. And this is a valid definition.
+
+9:16  
+Got the other semicolon.
+
+9:19  
+And we see
+
+9:21  
+this is the right type. It takes a pair of integers. Well, the formal parameters here were x and y, you also get this information and it returns in and now I can use add instead of plus if I if I want.
+
+9:43  
+It is really important to understand that even though it looks like a two place function, this is just one single argument that is a pair. How do I how do I prove this to you? So let's perhaps
+
+9:57  
+so maybe one way to prove it to you is to show that
+
+10:00  
+I can I can define it differently.
+
+10:07  
+But maybe later?
+
+10:12  
+Yes.
+
+10:21  
+No, let me do it anyway.
+
+10:23  
+So let me show you how to define a function that extracts the first component of a path.
+
+10:29  
+You can do it like this, we just say, lead
+
+10:35  
+first,
+
+10:37  
+then some pair, where I don't care about the second component.
+
+10:44  
+Equal backs.
+
+10:46  
+So this is to define the function first. That takes in the pair, but it extracts its first argument. Yeah.
+
+11:00  
+This is an interesting example. Because when you look at the type, you see new things for you. So you see first as the Type A times B, arrow a, where the A and B have these little apostrophes also attached to these letters.
+
+11:16  
+So when in the place of a type, you see something of the form apostrophe, a string, then this is really
+
+11:25  
+F, sharps notation for type variables.
+
+11:30  
+And what this signifies is that this function is polymorphic. To extract the first component of a pair.
+
+11:37  
+The first component can be any type, the second component can be any type. But the result, of course has to be the same type
+
+11:45  
+as the first component of the pair, because after all, that's what we
+
+11:49  
+can similarly define the second component of a pair,
+
+11:54  
+maybe like this.
+
+12:02  
+And now I can define addition differently just to define to to, to explain to you that addition really takes takes as an argument, the pair is not that this is like a two place function that really
+
+12:14  
+somehow takes the first argument x and the second argument y. And this is some special syntax for two places No, I can very well, right, let add
+
+12:26  
+of a pair be the first component of the pair p plus the second component of the pair P. This is a valid definition.
+
+12:39  
+It has the right time, the same that you saw before.
+
+12:45  
+Now interestingly, you can't say that the first integer is x. And the second integer is why F sharp could have told us that the whole pair is B but somehow decided to omit this. And I can use this function addition to add together pairs. So I can seem to add up to one three.
+
+13:04  
+And I can get the value of that this is fine.
+
+13:10  
+So what I took was useful, in addition to, to, to to capture multiple number of arguments to functions. Another typical thing is, you know, structured information, say, maybe we want to talk about times of the day,
+
+13:28  
+when it's natural that you speak of pairs of say, hours and minutes, or maybe triples of hours, minutes and seconds. And here are some typical ones, for example. So noon might be the pair of 12. Zero.
+
+13:43  
+Yeah, some particular talk or lecture could start at 1515, etc.
+
+13:51  
+This is close to record types.
+
+13:54  
+But the difference is that record types would have field names for the different components here, you can just access the different components. positionally, you know, instead of saying these are ours, we just say this is the first component of a pair. Instead of saying these are minutes, we just access this is the second component of a pair. But record types are also possible and we'll get to them very soon.
+
+14:19  
+Then, it's also important to realise that you may need to pose
+
+14:25  
+So
+
+14:27  
+for example, if we do this thing that we talked about hours and minutes, I might want to define a function that finds out if a certain time is earlier than some other time, then you
+
+14:40  
+then this naturally is a function of two arguments. But each argument in its own term is a time right so we've got a pair of an hour and the minute and an hour and the minute and when is one time earlier than the other? Well, you have to first compare the hours if the first hour is strictly smaller than the second then
+
+15:00  
+really the first time is earlier than the second is the hours are the same, then one time is earlier than the other. If this relation holds between the minute amounts.
+
+15:12  
+Yes.
+
+15:18  
+So we see that we can have the tuples of two components, three, four, etc, it's important to realise and that's a design choice in the language, that you cannot have tuples of one element.
+
+15:35  
+And there are various reasons for this, but maybe I don't go deeper into this. But
+
+15:42  
+well, the easiest to say is that also practically, there is no point in in one component tuples, because that's just one value.
+
+15:53  
+Which you don't need to group together with anything. So there's pointless, it's pointless to require some additional amount of parentheses around it. But when you think about the closer why,
+
+16:04  
+with the simple design of syntax,
+
+16:08  
+one component tuples are maybe not a good idea. One of the reasons is exactly that, you know, here we use commas to talk about tuples, parentheses
+
+16:19  
+to indicate groups of tuples. But if we also allow
+
+16:24  
+Singleton tuples, then it becomes a bit of problem to decide which parentheses are for precedence, and which are to indicate nesting of tuples.
+
+16:36  
+So you can have multiple tuples, you cannot have a unary tuple. But interestingly enough, then it has a purpose.
+
+16:43  
+You
+
+16:45  
+it's possible to have an empty tuple. Well, in fact, there is exactly one empty tuple, the empty tuple, which is just right like this. And it's huge. Its type is called unit. So let me let me show you here. So when I evaluate this thing,
+
+17:04  
+then it says, well, it's a legal thing. And it's type is unique.
+
+17:09  
+In many languages, this type is also called void. And it's exactly the same thing.
+
+17:16  
+Why functional programmers don't like maybe the name void is that void is kind of a misnomer, it means that there is no information. So in that sense, the type is void.
+
+17:28  
+I mean, if you if you learn an element of that type of learn no information, because there was only one element there anyway. But the type is not void in the sense that is not empty, it's not true that there isn't any single element in the type that is exactly one element in the type, which is the empty tuple. And it's for that reason, that there is only one element, that if you learn this element, someone tells you, you know, I've got an element of unique, please Guess which one it is,
+
+17:57  
+then there is nothing to guess there is no information there, you know, upfront that this must be this.
+
+18:06  
+So when do you ever need this thing?
+
+18:11  
+In a type
+
+18:13  
+of some expression? Well, the empty tuple by itself is not very useful. But there are functions that don't return anything. These are exactly the sort of void or void functions or methods of some other languages.
+
+18:31  
+And those indeed do have
+
+18:37  
+the return type unit.
+
+18:39  
+Now, you might ask, why would I have a function that returns nothing?
+
+18:44  
+Well, in a pure functional language, it is pointless to have such functions because they don't find out anything for you, they don't compute anything for you. However,
+
+18:55  
+we also have these things called side effects. And one very useful function, for example, that doesn't return anything is printing. So it takes as an argument, the string that you want to show on the screen,
+
+19:09  
+it prints it so that's the side effect this is something that the function does while it computes when a given argument, but the end result is well in some sense, nothing is no information, it is the empty tuple. So,
+
+19:24  
+let me open this module system again where these things are.
+
+19:29  
+And then I can use this function console writeline
+
+19:34  
+to just print hello or hello world.
+
+19:39  
+And this is what you see Hello is printed. So this is a side effect.
+
+19:44  
+But the return value is the empty tuple of type unit, nothing is returned. I might also just ask what is the type of the function by just saying, you know, evaluate the function alone.
+
+20:05  
+Okay,
+
+20:07  
+so it should basically say, from the string to the empty type, but there is also overloading involved here. So that's the only, that's not the only possible. Possible type A now this is discussed here. So this is maybe a bit more complicated than I wanted, but, but you can see it has all these possible types. So for example, where is the string thing written?
+
+20:31  
+somewhere around here, but but for example, right, right line is able to take an unsigned integer, and to produce a unit.
+
+20:42  
+There's multiple types.
+
+20:45  
+So there is also the empty, empty,
+
+20:48  
+or sorry, the unit type in the picture.
+
+20:53  
+Now, let me tell you a bit more about
+
+20:57  
+to place functions.
+
+21:00  
+So
+
+21:02  
+I already indicated to you that there is really nothing like to place functions, or three plays, or four place functions in F sharp at all.
+
+21:15  
+Everything you do is kind of fake. But it's very principled and very systematic, fake,
+
+21:21  
+or faking. So
+
+21:25  
+let's talk about two places. So we're interested in functions that should take two arguments. There's two ways that you can implement these or define these in F sharp.
+
+21:37  
+One is that we already saw su say, No, no, it's not the function that takes two arguments is the function takes one argument, but that argument must be other pair type or tuple type for n equal to
+
+21:52  
+this representation of functions is often called on curried functions.
+
+21:58  
+There is an alternative
+
+22:02  
+which takes seriously the fact that in functional languages, functions are first class citizens, which means that they can be used in any role that values of other types say simpler things like integers or Booleans can be so functions cannot only be defined and applied, they can also be passed around as values. And they can be produced as values in the first place. So then the binary function can be understood as a function that works in stages. So it's a function that takes as its argument, well, the thing that we want to give us the first argument, and then the result
+
+22:48  
+is not yet the thing that we're interested in, it's not the result, the result is another function that takes our second argument.
+
+22:57  
+So, the whole thing is represented as a function,
+
+23:02  
+which only wants to see the first argument and already then it produces something but namely it it produces a thing that is still waiting, it produces a function that then wants the second argument.
+
+23:16  
+This representation is called curried functions. This has nothing to do with food from India. It has everything to do with the name of the logician,
+
+23:27  
+Haskell curry
+
+23:34  
+of the 20th century, of course.
+
+23:41  
+So his work is very relevant to functional programming in that a certain type of formal logic, namely intuitionistic logic is very closely connected to types in functional programming.
+
+23:57  
+And the name Haskell curry has actually not only given you know the name to curried functions, it's also given the name to two languages. So that is the functional language Haskell. But there is also a functional logic programming language called curry. So both exist. So that's that's the origin of the of the work.
+
+24:22  
+Now, why the there are these two are alternatives, I should tell you that
+
+24:27  
+functional programmers
+
+24:30  
+tend to prefer the curried form most of the time.
+
+24:46  
+Now, what are these two forms about?
+
+24:49  
+I already indicated to you what the first one is too. So so here are these once again just to compare. So So addition done with the type
+
+25:00  
+That says Well, we take in a pair and
+
+25:05  
+then return what we want here in this case integers. This is the corresponding definition which goes by pattern matching on the given pair. And then the way that you are applying such a function is for example, here at the apply to the pair of 17 at 25, and you hope that you get 42 back.
+
+25:28  
+But here's a different alternative.
+
+25:31  
+We say this is the curried ad.
+
+25:35  
+This one will have typed in arrows in Petrosian. This is how this will be shown to you, it's important to realise it means this thing. So there are some omitted parentheses here, it is a function that takes in an integer,
+
+25:51  
+but then the result of applying this function is another function
+
+25:58  
+which takes in another integer and gives a result which is an integer.
+
+26:05  
+Now, functional programmers often do not write these kinds of parentheses for the reason that the arrow sign is agreed to be right associative. So whenever we receive the two arrow signs in a row, you know that
+
+26:21  
+the second one, the rightmost, one has preference. So as priority has, sorry, has precedence has priority. So we can
+
+26:33  
+imagine that the parentheses are here. And then the the the the the the first one, that the leftmost one is the one that binds weaker.
+
+26:44  
+Now in this notation,
+
+26:47  
+sorry, it's under this convention that we work with curried functions, you have to define addition differently.
+
+26:54  
+Namely, we say FC is a function that that can apply to a parameter x.
+
+27:00  
+And then the result is a function that that can apply to a further parameter y.
+
+27:07  
+And what they get is x plus y. So let me demonstrate this.
+
+27:13  
+So here's the use case of this thing.
+
+27:19  
+Right.
+
+27:24  
+The definition is accepted that we can see exactly this type, but you should think that it is a function that takes in x and returns another function, which you may call
+
+27:35  
+on y which you may apply to y is another terminology is the other terminology here. And therefore, I can do the following thing I can apply at C to 17 and 25.
+
+27:52  
+Now, why this why would this be useful?
+
+27:58  
+Why don't we just work with pairs
+
+28:01  
+and
+
+28:06  
+there are reasons
+
+28:19  
+let me come to them. First, I should also tell you that there is there is the function plus right which we have seen anyway, I mean, we do not define ad primitively, we defined ad p through plus and that See also through plus. So, if there are really no two plus functions, then the interesting question is, what is the type of plus Is it this? Or is it this?
+
+28:42  
+Well,
+
+28:46  
+operators that you use in infix form, they are also just ordinary functions. And if you want to see an operation as a function, you just put parentheses around it. So in particular, I could ask what the type of plus is.
+
+29:01  
+And it is
+
+29:04  
+its type is take an integer, give a function that takes another integer returns an integer,
+
+29:11  
+and here should be its value, but since it is a function, you can't really show a function in any useful sense, which just indicates this is some sort of a function.
+
+29:21  
+So plus can really be used in exactly the same way as Add curry. So I can write plus 1725
+
+29:30  
+and that is also 40. To
+
+29:37  
+know
+
+29:40  
+if this is true, so then
+
+29:46  
+Anyway, what is the use of curried functions? Great functions are great because they allow something that is called partial application.
+
+29:54  
+So here, I use plus unapplied plus is just a function here. I asked what it's doing.
+
+30:00  
+Easy to function. Here I've used plus fully applied, I applied it to the first argument and to the second argument, and the result is a number.
+
+30:10  
+But I could also,
+
+30:13  
+in principle just applied to only the first argument. So I could talk about this thing.
+
+30:20  
+Sorry.
+
+30:27  
+This is also a function. But it's the function that now needs only one further integer to produce the final result. Yeah.
+
+30:37  
+This guy just says at some other function.
+
+30:41  
+So what's the possible use of this? Well, I could, for example, say,
+
+30:47  
+I can give it the name, it's a function. So I can give it a name.
+
+30:51  
+I can say that such a function is called that 17.
+
+30:57  
+And then I can use this thing as a function on its own right. So I know that I'm not interested in general addition anymore. I'm just interested in adding 17 to whatever comes in, you know, my way. So here is one use of the function.
+
+31:14  
+Here is another
+
+31:17  
+here is yet another.
+
+31:23  
+Which is, which is one way of of doing these things.
+
+31:31  
+Let me also illustrate you one other way that you use these things. So you might ask, okay, so this is a this is a function.
+
+31:42  
+Why get it? Why gate? its
+
+31:46  
+own name, because, you know,
+
+31:55  
+when I finally want to apply, but I need to give the second argument anyway. Right? So it's never really the case that you can fully carry out tradition, until you've seen both arguments that could be, say,
+
+32:09  
+a complaint. What Why do you ever need partial application, but partial application is useful, because functions are things in their own right, so let me explain it on this example. So let me define the following function.
+
+32:24  
+Let twice,
+
+32:28  
+I'm gonna define a function twice, twice is a function
+
+32:33  
+that is itself, a two plus function defined in the curried form. What it does, is it takes as a first argument, function f, and a second argument, something that I want to use as an argument. And then what I want to return is F four f of x.
+
+32:53  
+This is something that you haven't seen here before yet in this course.
+
+32:59  
+But it's a beautiful demonstration of the first use of something called higher order functions that we will later see in much more detail.
+
+33:08  
+Holderness already mentioned in my introduction is one of these abstractions that is characteristic to functional programming and just says
+
+33:18  
+this is another you know, it is just another way of enhancing usability in the language in general.
+
+33:25  
+And this is one example. So
+
+33:30  
+if I see the pattern that
+
+33:33  
+some activity, you know, is done twice in a row to an argument, then I can encapsulate it by saying, Okay, let's capture this activity itself in a function and, and we can capture the the the aspect of like iterating the activity
+
+33:49  
+in a higher order function that says how many times this thing is iterated like here.
+
+33:54  
+So, twice is typed like this, it takes in a function, which works on any type and returns exactly the same type. So it takes in any function from A to A, then it takes an argument from type A.
+
+34:09  
+And the result is also of type A, the idea is x comes in is of type A, I apply f three, three, the result again has to be a type A, which means that I can repeatedly apply F to it, and I then get that this is again a result of Type A and now I can apply twice to at 17.
+
+34:37  
+I'm
+
+34:40  
+sorry, no, no need for left anymore. So just want to say I want to apply twice to add 17.
+
+34:48  
+Let's see what it's like is
+
+34:52  
+now since ad 17 was a function from in three twice is able to send any such function to any
+
+35:00  
+function from mean three, which I can actually apply twice here is only partially applied, I've applied it to a function but not yet to, you know that the real argument, I can also supply the real argument I maybe want to say I want to add 17 points to three.
+
+35:18  
+And the results should be then three plus 17 plus 17, again, which I think is 37. And that indeed, is the result.
+
+35:31  
+Now, what did I cover at this point was
+
+35:35  
+or until this point, then in this lecture was
+
+35:40  
+tuple types as a way of group together values
+
+35:44  
+as a kind of poor man's version of record types. So, conceptually related values can be grouped together, but also you can use tuples to deal with the fact that sometimes you want to apply functions to multiple arguments, then you can collect them together into a tuple say a pair for the case of a to base function, then I also told you that apart from applying a function to a pair or tuple, in general, there is a different way of doing multi way sorry, multiple argument functions, which is to to use the correct form. The current format has the slight disadvantage that it prefers the first argument to the second argument, it allows you to partially apply the function to the first argument, leaving the second arguments waiting. If you'd like to prefer the second argument
+
+36:36  
+then the syntax doesn't directly support this you can code it, but, but
+
+36:42  
+just in the primitive form, what is supported is
+
+36:48  
+is is preferring the first argument.
+
+36:53  
+So, let me stop sharing here.
+
+36:56  
+So, this was this part of the lecture,
+
+37:00  
+I will continue with with the first interesting data type or discriminated union type of the F sharp language which are lists and then go further on to more
+
+37:13  
+polymorphism and more higher order functions.
+
+Transcribed by https://otter.ai
